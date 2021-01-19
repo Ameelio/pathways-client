@@ -12,7 +12,6 @@ import ProtectedRoute, {
 } from "./components/hocs/ProtectedRoute";
 import LoginPage from "src/pages/Login";
 import { ROUTES } from "./utils/constants";
-import { loginWithToken } from "./api/User";
 import { useEffect } from "react";
 
 const mapStateToProps = (state: RootState) => ({
@@ -29,17 +28,6 @@ function App({ session, history }: PropsFromRedux & { history: History }) {
     isAuthenticated: session.authInfo.apiToken !== "", // TODO: improve this later
     authenticationPath: "/login",
   };
-
-  useEffect(() => {
-    // localStorage.setItem("debug", "*");
-    localStorage.removeItem("debug");
-    (async () => {
-      try {
-        await loginWithToken();
-        // await loadData();
-      } catch (err) {}
-    })();
-  }, []);
 
   return (
     <ConnectedRouter history={history}>

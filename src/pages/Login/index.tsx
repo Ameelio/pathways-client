@@ -32,17 +32,16 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
   const onFinish = async (values: any) => {
     try {
       await loginWithCredentials({
-        email: values.email,
-        password: values.password,
-        remember: values.remember,
+        inmateNumber: values.inmateNumber,
+        pin: values.pin,
       });
     } catch (err) {
-      setError("Invalid email or password");
+      setError("Invalid ID or Pin Code");
     }
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    setError("Invalid email or password");
+    setError("Invalid ID or Pin Code");
   };
 
   return (
@@ -56,27 +55,23 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
           onFinishFailed={onFinishFailed}
         >
           <Form.Item
-            name="email"
-            rules={[{ required: true, message: "Email is required." }]}
+            name="inmateNumber"
+            rules={[{ required: true, message: "Inmate ID is required." }]}
           >
             <Input
               prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Email"
+              placeholder="Inmate Number"
             />
           </Form.Item>
 
           <Form.Item
-            name="password"
+            name="pin"
             rules={[{ required: true, message: "Password is required." }]}
           >
             <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
-              placeholder="Password"
+              placeholder="Pin Code"
             />
-          </Form.Item>
-
-          <Form.Item name="remember" valuePropName="checked">
-            <Checkbox>Remember me</Checkbox>
           </Form.Item>
 
           <Form.Item>

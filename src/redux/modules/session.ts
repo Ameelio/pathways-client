@@ -3,7 +3,6 @@ import { User } from "src/types/User";
 
 interface AuthInfo {
   apiToken: string;
-  rememberToken: string;
 }
 
 interface SessionState {
@@ -41,7 +40,7 @@ export const setSession = (userState: SessionState): UserActionTypes => {
 
 // Reducer
 const initialState: SessionState = {
-  authInfo: { apiToken: "", rememberToken: "" },
+  authInfo: { apiToken: "" },
   user: {
     id: UNAUTHENTICATED_USER_ID,
     firstName: "",
@@ -62,7 +61,7 @@ export function sessionReducer(
       //   sessionStorage.clear();
       return {
         ...state,
-        authInfo: { apiToken: "", rememberToken: "" },
+        authInfo: { apiToken: "" },
         user: {
           id: UNAUTHENTICATED_USER_ID,
           firstName: "",
