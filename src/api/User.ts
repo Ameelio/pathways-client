@@ -1,4 +1,4 @@
-import { API_URL, fetchAuthenticated, fetchTimeout } from "./Common";
+import { API_URL, fetchTimeout } from "./Common";
 import url from "url";
 import { setSession } from "src/redux/modules/session";
 import { Store } from "src/redux";
@@ -7,11 +7,11 @@ import { User } from "src/types/User";
 
 async function initializeSession(body: any) {
   const user = body.data.user as User;
-  const token = body.data.user;
+  const { token, id } = body.data.user;
   Store.dispatch(
     setSession({
       user,
-      authInfo: { apiToken: token },
+      authInfo: { token, id, type: "inmate" },
       isLoggedIn: true,
     })
   );

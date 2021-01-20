@@ -1,5 +1,6 @@
 import { Store } from "src/redux";
 import url from "url";
+import path from "path";
 // import { getApprovedConnections } from "./Connection";
 // import { getContacts, getInmates, getStaff } from "./Persona";
 
@@ -42,12 +43,20 @@ export async function fetchAuthenticated(
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${state.session.authInfo.apiToken}`,
+      Authorization: `Bearer ${state.session.authInfo.token}`,
+      ["X-Ameelio-User-Type"]: "inmate",
+      ["X-Ameelio-Inmate-Id"]: `${state.session.authInfo.id}`,
     },
   };
 
-  const response = await fetchTimeout(fetchUrl, requestOptions, timeout);
+  const response = await fetchTimeout(
+    path.join(API_URL, `inmate/${state.session.authInfo.id}`, fetchUrl),
+    requestOptions,
+    timeout
+  );
+
   const body = await response.json();
+
   return body;
 }
 

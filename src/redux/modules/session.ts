@@ -2,7 +2,9 @@ import { UNAUTHENTICATED_USER_ID } from "src/utils/constants";
 import { User } from "src/types/User";
 
 interface AuthInfo {
-  apiToken: string;
+  token: string;
+  id: number;
+  type: "inmate";
 }
 
 interface SessionState {
@@ -40,7 +42,7 @@ export const setSession = (userState: SessionState): UserActionTypes => {
 
 // Reducer
 const initialState: SessionState = {
-  authInfo: { apiToken: "" },
+  authInfo: { token: "", id: UNAUTHENTICATED_USER_ID, type: "inmate" },
   user: {
     id: UNAUTHENTICATED_USER_ID,
     firstName: "",
@@ -61,7 +63,7 @@ export function sessionReducer(
       //   sessionStorage.clear();
       return {
         ...state,
-        authInfo: { apiToken: "" },
+        authInfo: { token: "", id: UNAUTHENTICATED_USER_ID, type: "inmate" },
         user: {
           id: UNAUTHENTICATED_USER_ID,
           firstName: "",
