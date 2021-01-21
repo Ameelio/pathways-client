@@ -1,7 +1,7 @@
 import React, { useState, ReactElement } from "react";
 import { RootState } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
-import { Input, Layout, Button, Form, Checkbox } from "antd";
+import { Input, Layout, Button, Form, Checkbox, Typography, Card } from "antd";
 
 // import { ReactComponent as Operator } from "src/assets/avatars/bald.svg";
 // import { ReactComponent as Supervisor } from "src/assets/avatars/woman.svg";
@@ -46,13 +46,13 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
 
   return (
     <Content>
-      <div className="login-form">
-        <div className="login-form-right-column" />
+      <Card className="login-form-container">
+        <Typography.Title level={3}>Welcome to Pathways!</Typography.Title>
         <Form
           name="basic"
-          initialValues={{ remember: true }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
+          className="login-form"
         >
           <Form.Item
             name="inmateNumber"
@@ -75,12 +75,12 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit
+            <Button type="primary" htmlType="submit" size="large" block>
+              Log In
             </Button>
           </Form.Item>
         </Form>
-      </div>
+      </Card>
     </Content>
   );
 }
