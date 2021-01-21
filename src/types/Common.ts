@@ -8,4 +8,5 @@ export interface Quote {
   author: string;
   quote: string;
   description: string;
+  background: string;
 }

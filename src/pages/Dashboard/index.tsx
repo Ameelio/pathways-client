@@ -8,6 +8,7 @@ import {
   Card,
   Col,
   Layout,
+  Menu,
   PageHeader,
   Row,
   Space,
@@ -19,7 +20,7 @@ import { differenceInMinutes, format } from "date-fns";
 import { QUOTES, WRAPPER_PADDING } from "src/utils/constants";
 import { Call } from "src/types/Call";
 import Banner from "src/assets/Banner.jpg";
-import { getRandomItem } from "src/utils/utils";
+import { genFullName, getRandomItem } from "src/utils/utils";
 import { Quote } from "src/types/Common";
 import "./index.css";
 import { Connection } from "src/types/Connection";
@@ -30,6 +31,7 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Skeleton } from "antd";
+import { connectionActions } from "src/redux/modules/connection";
 
 const { Header, Footer, Sider, Content } = Layout;
 const { Meta } = Card;
@@ -78,8 +80,23 @@ function DashboardPage({
     setAppointments(upcoming);
   }, [calls, connections]);
 
+  const getStatusType = (
+    connection: Connection
+  ): "success" | "warning" | "danger" | "secondary" => {
+    switch (connection.status) {
+      case "approved":
+        return "success";
+      case "pending":
+        return "warning";
+      case "rejected":
+        return "danger";
+      default:
+        return "secondary";
+    }
+  };
+
   return (
-    <Layout>
+    <Layout style={{ minHeight: "100vh" }}>
       <Content>
         <PageHeader title={`Hi ${name}!`}></PageHeader>
         <Space direction="vertical" size="large" style={WRAPPER_PADDING}>
@@ -89,7 +106,10 @@ function DashboardPage({
                 <Space
                   direction="vertical"
                   align="center"
-                  style={{ backgroundImage: `url(${Banner})`, width: "100%" }}
+                  style={{
+                    backgroundImage: `url(${dailyQuote.background})`,
+                    width: "100%",
+                  }}
                   className="dashboard-header-container"
                 >
                   <Typography.Title
@@ -166,7 +186,25 @@ function DashboardPage({
           </Row>
         </Space>
       </Content>
-      <Sider theme="light">Sider</Sider>
+      <Sider theme="light" width={400}>
+        <PageHeader title={"Your Loved Ones"} />
+        {connections.map((connection) => (
+          <Card>
+            <Card.Meta
+              title={genFullName(connection.user)}
+              avatar={<Avatar src={connection.user.profileImgPath} />}
+              description={
+                <Typography.Text type="secondary">
+                  Status:{" "}
+                  <Typography.Text type={getStatusType(connection)}>
+                    {connection.status}
+                  </Typography.Text>
+                </Typography.Text>
+              }
+            ></Card.Meta>
+          </Card>
+        ))}
+      </Sider>
     </Layout>
   );
 }

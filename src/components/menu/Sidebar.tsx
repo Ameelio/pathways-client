@@ -33,13 +33,13 @@ export default function Sidebar({
         >
           Home
         </Menu.Item>
-        <Menu.Item
+        {/* <Menu.Item
           key="contacts"
           icon={<UserOutlined />}
           onClick={() => navigate("home")}
         >
           Contacts
-        </Menu.Item>
+        </Menu.Item> */}
       </Menu>
     </Sider>
   );
