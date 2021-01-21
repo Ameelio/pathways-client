@@ -24,6 +24,7 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { format } from "date-fns";
+import { useUserMedia } from "./useUserMedia";
 
 declare global {
   interface Window {
@@ -53,20 +54,25 @@ function Loader({ message }: { message: string }): ReactElement {
   );
 }
 
+const CAPTURE_OPTIONS = {
+  audio: false,
+  video: { facingMode: "environment" },
+};
+
 const CallBase: React.FC<PropsFromRedux> = React.memo(({ call, authInfo }) => {
-  const [loading, setLoading] = useState(false);
   const [isAuthed, setIsAuthed] = useState(false);
   const [rc, setRc] = useState<RoomClient>();
   const [socket, setSocket] = useState<SocketIOClient.Socket>();
   const [showOverlay, setShowOverlay] = useState(true);
   const [participantHasJoined, setParticipantHasJoined] = useState(false);
 
-  const [participant, setParticipant] = useState(() => {
-    const video = document.createElement("video");
-    video.style.width = "100%";
-    video.style.height = "100%";
-    return video;
-  });
+  const mediaStream = useUserMedia(CAPTURE_OPTIONS);
+
+  const meRef = useRef<HTMLVideoElement>(null);
+  if (meRef.current && !meRef.current.srcObject && mediaStream) {
+    console.log("setting my video");
+    meRef.current.srcObject = mediaStream;
+  }
 
   useEffect(() => {
     if (!socket) {
@@ -90,7 +96,6 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(({ call, authInfo }) => {
 
   // Asynchronously load the room
   useEffect(() => {
-    setLoading(true);
     if (!isAuthed && socket && call) {
       (async () => {
         console.log(socket);
@@ -116,7 +121,6 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(({ call, authInfo }) => {
         await joinRoom();
         console.log("init room");
         setIsAuthed(true);
-        setLoading(false);
       })();
     }
   }, [call, authInfo, socket, joinRoom, isAuthed]);
@@ -165,8 +169,9 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(({ call, authInfo }) => {
               stream: MediaStream,
               user: { type: string; id: number }
             ) => {
-              if (node && kind !== "inmate") {
-                console.log("CONSUME: outside stream");
+              console.log(`CONSUME RECEIVED: ${user.type} ${kind}`);
+              if (node && user.type === "user") {
+                console.log("CONSUME: user stream");
                 if (kind === "video") {
                   const video = document.createElement("video");
                   video.style.width = "100%";
@@ -182,6 +187,15 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(({ call, authInfo }) => {
                 }
 
                 setParticipantHasJoined(true);
+              } else if (node && user.type === "inmate") {
+                // console.log("CONSUME: inmate stream");
+                // const video = document.createElement("video");
+                // video.style.width = "300px";
+                // video.style.height = "300px";
+                // video.className="video-me";
+                // video.srcObject = stream;
+                // video.autoplay = true;
+                // node.appendChild(video);
               }
             }
           );
@@ -191,35 +205,35 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(({ call, authInfo }) => {
     [rc, isAuthed]
   );
 
-  const meRef = useCallback(
-    (node) => {
-      if (node !== null && rc && isAuthed) {
-        (async () => {
-          rc.on(
-            "consume",
-            async (
-              kind: string,
-              stream: MediaStream,
-              user: { type: string; id: number }
-            ) => {
-              if (node && user.type === "inmate") {
-                console.log("CONSUME: inmate stream");
-                if (kind === "video") {
-                  const video = document.createElement("video");
-                  video.style.width = "300px";
-                  video.style.height = "200px";
-                  video.srcObject = stream;
-                  video.autoplay = true;
-                  node.appendChild(video);
-                }
-              }
-            }
-          );
-        })();
-      }
-    },
-    [rc, isAuthed]
-  );
+  // const meRef = useCallback(
+  //   (node) => {
+  //     if (node !== null && rc && isAuthed) {
+  //       (async () => {
+  //         rc.on(
+  //           "consume",
+  //           async (
+  //             kind: string,
+  //             stream: MediaStream,
+  //             user: { type: string; id: number }
+  //           ) => {
+  //             if (node && user.type === "inmate") {
+  //               console.log("CONSUME: inmate stream");
+  //               if (kind === "video") {
+  //                 const video = document.createElement("video");
+  //                 video.style.width = "300px";
+  //                 video.style.height = "200px";
+  //                 video.srcObject = stream;
+  //                 video.autoplay = true;
+  //                 node.appendChild(video);
+  //               }
+  //             }
+  //           }
+  //         );
+  //       })();
+  //     }
+  //   },
+  //   [rc, isAuthed]
+  // );
 
   const getMessage = (): string => {
     if (!isAuthed) {
@@ -232,7 +246,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(({ call, authInfo }) => {
 
   return (
     <div className="video-wrapper" ref={measuredRef}>
-      <div className="video-me" ref={meRef} />
+      <video className="video-me" autoPlay={true} ref={meRef} />
       <Space className="video-info-overlay">
         <MessageOutlined />
         <Typography.Title level={4}>

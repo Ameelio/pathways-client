@@ -91,7 +91,6 @@ class RoomClient {
     return new Promise((resolve, reject) => {
       // Wait for the producer transport to connect...
       transport.on("connect", async ({ dtlsParameters }, callback, errback) => {
-        console.log("got connect!");
         await this.request("establishDtls", {
           dtlsParameters,
           callId: this.callId,
@@ -148,8 +147,6 @@ class RoomClient {
       this.producerTransport.on(
         "produce",
         async ({ kind, rtpParameters }, callback, errback) => {
-          console.log("Sending produce request");
-
           const { producerId } = await this.request("produce", {
             callId: this.callId,
             kind,
@@ -190,10 +187,7 @@ class RoomClient {
 
   async produce(type, deviceId = null) {
     const mediaConstraints = this.getMediaConstraints(type, deviceId);
-    console.log("Media constraints are", mediaConstraints);
     const stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
-
-    console.log("Got stream");
 
     const track = (type === MEDIA_TYPE.audio
       ? stream.getAudioTracks()
@@ -201,17 +195,12 @@ class RoomClient {
 
     const params = { track };
 
-    console.log("got track");
-
     if (type === MEDIA_TYPE.video) {
       params.encodings = config.video.encodings;
       params.codecOptions = config.video.codecOptions;
     }
 
-    console.log("producing with params", params);
-
     const producer = await this.producerTransport.produce(params);
-    console.log("produced with id", producer.id);
     window.producers.push(producer);
     this.producers[producer.id] = producer;
   }
@@ -231,8 +220,6 @@ class RoomClient {
     this.consumers[consumer.id] = consumer;
 
     stream.addTrack(consumer.track);
-
-    console.log("Successfully created stream.");
     return { consumer, stream };
   }
 
@@ -244,7 +231,6 @@ class RoomClient {
   }
 
   async terminate() {
-    console.log("sending request to terminate");
     await this.request("terminate", { callId: this.callId });
   }
 }
