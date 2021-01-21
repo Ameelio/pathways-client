@@ -9,7 +9,7 @@
   margin: auto;
 }
 
-.video-overlay {
+.video-overlay-actions {
   position: absolute;
   bottom: 0;
   background-color: white;
@@ -19,7 +19,7 @@
   justify-content: center;
 }
 
-.video-info-overlay {
+.video-overlay-info {
   position: absolute;
   top: 0;
   right: 0;
