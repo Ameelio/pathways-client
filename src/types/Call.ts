@@ -6,6 +6,7 @@ export interface Call {
   id: number;
   start: number;
   end: number;
-  kiosk: Kiosk;
   approved: boolean;
+  status: "ended" | "scheduled" | "terminated" | "rescheduled" | "live";
+  connectionId: number;
 }

@@ -1,14 +1,43 @@
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { RootState } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
 import { fetchCalls } from "src/redux/modules/call";
-import { Card, Col, Layout, PageHeader, Row } from "antd";
-import { selectAllCalls } from "src/redux/selectors";
+import {
+  Avatar,
+  Button,
+  Card,
+  Col,
+  Layout,
+  PageHeader,
+  Row,
+  Space,
+  Typography,
+} from "antd";
+import { selectAllCalls, selectAllConnections } from "src/redux/selectors";
 import { push } from "connected-react-router";
-import { format } from "date-fns";
+import { differenceInMinutes, format } from "date-fns";
+import { QUOTES, WRAPPER_PADDING } from "src/utils/constants";
+import { Call } from "src/types/Call";
+import Banner from "src/assets/Banner.jpg";
+import { getRandomItem } from "src/utils/utils";
+import { Quote } from "src/types/Common";
+import "./index.css";
+import { Connection } from "src/types/Connection";
+import {
+  EllipsisOutlined,
+  UserAddOutlined,
+  VideoCameraFilled,
+  VideoCameraOutlined,
+} from "@ant-design/icons";
+import { Skeleton } from "antd";
+
+const { Header, Footer, Sider, Content } = Layout;
+const { Meta } = Card;
 
 const mapStateToProps = (state: RootState) => ({
   calls: selectAllCalls(state),
+  connections: selectAllConnections(state),
+  name: state.session.user.firstName,
 });
 
 const mapDispatchToProps = { fetchCalls, push };
@@ -19,33 +48,126 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function DashboardPage({
   calls,
+  connections,
   fetchCalls,
   push,
+  name,
 }: PropsFromRedux): ReactElement {
+  const [appointments, setAppointments] = useState<
+    { call: Call; connection: Connection }[]
+  >([]);
+  const [dailyQuote, setDailyQuote] = useState(getRandomItem(QUOTES) as Quote);
+
   useEffect(() => {
     (async () => await fetchCalls())();
   }, [fetchCalls]);
 
+  useEffect(() => {
+    // TODO sort
+    const upcoming = calls
+      .filter((call) => call.status === "scheduled" || call.status === "live")
+      .map((call) => ({
+        call,
+        connection:
+          connections.find((connection) => connection.id === call.id) ||
+          ({
+            user: { firstName: "", lastName: "", profileImgPath: "" },
+          } as Connection),
+      }));
+
+    setAppointments(upcoming);
+  }, [calls, connections]);
+
   return (
-    <Layout.Content>
-      <PageHeader title="Your Pathway"></PageHeader>
-      {calls.map((call) => (
-        <Row>
-          <Col span={6}>
-            <Card
-              title={`Call ${call.id}`}
-              style={{ width: 300 }}
-              onClick={() => push(`call/${call.id}`)}
-            >
-              <p>
-                {format(new Date(call.start), "MM/dd HH:mm")} -{" "}
-                {format(new Date(call.end), "MM/dd HH:mm")}
-              </p>
-            </Card>
-          </Col>
-        </Row>
-      ))}
-    </Layout.Content>
+    <Layout>
+      <Content>
+        <PageHeader title={`Hi ${name}!`}></PageHeader>
+        <Space direction="vertical" size="large" style={WRAPPER_PADDING}>
+          <Row>
+            <Col span={24}>
+              <div>
+                <Space
+                  direction="vertical"
+                  align="center"
+                  style={{ backgroundImage: `url(${Banner})`, width: "100%" }}
+                  className="dashboard-header-container"
+                >
+                  <Typography.Title
+                    level={3}
+                    className="dashboard-header-content"
+                  >
+                    {format(new Date(), "HH:mm")}
+                  </Typography.Title>
+                  <Typography.Title
+                    level={5}
+                    className="dashboard-header-content"
+                  >
+                    {dailyQuote.quote}
+                  </Typography.Title>
+                  <Typography.Text className="dashboard-header-content">
+                    {dailyQuote.author}
+                  </Typography.Text>
+                </Space>
+                <div style={{ width: "100%", backgroundColor: "white" }}>
+                  {appointments.map((appointment) => (
+                    <Card>
+                      <Space size="large">
+                        <Avatar
+                          src={appointment.connection.user.profileImgPath}
+                        />
+                        <div>
+                          <Typography.Title level={3}>
+                            Call with {appointment.connection.user.firstName}
+                          </Typography.Title>
+                          <Typography.Text>
+                            {format(new Date(appointment.call.start), "HH:mm")}{" "}
+                            - {format(new Date(appointment.call.end), "HH:mm")}{" "}
+                            | starts in{" "}
+                            {differenceInMinutes(
+                              new Date(),
+                              new Date(appointment.call.start)
+                            )}{" "}
+                            minutes
+                          </Typography.Text>
+                        </div>
+                        <Space>
+                          <Button
+                            onClick={() => push(`call/${appointment.call.id}`)}
+                          >
+                            <EllipsisOutlined />
+                          </Button>
+                          <Button
+                            type="primary"
+                            onClick={() => push(`call/${appointment.call.id}`)}
+                          >
+                            Join
+                          </Button>
+                        </Space>
+                      </Space>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Card>
+                <VideoCameraFilled />
+                <Typography.Title level={4}>Schedule Call</Typography.Title>
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card>
+                <UserAddOutlined />
+                <Typography.Title level={4}>Add Contact</Typography.Title>
+              </Card>
+            </Col>
+          </Row>
+        </Space>
+      </Content>
+      <Sider theme="light">Sider</Sider>
+    </Layout>
   );
 }
 

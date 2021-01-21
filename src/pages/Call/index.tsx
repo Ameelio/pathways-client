@@ -10,11 +10,20 @@ import { RootState } from "src/redux";
 import RoomClient from "src/pages/Call/RoomClient";
 import * as mediasoupClient from "mediasoup-client";
 import io from "socket.io-client";
-import { Spin } from "antd";
+import { Button, Space, Spin, Typography } from "antd";
 import { Call } from "src/types/Call";
 import { connect, ConnectedProps } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { selectCallById } from "src/redux/selectors";
+import "./index.css";
+import {
+  AudioMutedOutlined,
+  AudioOutlined,
+  MessageOutlined,
+  PoweroffOutlined,
+  VideoCameraOutlined,
+} from "@ant-design/icons";
+import { format } from "date-fns";
 
 declare global {
   interface Window {
@@ -36,10 +45,10 @@ const connector = connect(mapStateToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-function Loader(): ReactElement {
+function Loader({ message }: { message: string }): ReactElement {
   return (
     <div className="video-loading-spinner">
-      <Spin tip="Loading video call..." />
+      <Spin tip={message} />
     </div>
   );
 }
@@ -49,6 +58,15 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(({ call, authInfo }) => {
   const [isAuthed, setIsAuthed] = useState(false);
   const [rc, setRc] = useState<RoomClient>();
   const [socket, setSocket] = useState<SocketIOClient.Socket>();
+  const [showOverlay, setShowOverlay] = useState(true);
+  const [participantHasJoined, setParticipantHasJoined] = useState(false);
+
+  const [participant, setParticipant] = useState(() => {
+    const video = document.createElement("video");
+    video.style.width = "100%";
+    video.style.height = "100%";
+    return video;
+  });
 
   useEffect(() => {
     if (!socket) {
@@ -65,9 +83,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(({ call, authInfo }) => {
   const joinRoom = useCallback(async () => {
     if (!call) return;
     const rc = new RoomClient(mediasoupClient, socket, call.id);
-    console.log("heree");
     await rc.init();
-    console.log("inited");
 
     setRc(rc);
   }, [call, socket]);
@@ -100,13 +116,13 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(({ call, authInfo }) => {
         await joinRoom();
         console.log("init room");
         setIsAuthed(true);
+        setLoading(false);
       })();
     }
   }, [call, authInfo, socket, joinRoom, isAuthed]);
 
   useEffect(() => {
     if (rc && isAuthed) {
-      console.log("herewqkeoqkeowq");
       (async () => {
         // Enumerate media devices
         const devices = await navigator.mediaDevices.enumerateDevices();
@@ -149,7 +165,8 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(({ call, authInfo }) => {
               stream: MediaStream,
               user: { type: string; id: number }
             ) => {
-              if (node) {
+              if (node && kind !== "inmate") {
+                console.log("CONSUME: outside stream");
                 if (kind === "video") {
                   const video = document.createElement("video");
                   video.style.width = "100%";
@@ -164,7 +181,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(({ call, authInfo }) => {
                   node.appendChild(audio);
                 }
 
-                setLoading(false);
+                setParticipantHasJoined(true);
               }
             }
           );
@@ -174,16 +191,68 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(({ call, authInfo }) => {
     [rc, isAuthed]
   );
 
+  const meRef = useCallback(
+    (node) => {
+      if (node !== null && rc && isAuthed) {
+        (async () => {
+          rc.on(
+            "consume",
+            async (
+              kind: string,
+              stream: MediaStream,
+              user: { type: string; id: number }
+            ) => {
+              if (node && user.type === "inmate") {
+                console.log("CONSUME: inmate stream");
+                if (kind === "video") {
+                  const video = document.createElement("video");
+                  video.style.width = "300px";
+                  video.style.height = "200px";
+                  video.srcObject = stream;
+                  video.autoplay = true;
+                  node.appendChild(video);
+                }
+              }
+            }
+          );
+        })();
+      }
+    },
+    [rc, isAuthed]
+  );
+
+  const getMessage = (): string => {
+    if (!isAuthed) {
+      return "Initializing video call...";
+    } else if (!participantHasJoined) {
+      return `Waiting for ${"Gabe"} to join the call...`;
+    }
+    return "Loading...";
+  };
+
   return (
-    <div
-      className="video-wrapper"
-      style={{
-        width: "100vw",
-        height: "100vh",
-      }}
-      ref={measuredRef}
-    >
-      {loading && <Loader />}
+    <div className="video-wrapper" ref={measuredRef}>
+      <div className="video-me" ref={meRef} />
+      <Space className="video-info-overlay">
+        <MessageOutlined />
+        <Typography.Title level={4}>
+          {format(new Date(), "HH:mm")}
+        </Typography.Title>
+      </Space>
+      {!participantHasJoined && <Loader message={getMessage()} />}
+      <Space className="video-overlay" align="center">
+        <Button
+          shape="round"
+          icon={true ? <AudioOutlined /> : <AudioMutedOutlined />}
+          size="large"
+        />
+        <Button shape="round" icon={<PoweroffOutlined />} size="large" />
+        <Button
+          shape="round"
+          icon={true ? <VideoCameraOutlined /> : <AudioMutedOutlined />}
+          size="large"
+        />
+      </Space>
     </div>
   );
 });

@@ -3,7 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import { RootState } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
-import { ConnectedRouter } from "connected-react-router";
+import { ConnectedRouter, push } from "connected-react-router";
 import { Layout } from "antd";
 import { Route, Switch } from "react-router";
 import { History } from "history";
@@ -14,11 +14,15 @@ import LoginPage from "src/pages/Login";
 import { ROUTES } from "./utils/constants";
 import { useEffect } from "react";
 import { fetchConnections } from "./redux/modules/connection";
+import Sidebar from "./components/menu/Sidebar";
+
+const { Footer, Header } = Layout;
 
 const mapStateToProps = (state: RootState) => ({
   session: state.session,
+  pathname: state.router.location.pathname,
 });
-const mapDispatchToProps = { fetchConnections };
+const mapDispatchToProps = { fetchConnections, push };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -27,7 +31,9 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 function App({
   session,
   history,
+  pathname,
   fetchConnections,
+  push,
 }: PropsFromRedux & { history: History }) {
   const defaultProtectedRouteProps: ProtectedRouteProps = {
     isAuthenticated: session.authInfo.token !== "", // TODO: improve this later
@@ -41,21 +47,28 @@ function App({
   return (
     <ConnectedRouter history={history}>
       <Layout style={{ minHeight: "100vh" }}>
-        <Switch>
-          <Route exact path="/login" component={LoginPage}></Route>
-          {ROUTES.map((route) => (
-            <ProtectedRoute
-              exact
-              {...defaultProtectedRouteProps}
-              path={route.path}
-              component={route.component}
-              key={route.label}
-            ></ProtectedRoute>
-          ))}
-        </Switch>
-        <Layout.Footer style={{ textAlign: "center" }}>
-          Connect ©2021 Created by Ameelio Inc.
-        </Layout.Footer>
+        <Sidebar
+          navigate={(path: string) => push(path)}
+          isVisible={session.isLoggedIn}
+          pathname={pathname}
+        />
+        <Layout>
+          <Switch>
+            <Route exact path="/login" component={LoginPage}></Route>
+            {ROUTES.map((route) => (
+              <ProtectedRoute
+                exact
+                {...defaultProtectedRouteProps}
+                path={route.path}
+                component={route.component}
+                key={route.label}
+              ></ProtectedRoute>
+            ))}
+          </Switch>
+          <Footer style={{ textAlign: "center" }}>
+            Connect ©2021 Created by Ameelio Inc.
+          </Footer>
+        </Layout>
       </Layout>
     </ConnectedRouter>
   );

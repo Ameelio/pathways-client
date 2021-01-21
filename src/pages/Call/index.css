@@ -1,0 +1,38 @@
+.video-wrapper {
+  width: 100vw;
+  height: 100vh;
+  background-color: #111;
+  display: flex;
+}
+
+.video-loading-spinner {
+  margin: auto;
+}
+
+.video-overlay {
+  position: absolute;
+  bottom: 0;
+  background-color: white;
+  display: flex;
+  width: 100%;
+  padding: 16px;
+  justify-content: center;
+}
+
+.video-info-overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: white;
+  border-radius: 4px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.video-me {
+  position: absolute;
+  bottom: 32;
+  left: 16;
+}

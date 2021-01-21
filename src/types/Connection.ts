@@ -7,5 +7,5 @@ export interface Connection {
   status: string;
   statusDetails: string;
   relationship: string;
-  contact: Contact;
+  user: Contact;
 }
