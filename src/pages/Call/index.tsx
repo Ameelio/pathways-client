@@ -36,7 +36,7 @@ import {
 import { format } from "date-fns";
 import { useUserMedia } from "./useUserMedia";
 import { goBack } from "connected-react-router";
-import { WRAPPER_PADDING } from "src/utils/constants";
+import { HEARTBEAT_INTERVAL, WRAPPER_PADDING } from "src/utils/constants";
 
 const { Sider } = Layout;
 declare global {
@@ -89,10 +89,14 @@ function MessageDisplay({ message }: { message: CallMessage }): ReactElement {
     }
   };
   return (
-    <Space align={type === "user" ? "end" : "start"}>
-      <Space direction="horizontal">
-        <Typography.Text>{getDisplayName()}</Typography.Text>
-        <Typography.Text>
+    <Space
+      direction="vertical"
+      align={type === "inmate" ? "end" : "start"}
+      style={{ width: "100%" }}
+    >
+      <Space>
+        <Typography.Text strong>{getDisplayName()}</Typography.Text>
+        <Typography.Text type="secondary">
           {format(new Date(message.timestamp), "HH:mm")}
         </Typography.Text>
       </Space>
@@ -262,6 +266,17 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
       [rc, isAuthed]
     );
 
+    let lastHeartbeatTime = new Date().getTime();
+    useEffect(() => {
+      if (rc && call) {
+        const now = new Date().getTime();
+        if (now - lastHeartbeatTime > HEARTBEAT_INTERVAL) {
+          rc.request("heartbeat", { callId: call.id });
+          lastHeartbeatTime = now;
+        }
+      }
+    }, [rc, call]);
+
     const getMessage = (): string => {
       if (!isAuthed) {
         return "Initializing video call...";
@@ -283,10 +298,22 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
     const onSendMessage = async () => {
       console.log("sending message");
       if (!socket || !call) return;
+      setDraftMessage("");
+      //TODO add property sent and change image visibility depending on whether it actually went through
+      setMessages([
+        ...messages,
+        {
+          content: draftMessage,
+          from: {
+            type: "inmate",
+            id: authInfo.id,
+          },
+          timestamp: new Date().toLocaleDateString(),
+        },
+      ]);
       const { participants } = await new Promise((resolve, reject) => {
         socket.emit("info", { callId: call.id }, resolve);
       });
-
       await new Promise((resolve) => {
         // TODO fetch actual credentials from redux
         socket.emit(
@@ -299,18 +326,6 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
           resolve
         );
       });
-      setDraftMessage("");
-      setMessages([
-        ...messages,
-        {
-          content: draftMessage,
-          from: {
-            type: "inmate",
-            id: authInfo.id,
-          },
-          timestamp: new Date().toLocaleDateString(),
-        },
-      ]);
     };
 
     return (
@@ -346,31 +361,33 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
         {(!chatCollapsed || showOverlay) && (
           <Sider
             theme="light"
-            style={{ minHeight: "100vh", ...WRAPPER_PADDING }}
+            style={{ height: "100vh", maxHeight: "100vh" }}
             width={300}
             collapsible
             collapsed={chatCollapsed}
             onCollapse={(collapsed) => setChatCollapsed(collapsed)}
           >
-            {!chatCollapsed && (
-              <PageHeader title="Chat" subTitle={format(new Date(), "HH:mm")} />
-            )}
-            {messages.map((message) => (
-              <MessageDisplay message={message} />
-            ))}
-            <div className="chat-container">
-              <Divider />
-              <Input.TextArea
-                value={draftMessage}
-                rows={2}
-                onChange={(e) => setDraftMessage(e.target.value)}
-                onPressEnter={(_e) => onSendMessage()}
-                onSubmit={(_e) => onSendMessage()}
-                className="chat-input"
-                placeholder="Type here..."
-                autoFocus
-                bordered={false}
-              />
+            {!chatCollapsed && <PageHeader title="Chat" />}
+
+            <div className="chat-container" style={WRAPPER_PADDING}>
+              <Space direction="vertical" style={{ overflowY: "scroll" }}>
+                {messages.map((message) => (
+                  <MessageDisplay message={message} />
+                ))}
+              </Space>
+              <div className="chat-input">
+                <Divider />
+                <Input.TextArea
+                  value={draftMessage}
+                  rows={2}
+                  onChange={(e) => setDraftMessage(e.target.value)}
+                  onPressEnter={(_e) => onSendMessage()}
+                  onSubmit={(_e) => onSendMessage()}
+                  placeholder="Type here..."
+                  autoFocus
+                  bordered={false}
+                />
+              </div>
             </div>
           </Sider>
         )}

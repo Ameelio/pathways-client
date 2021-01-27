@@ -66,9 +66,9 @@ function App({
             ))}
             <Redirect to="/login" />
           </Switch>
-          <Footer style={{ textAlign: "center" }}>
+          {/* <Footer style={{ textAlign: "center" }}>
             Connect ©2021 Created by Ameelio Inc.
-          </Footer>
+          </Footer> */}
         </Layout>
       </Layout>
     </ConnectedRouter>

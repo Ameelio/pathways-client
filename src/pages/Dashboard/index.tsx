@@ -220,7 +220,7 @@ function DashboardPage({
       <Sider theme="light" width={400}>
         <PageHeader title={"Your Loved Ones"} />
         {connections.map((connection) => (
-          <Card>
+          <Card key={connection.id}>
             <Card.Meta
               title={genFullName(connection.user)}
               avatar={<Avatar src={connection.user.profileImgPath} />}
