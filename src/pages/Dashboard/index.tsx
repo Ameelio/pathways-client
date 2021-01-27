@@ -19,7 +19,6 @@ import { push } from "connected-react-router";
 import { differenceInMinutes, format } from "date-fns";
 import { QUOTES, WRAPPER_PADDING } from "src/utils/constants";
 import { Call } from "src/types/Call";
-import Banner from "src/assets/Banner.jpg";
 import { genFullName, getRandomItem } from "src/utils/utils";
 import { Quote } from "src/types/Common";
 import "./index.css";
@@ -30,8 +29,6 @@ import {
   VideoCameraFilled,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Skeleton } from "antd";
-import { connectionActions } from "src/redux/modules/connection";
 
 const { Header, Footer, Sider, Content } = Layout;
 const { Meta } = Card;
@@ -39,7 +36,7 @@ const { Meta } = Card;
 const mapStateToProps = (state: RootState) => ({
   calls: selectAllCalls(state),
   connections: selectAllConnections(state),
-  name: state.session.user.firstName,
+  firstName: state.session.user.firstName,
 });
 
 const mapDispatchToProps = { fetchCalls, push };
@@ -53,13 +50,22 @@ function DashboardPage({
   connections,
   fetchCalls,
   push,
-  name,
+  firstName,
 }: PropsFromRedux): ReactElement {
   const [appointments, setAppointments] = useState<
     { call: Call; connection: Connection }[]
   >([]);
   const [dailyQuote, setDailyQuote] = useState(getRandomItem(QUOTES) as Quote);
 
+  const [currTime, setCurrTime] = useState(new Date());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  });
   useEffect(() => {
     (async () => await fetchCalls())();
   }, [fetchCalls]);
@@ -67,7 +73,11 @@ function DashboardPage({
   useEffect(() => {
     // TODO sort
     const upcoming = calls
-      .filter((call) => call.status === "scheduled" || call.status === "live")
+      .filter(
+        (call) =>
+          (call.status === "scheduled" || call.status === "live") &&
+          new Date(call.end) > new Date()
+      )
       .map((call) => ({
         call,
         connection:
@@ -98,7 +108,7 @@ function DashboardPage({
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Content>
-        <PageHeader title={`Hi ${name}!`}></PageHeader>
+        <PageHeader title={`Hi ${firstName}!`}></PageHeader>
         <Space direction="vertical" size="large" style={WRAPPER_PADDING}>
           <Row>
             <Col span={24}>
@@ -116,7 +126,7 @@ function DashboardPage({
                     level={3}
                     className="dashboard-header-content"
                   >
-                    {format(new Date(), "HH:mm")}
+                    {format(currTime, "HH:mm")}
                   </Typography.Title>
                   <Typography.Title
                     level={5}
@@ -129,43 +139,64 @@ function DashboardPage({
                   </Typography.Text>
                 </Space>
                 <div style={{ width: "100%", backgroundColor: "white" }}>
-                  {appointments.map((appointment) => (
+                  {!appointments.length && (
                     <Card>
-                      <Space size="large">
-                        <Avatar
-                          src={appointment.connection.user.profileImgPath}
-                        />
-                        <div>
-                          <Typography.Title level={3}>
-                            Call with {appointment.connection.user.firstName}
-                          </Typography.Title>
-                          <Typography.Text>
-                            {format(new Date(appointment.call.start), "HH:mm")}{" "}
-                            - {format(new Date(appointment.call.end), "HH:mm")}{" "}
-                            | starts in{" "}
-                            {differenceInMinutes(
-                              new Date(),
-                              new Date(appointment.call.start)
-                            )}{" "}
-                            minutes
-                          </Typography.Text>
-                        </div>
-                        <Space>
-                          <Button
-                            onClick={() => push(`call/${appointment.call.id}`)}
-                          >
-                            <EllipsisOutlined />
-                          </Button>
-                          <Button
-                            type="primary"
-                            onClick={() => push(`call/${appointment.call.id}`)}
-                          >
-                            Join
-                          </Button>
-                        </Space>
-                      </Space>
+                      <span>No upcoming calls today</span>
                     </Card>
-                  ))}
+                  )}
+                  {appointments.map((appointment) => {
+                    const tMinus = differenceInMinutes(
+                      new Date(appointment.call.start),
+                      new Date()
+                    );
+
+                    return (
+                      <Card key={appointment.call.id}>
+                        <Space size="large">
+                          <Avatar
+                            src={appointment.connection.user.profileImgPath}
+                          />
+                          <div>
+                            <Typography.Title level={3}>
+                              Call with {appointment.connection.user.firstName}
+                            </Typography.Title>
+                            <Typography.Text>
+                              {format(
+                                new Date(appointment.call.start),
+                                "HH:mm"
+                              )}{" "}
+                              -{" "}
+                              {format(new Date(appointment.call.end), "HH:mm")}{" "}
+                              | {tMinus > 0 ? "starts in " : "started "}
+                              <Typography.Text
+                                type={tMinus >= 0 ? "warning" : "danger"}
+                              >
+                                {Math.abs(tMinus)} minutes{" "}
+                                {tMinus < 0 && " ago"}
+                              </Typography.Text>
+                            </Typography.Text>
+                          </div>
+                          <Space>
+                            <Button
+                              onClick={() =>
+                                push(`call/${appointment.call.id}`)
+                              }
+                            >
+                              <EllipsisOutlined />
+                            </Button>
+                            <Button
+                              type="primary"
+                              onClick={() =>
+                                push(`call/${appointment.call.id}`)
+                              }
+                            >
+                              Join
+                            </Button>
+                          </Space>
+                        </Space>
+                      </Card>
+                    );
+                  })}
                 </div>
               </div>
             </Col>

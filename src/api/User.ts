@@ -8,6 +8,7 @@ import { User } from "src/types/User";
 async function initializeSession(body: any) {
   const user = body.data.user as User;
   const { token, id } = body.data.user;
+  console.log("setting session");
   Store.dispatch(
     setSession({
       user,

@@ -10,3 +10,14 @@ export interface Call {
   status: "ended" | "scheduled" | "terminated" | "rescheduled" | "live";
   connectionId: number;
 }
+
+export interface CallParticipant {
+  type: "monitor" | "inmate" | "user";
+  id: number;
+}
+
+export interface CallMessage {
+  content: string;
+  from: CallParticipant;
+  timestamp: string;
+}

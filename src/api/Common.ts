@@ -6,6 +6,7 @@ import path from "path";
 
 export const API_URL = `${process.env.REACT_APP_BASE_URL}api/`;
 
+console.log(process.env.REACT_APP_BASE_URL);
 export interface ApiResponse {
   date: number;
   good: boolean;

@@ -10,8 +10,17 @@ import { RootState } from "src/redux";
 import RoomClient from "src/pages/Call/RoomClient";
 import * as mediasoupClient from "mediasoup-client";
 import io from "socket.io-client";
-import { Button, Space, Spin, Typography } from "antd";
-import { Call } from "src/types/Call";
+import {
+  Button,
+  Space,
+  Spin,
+  Typography,
+  Layout,
+  PageHeader,
+  Input,
+  Divider,
+} from "antd";
+import { Call, CallMessage, CallParticipant } from "src/types/Call";
 import { connect, ConnectedProps } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { selectCallById } from "src/redux/selectors";
@@ -21,12 +30,15 @@ import {
   AudioOutlined,
   MessageOutlined,
   PoweroffOutlined,
+  ShopTwoTone,
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { format } from "date-fns";
 import { useUserMedia } from "./useUserMedia";
 import { goBack } from "connected-react-router";
+import { WRAPPER_PADDING } from "src/utils/constants";
 
+const { Sider } = Layout;
 declare global {
   interface Window {
     Debug: any;
@@ -64,6 +76,31 @@ const CAPTURE_OPTIONS = {
   },
 };
 
+function MessageDisplay({ message }: { message: CallMessage }): ReactElement {
+  const { type } = message.from;
+  const getDisplayName = () => {
+    switch (type) {
+      case "inmate":
+        return "You";
+      case "monitor":
+        return "DOC";
+      case "user":
+        return "Loved One";
+    }
+  };
+  return (
+    <Space align={type === "user" ? "end" : "start"}>
+      <Space direction="horizontal">
+        <Typography.Text>{getDisplayName()}</Typography.Text>
+        <Typography.Text>
+          {format(new Date(message.timestamp), "HH:mm")}
+        </Typography.Text>
+      </Space>
+      <Typography.Text>{message.content}</Typography.Text>
+    </Space>
+  );
+}
+
 const CallBase: React.FC<PropsFromRedux> = React.memo(
   ({ call, authInfo, goBack }) => {
     const [isAuthed, setIsAuthed] = useState(false);
@@ -71,12 +108,13 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
     const [socket, setSocket] = useState<SocketIOClient.Socket>();
     const [showOverlay, setShowOverlay] = useState(true);
     const [participantHasJoined, setParticipantHasJoined] = useState(false);
-
+    const [chatCollapsed, setChatCollapsed] = useState(false);
     const mediaStream = useUserMedia(CAPTURE_OPTIONS);
+    const [draftMessage, setDraftMessage] = useState("");
+    const [messages, setMessages] = useState<CallMessage[]>([]);
 
     const meRef = useRef<HTMLVideoElement>(null);
     if (meRef.current && !meRef.current.srcObject && mediaStream) {
-      console.log("setting my video");
       meRef.current.srcObject = mediaStream;
     }
 
@@ -128,7 +166,6 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
             );
           });
           await joinRoom();
-          console.log("init room");
           setIsAuthed(true);
         })();
       }
@@ -167,6 +204,25 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
       }
     }, [isAuthed, rc]);
 
+    useEffect(() => {
+      if (rc && isAuthed) {
+        rc.on(
+          "textMessage",
+          async (from: CallParticipant, contents: string, meta: string) => {
+            console.log("receiving message");
+            setMessages([
+              ...messages,
+              {
+                content: contents,
+                from,
+                timestamp: new Date().toLocaleDateString(),
+              },
+            ]);
+          }
+        );
+      }
+    }, [isAuthed, rc]);
+
     const measuredRef = useCallback(
       (node) => {
         if (node !== null && rc && isAuthed) {
@@ -176,7 +232,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
               async (
                 kind: string,
                 stream: MediaStream,
-                user: { type: string; id: number }
+                user: CallParticipant
               ) => {
                 console.log(`CONSUME RECEIVED: ${user.type} ${kind}`);
                 if (node && user.type === "user") {
@@ -197,14 +253,6 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
 
                   setParticipantHasJoined(true);
                 } else if (node && user.type === "inmate") {
-                  // console.log("CONSUME: inmate stream");
-                  // const video = document.createElement("video");
-                  // video.style.width = "300px";
-                  // video.style.height = "300px";
-                  // video.className="video-me";
-                  // video.srcObject = stream;
-                  // video.autoplay = true;
-                  // node.appendChild(video);
                 }
               }
             );
@@ -223,53 +271,110 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
       return "Loading...";
     };
 
+    let timeout: any;
     const onMouseMove = () => {
       setShowOverlay(true);
-      let timeout;
       (() => {
         clearTimeout(timeout);
         timeout = setTimeout(() => setShowOverlay(false), 5000);
       })();
     };
 
-    return (
-      <div
-        className="video-wrapper"
-        ref={measuredRef}
-        onMouseMove={() => onMouseMove()}
-      >
-        <video className="video-me" autoPlay={true} ref={meRef} />
-        {!participantHasJoined && <Loader message={getMessage()} />}
-        {showOverlay && (
-          <Space className="video-overlay-info">
-            <MessageOutlined />
-            <Typography.Title level={4}>
-              {format(new Date(), "HH:mm")}
-            </Typography.Title>
-          </Space>
-        )}
+    const onSendMessage = async () => {
+      console.log("sending message");
+      if (!socket || !call) return;
+      const { participants } = await new Promise((resolve, reject) => {
+        socket.emit("info", { callId: call.id }, resolve);
+      });
 
-        {showOverlay && (
-          <Space className="video-overlay-actions" align="center">
-            <Button
-              shape="round"
-              icon={true ? <AudioOutlined /> : <AudioMutedOutlined />}
-              size="large"
-            />
-            <Button
-              shape="round"
-              icon={<PoweroffOutlined />}
-              size="large"
-              onClick={() => goBack()}
-            />
-            <Button
-              shape="round"
-              icon={true ? <VideoCameraOutlined /> : <AudioMutedOutlined />}
-              size="large"
-            />
-          </Space>
+      await new Promise((resolve) => {
+        // TODO fetch actual credentials from redux
+        socket.emit(
+          "textMessage",
+          {
+            callId: call.id,
+            contents: draftMessage,
+            recipients: participants,
+          },
+          resolve
+        );
+      });
+      setDraftMessage("");
+      setMessages([
+        ...messages,
+        {
+          content: draftMessage,
+          from: {
+            type: "inmate",
+            id: authInfo.id,
+          },
+          timestamp: new Date().toLocaleDateString(),
+        },
+      ]);
+    };
+
+    return (
+      <Layout>
+        <div
+          className="video-wrapper ant-layout-content"
+          ref={measuredRef}
+          onMouseMove={() => onMouseMove()}
+        >
+          <video className="video-me" autoPlay={true} ref={meRef} />
+          {!participantHasJoined && <Loader message={getMessage()} />}
+          {showOverlay && (
+            <Space className="video-overlay-actions" align="center">
+              <Button
+                shape="round"
+                icon={true ? <AudioOutlined /> : <AudioMutedOutlined />}
+                size="large"
+              />
+              <Button
+                shape="round"
+                icon={<PoweroffOutlined />}
+                size="large"
+                onClick={() => goBack()}
+              />
+              <Button
+                shape="round"
+                icon={true ? <VideoCameraOutlined /> : <AudioMutedOutlined />}
+                size="large"
+              />
+            </Space>
+          )}
+        </div>
+        {(!chatCollapsed || showOverlay) && (
+          <Sider
+            theme="light"
+            style={{ minHeight: "100vh", ...WRAPPER_PADDING }}
+            width={300}
+            collapsible
+            collapsed={chatCollapsed}
+            onCollapse={(collapsed) => setChatCollapsed(collapsed)}
+          >
+            {!chatCollapsed && (
+              <PageHeader title="Chat" subTitle={format(new Date(), "HH:mm")} />
+            )}
+            {messages.map((message) => (
+              <MessageDisplay message={message} />
+            ))}
+            <div className="chat-container">
+              <Divider />
+              <Input.TextArea
+                value={draftMessage}
+                rows={2}
+                onChange={(e) => setDraftMessage(e.target.value)}
+                onPressEnter={(_e) => onSendMessage()}
+                onSubmit={(_e) => onSendMessage()}
+                className="chat-input"
+                placeholder="Type here..."
+                autoFocus
+                bordered={false}
+              />
+            </div>
+          </Sider>
         )}
-      </div>
+      </Layout>
     );
   }
 );

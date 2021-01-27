@@ -27,7 +27,10 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 function LoginContainer({ session }: PropsFromRedux): ReactElement {
   const [error, setError] = useState("");
 
-  if (session.isLoggedIn) return <Redirect to="/" />;
+  if (session.isLoggedIn) {
+    console.log("here");
+    return <Redirect to="/" />;
+  }
 
   const onFinish = async (values: any) => {
     try {

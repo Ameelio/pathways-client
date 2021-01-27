@@ -5,7 +5,7 @@ import { RootState } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
 import { ConnectedRouter, push } from "connected-react-router";
 import { Layout } from "antd";
-import { Route, Switch } from "react-router";
+import { Redirect, Route, Switch } from "react-router";
 import { History } from "history";
 import ProtectedRoute, {
   ProtectedRouteProps,
@@ -64,6 +64,7 @@ function App({
                 key={route.label}
               ></ProtectedRoute>
             ))}
+            <Redirect to="/login" />
           </Switch>
           <Footer style={{ textAlign: "center" }}>
             Connect ©2021 Created by Ameelio Inc.
