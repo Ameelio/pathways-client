@@ -28,8 +28,7 @@
 .chat-input {
   margin-top: auto;
   margin-bottom: 32px;
-  /* position: absolute; */
-  /* bottom: 32px; */
+  flex-shrink: 0;
 }
 
 .video-me {

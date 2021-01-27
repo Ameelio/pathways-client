@@ -266,14 +266,12 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
       [rc, isAuthed]
     );
 
-    let lastHeartbeatTime = new Date().getTime();
     useEffect(() => {
       if (rc && call) {
-        const now = new Date().getTime();
-        if (now - lastHeartbeatTime > HEARTBEAT_INTERVAL) {
-          rc.request("heartbeat", { callId: call.id });
-          lastHeartbeatTime = now;
-        }
+        const interval = setInterval(() => {
+          rc.socket.emit("heartbeat", { callId: call.id });
+        }, HEARTBEAT_INTERVAL);
+        return () => clearInterval(interval);
       }
     }, [rc, call]);
 
@@ -369,26 +367,28 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
           >
             {!chatCollapsed && <PageHeader title="Chat" />}
 
-            <div className="chat-container" style={WRAPPER_PADDING}>
-              <Space direction="vertical" style={{ overflowY: "scroll" }}>
-                {messages.map((message) => (
-                  <MessageDisplay message={message} />
-                ))}
-              </Space>
-              <div className="chat-input">
-                <Divider />
-                <Input.TextArea
-                  value={draftMessage}
-                  rows={2}
-                  onChange={(e) => setDraftMessage(e.target.value)}
-                  onPressEnter={(_e) => onSendMessage()}
-                  onSubmit={(_e) => onSendMessage()}
-                  placeholder="Type here..."
-                  autoFocus
-                  bordered={false}
-                />
+            {!chatCollapsed && (
+              <div className="chat-container" style={WRAPPER_PADDING}>
+                <Space direction="vertical" style={{ overflowY: "scroll" }}>
+                  {messages.map((message) => (
+                    <MessageDisplay message={message} />
+                  ))}
+                </Space>
+                <div className="chat-input">
+                  <Divider />
+                  <Input.TextArea
+                    value={draftMessage}
+                    rows={2}
+                    onChange={(e) => setDraftMessage(e.target.value)}
+                    onPressEnter={(_e) => onSendMessage()}
+                    onSubmit={(_e) => onSendMessage()}
+                    placeholder="Type here..."
+                    autoFocus
+                    bordered={false}
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </Sider>
         )}
       </Layout>
