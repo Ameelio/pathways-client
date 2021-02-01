@@ -35,7 +35,7 @@ import {
 } from "@ant-design/icons";
 import { format } from "date-fns";
 import { useUserMedia } from "./useUserMedia";
-import { goBack } from "connected-react-router";
+import { push } from "connected-react-router";
 import { HEARTBEAT_INTERVAL, WRAPPER_PADDING } from "src/utils/constants";
 
 const { Sider } = Layout;
@@ -55,7 +55,7 @@ const mapStateToProps = (
   authInfo: state.session.authInfo,
 });
 
-const mapDispatchToProps = { goBack };
+const mapDispatchToProps = { push };
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -106,7 +106,7 @@ function MessageDisplay({ message }: { message: CallMessage }): ReactElement {
 }
 
 const CallBase: React.FC<PropsFromRedux> = React.memo(
-  ({ call, authInfo, goBack }) => {
+  ({ call, authInfo, push }) => {
     const [isAuthed, setIsAuthed] = useState(false);
     const [rc, setRc] = useState<RoomClient>();
     const [socket, setSocket] = useState<SocketIOClient.Socket>();
@@ -125,10 +125,10 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
     useEffect(() => {
       if (!socket) {
         const s = io.connect(
-          `${process.env.REACT_APP_MEDIASOUP_HOSTNAME}` || "localhost:8000",
-          {
-            transports: ["websocket"],
-          }
+          `${process.env.REACT_APP_MEDIASOUP_HOSTNAME}` || "localhost:8000"
+          // {
+          //   transports: ["websocket"],
+          // }
         );
         setSocket(s);
       }
@@ -210,10 +210,20 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
 
     useEffect(() => {
       if (rc && isAuthed) {
-        rc.on(
+        console.log("listening to text message");
+        rc.socket.on(
           "textMessage",
-          async (from: CallParticipant, contents: string, meta: string) => {
-            console.log("receiving message");
+          async ({
+            from,
+            contents,
+            meta,
+          }: {
+            from: CallParticipant;
+            contents: string;
+            meta: string;
+          }) => {
+            console.log(contents);
+            console.log(from);
             setMessages([
               ...messages,
               {
@@ -265,15 +275,6 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
       },
       [rc, isAuthed]
     );
-
-    useEffect(() => {
-      if (rc && call) {
-        const interval = setInterval(() => {
-          rc.socket.emit("heartbeat", { callId: call.id });
-        }, HEARTBEAT_INTERVAL);
-        return () => clearInterval(interval);
-      }
-    }, [rc, call]);
 
     const getMessage = (): string => {
       if (!isAuthed) {
@@ -346,7 +347,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
                 shape="round"
                 icon={<PoweroffOutlined />}
                 size="large"
-                onClick={() => goBack()}
+                onClick={() => push(`/feedback/${call?.id}`)}
               />
               <Button
                 shape="round"

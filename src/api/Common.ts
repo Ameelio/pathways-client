@@ -45,13 +45,16 @@ export async function fetchAuthenticated(
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization: `Bearer ${state.session.authInfo.token}`,
-      ["X-Ameelio-User-Type"]: "inmate",
-      ["X-Ameelio-Inmate-Id"]: `${state.session.authInfo.id}`,
+      "X-Ameelio-User-Type": "inmate",
+      "X-Ameelio-Inmate-Id": `${state.session.authInfo.id}`,
     },
   };
 
+  console.log(
+    url.resolve(`${API_URL}/inmate/${state.session.authInfo.id}`, fetchUrl)
+  );
   const response = await fetchTimeout(
-    path.join(API_URL, `inmate/${state.session.authInfo.id}`, fetchUrl),
+    `${API_URL}/inmate/${state.session.authInfo.id}/${fetchUrl}`,
     requestOptions,
     timeout
   );

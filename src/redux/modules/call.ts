@@ -8,7 +8,7 @@ import { fetchAuthenticated } from "src/api/Common";
 import { Call } from "src/types/Call";
 
 export const fetchCalls = createAsyncThunk("calls/fetchAll", async () => {
-  const body = await fetchAuthenticated(`/calls`);
+  const body = await fetchAuthenticated(`calls`);
   if (body.status !== 200) {
     throw body;
   }

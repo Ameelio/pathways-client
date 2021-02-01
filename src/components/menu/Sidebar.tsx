@@ -16,7 +16,12 @@ export default function Sidebar({
 }: Props): ReactElement {
   const [collapsed, setCollapsed] = useState(false);
 
-  if (!isVisible || pathname.indexOf("call") !== -1) return <div />;
+  if (
+    !isVisible ||
+    pathname.indexOf("call") !== -1 ||
+    pathname.indexOf("feedback") !== -1
+  )
+    return <div />;
   return (
     <Sider
       theme="light"

@@ -1,11 +1,13 @@
 import { Quote, Route } from "src/types/Common";
 import DashboardPage from "src/pages/Dashboard";
 import CallPage from "src/pages/Call";
+import CallFeedbackPage from "src/pages/CallFeedback";
 
 export const UNAUTHENTICATED_USER_ID = -1;
 
 export const ROUTES: Route[] = [
   { path: "/call/:id", component: CallPage, label: "Call" },
+  { path: "/feedback/:id", component: CallFeedbackPage, label: "Feedback" },
   { path: "/", component: DashboardPage, label: "Dash" },
 ];
 

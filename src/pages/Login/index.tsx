@@ -28,7 +28,6 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
   const [error, setError] = useState("");
 
   if (session.isLoggedIn) {
-    console.log("here");
     return <Redirect to="/" />;
   }
 

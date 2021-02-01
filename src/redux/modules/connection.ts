@@ -11,7 +11,7 @@ import { fetchAuthenticated } from "src/api/Common";
 export const fetchConnections = createAsyncThunk(
   "connections/fetchAll",
   async () => {
-    const body = await fetchAuthenticated(`/connections`);
+    const body = await fetchAuthenticated(`connections`);
     if (body.status !== 200) {
       throw body;
     }
