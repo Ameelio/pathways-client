@@ -73,6 +73,8 @@ class RoomClient {
     // Consumers and producers
     this.consumers = {};
     this.producers = {};
+    this.micProducer = null;
+    this.videoProducer = null;
 
     // Event handlers
     this.handlers = { consume: [] };
@@ -201,8 +203,11 @@ class RoomClient {
     }
 
     const producer = await this.producerTransport.produce(params);
+    console.log(producer);
     window.producers.push(producer);
     this.producers[producer.id] = producer;
+    if (producer._kind === "audio") this.micProducer = producer;
+    else if (producer._kind === "video") this.videoProducer = producer;
   }
 
   async loadDevice(routerRtpCapabilities) {
@@ -232,6 +237,26 @@ class RoomClient {
 
   async terminate() {
     await this.request("terminate", { callId: this.callId });
+  }
+
+  async turnOffVideo() {
+    // await this.producer.pause()
+  }
+
+  muteAudio() {
+    if (this.micProducer) this.micProducer.pause();
+  }
+
+  unmuteAudio() {
+    if (this.micProducer) this.micProducer.resume();
+  }
+
+  enableWebcam() {
+    if (this.videoProducer) this.videoProducer.resume();
+  }
+
+  disableWebcam() {
+    if (this.videoProducer) this.videoProducer.pause();
   }
 }
 

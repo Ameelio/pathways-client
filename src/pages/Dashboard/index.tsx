@@ -18,7 +18,7 @@ import { selectAllCalls, selectAllConnections } from "src/redux/selectors";
 import { push } from "connected-react-router";
 import { differenceInMinutes, format } from "date-fns";
 import { QUOTES, WRAPPER_PADDING } from "src/utils/constants";
-import { Call } from "src/types/Call";
+import { BaseCall } from "src/types/Call";
 import { genFullName, getRandomItem } from "src/utils/utils";
 import { Quote } from "src/types/Common";
 import "./index.css";
@@ -53,7 +53,7 @@ function DashboardPage({
   firstName,
 }: PropsFromRedux): ReactElement {
   const [appointments, setAppointments] = useState<
-    { call: Call; connection: Connection }[]
+    { call: BaseCall; connection: Connection }[]
   >([]);
   const [dailyQuote, setDailyQuote] = useState(getRandomItem(QUOTES) as Quote);
 
