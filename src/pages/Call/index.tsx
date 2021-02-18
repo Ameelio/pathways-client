@@ -20,6 +20,7 @@ import {
   Input,
   Divider,
   Avatar,
+  Badge,
 } from "antd";
 import { CallMessage, CallParticipant } from "src/types/Call";
 import { connect, ConnectedProps } from "react-redux";
@@ -126,6 +127,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
     const [messages, setMessages] = useState<CallMessage[]>([]);
     const [audioOn, setAudioOn] = useState(true);
     const [videoOn, setVideoOn] = useState(true);
+    const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
 
     const meRef = useRef<HTMLVideoElement>(null);
     if (meRef.current && !meRef.current.srcObject && mediaStream) {
@@ -231,8 +233,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
             contents: string;
             meta: string;
           }) => {
-            console.log(contents);
-            console.log(from);
+            if (chatCollapsed) setHasUnreadMessages(true);
             if (from.type === "monitor") {
               openNotificationWithIcon("DOC Warning", contents, "warning");
             }
@@ -247,7 +248,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
           }
         );
       }
-    }, [isAuthed, rc, messages]);
+    }, [isAuthed, rc, messages, chatCollapsed]);
 
     const measuredRef = useCallback(
       (node) => {
@@ -260,13 +261,12 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
                 stream: MediaStream,
                 user: CallParticipant
               ) => {
-                openNotificationWithIcon(
-                  "joined the call.",
-                  "Your call will connect soon.",
-                  "info"
-                );
                 if (node && user.type === "user") {
-                  console.log("CONSUME: user stream");
+                  openNotificationWithIcon(
+                    `${call?.connection.user.firstName} joined the call.`,
+                    "Your call will connect soon.",
+                    "info"
+                  );
                   if (kind === "video") {
                     const video = document.createElement("video");
                     video.style.width = "100%";
@@ -289,7 +289,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
           })();
         }
       },
-      [rc, isAuthed]
+      [rc, isAuthed, call?.connection.user.firstName]
     );
 
     if (!call) return <div />;
@@ -424,6 +424,24 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
                     "info"
                   );
                   setVideoOn((isVideoOn) => !isVideoOn);
+                }}
+              />
+              <Button
+                shape="round"
+                style={{ backgroundColor: chatCollapsed ? "#fff" : "#f5f5f5" }}
+                icon={
+                  chatCollapsed ? (
+                    <Badge dot={hasUnreadMessages}>
+                      <MessageOutlined style={{ fontSize: 24 }} />
+                    </Badge>
+                  ) : (
+                    <MessageOutlined style={{ fontSize: 24 }} />
+                  )
+                }
+                size="large"
+                onClick={() => {
+                  if (chatCollapsed) setHasUnreadMessages(false);
+                  setChatCollapsed((collapsed) => !collapsed);
                 }}
               />
             </Space>
