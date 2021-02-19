@@ -1,0 +1,25 @@
+{
+  "title": "Welcom to pathways",
+  "buttonText": "Login",
+  "doc": {
+    "warning": "DOC Warning"
+  },
+  "peer": {
+    "joinedCallTitle": "joined the call",
+    "joinedCallBody": "Your call will connect soon.",
+    "muted": "muted their mic",
+    "unmuted": "unmuted their mic",
+    "videoOn": "turned on their video",
+    "videoOff": "turned off their video"
+  },
+  "waitingRoom": {
+    "initialization": "Initializing video call...",
+    "waitingForPrefix": "Waiting for",
+    "waitingForSuffix": "to join the call",
+    "loading": "Loading..."
+  },
+  "chat": {
+    "title": "Chat",
+    "placeholder": "Type here..."
+  }
+}

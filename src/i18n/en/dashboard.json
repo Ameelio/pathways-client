@@ -1,0 +1,15 @@
+{
+  "call": {
+    "title": "Upcoming Calls",
+    "seeAll": "See All",
+    "noCalls": "No upcoming calls",
+    "minutes": "minutes",
+    "ago": "ago",
+    "join": "join"
+  },
+  "connection": {
+    "approved": "Approved",
+    "pending": "Pending",
+    "title": "Connections"
+  }
+}

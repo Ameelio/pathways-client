@@ -1,0 +1,15 @@
+{
+  "call": {
+    "title": "Próximas llamadas",
+    "seeAll": "Ver Todo",
+    "noCalls": "No hay próximas llamadas",
+    "minutes": "minutos",
+    "ago": "atrás",
+    "join": "Únete"
+  },
+  "connection": {
+    "approved": "Aprobada(o)s",
+    "pending": "Pendientes",
+    "title": "Conexiones"
+  }
+}

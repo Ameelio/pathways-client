@@ -32,6 +32,8 @@ import {
 import { Quote } from "src/types/Common";
 import "./index.css";
 import { EllipsisOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
+import "src/i18n/config";
 
 const { Content } = Layout;
 
@@ -50,17 +52,6 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-const tabList = [
-  {
-    key: "approved",
-    tab: "Approved",
-  },
-  {
-    key: "pending",
-    tab: "Pending",
-  },
-];
-
 function DashboardPage({
   calls,
   connections,
@@ -68,6 +59,18 @@ function DashboardPage({
   push,
   firstName,
 }: PropsFromRedux): ReactElement {
+  const { t } = useTranslation("dashboard");
+
+  const tabList = [
+    {
+      key: "approved",
+      tab: t("connection.approved"),
+    },
+    {
+      key: "pending",
+      tab: t("connection.pending"),
+    },
+  ];
   const [dailyQuote] = useState(getRandomItem(QUOTES) as Quote);
 
   const [currTime, setCurrTime] = useState(new Date());
@@ -138,15 +141,15 @@ function DashboardPage({
           <Row gutter={16}>
             <Col span={16}>
               <Card
-                title="Upcoming Calls"
+                title={t("call.title")}
                 extra={
                   <Typography.Link onClick={() => push("/")}>
-                    See All
+                    {t("call.seeAll")}
                   </Typography.Link>
                 }
               >
                 {!calls.length && (
-                  <Typography.Text>No upcoming calls</Typography.Text>
+                  <Typography.Text>{t("call.noCalls")}</Typography.Text>
                 )}
                 <Space></Space>
                 {calls.map((call) => {
@@ -170,8 +173,8 @@ function DashboardPage({
                               <Typography.Text
                                 type={tMinus >= 0 ? "warning" : "danger"}
                               >
-                                {Math.abs(tMinus)} minutes{" "}
-                                {tMinus < 0 && " ago"}
+                                {Math.abs(tMinus)} {t("call.minutes")}{" "}
+                                {tMinus < 0 && `${t("call.ago")}`}
                               </Typography.Text>
                             </Typography.Text>
                             <Space>
@@ -197,7 +200,7 @@ function DashboardPage({
                               type="primary"
                               onClick={() => push(`call/${call.id}`)}
                             >
-                              Join
+                              {t("call.join")}
                             </Button>
                           </Space>
                         </Row>
@@ -209,7 +212,7 @@ function DashboardPage({
             </Col>
             <Col span={8}>
               <Card
-                title="Connections"
+                title={t("connection.title")}
                 tabList={tabList}
                 activeTabKey={activeContactTab}
                 onTabChange={(key) => setActiveContactTab(key)}

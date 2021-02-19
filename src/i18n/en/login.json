@@ -1,0 +1,8 @@
+{
+  "title": "Welcome to pathways",
+  "buttonText": "Login",
+  "placeholder": {
+    "inmateNumber": "Inmate Number",
+    "pinCode": "Pin Code"
+  }
+}

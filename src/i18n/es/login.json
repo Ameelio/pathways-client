@@ -1,0 +1,8 @@
+{
+  "title": "Bienvenido a Ameelio",
+  "buttonText": "Iniciar Sesión",
+  "placeholder": {
+    "inmateNumber": "Número de Persona Encarcelada",
+    "pinCode": "Código PIN"
+  }
+}

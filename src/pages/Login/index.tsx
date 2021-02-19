@@ -17,6 +17,8 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { showToast } from "src/utils/utils";
 import { ReactComponent as Logo } from "src/assets/logo.svg";
 import "./index.css";
+import "src/i18n/config";
+import { useTranslation } from "react-i18next";
 
 const { Content } = Layout;
 
@@ -29,6 +31,8 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function LoginContainer({ session }: PropsFromRedux): ReactElement {
+  const { t } = useTranslation("login");
+
   if (session.isLoggedIn) {
     return <Redirect to="/" />;
   }
@@ -56,7 +60,7 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
         </Row>
 
         <Card className="login-form-container">
-          <Typography.Title level={3}>Welcome to Pathways!</Typography.Title>
+          <Typography.Title level={3}>{t("title")}</Typography.Title>
           <Form
             name="basic"
             onFinish={onFinish}
@@ -69,7 +73,7 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
             >
               <Input
                 prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Inmate Number"
+                placeholder={t("placeholder.inmateNumber")}
               />
             </Form.Item>
 
@@ -79,13 +83,13 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
             >
               <Input.Password
                 prefix={<LockOutlined className="site-form-item-icon" />}
-                placeholder="Pin Code"
+                placeholder={t("placeholder.pinCode")}
               />
             </Form.Item>
 
             <Form.Item>
               <Button type="primary" htmlType="submit" size="large" block>
-                Log In
+                {t("buttonText")}
               </Button>
             </Form.Item>
           </Form>

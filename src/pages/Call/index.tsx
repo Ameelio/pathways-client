@@ -43,6 +43,8 @@ import {
   openNotificationWithIcon,
   showToast,
 } from "src/utils/utils";
+import { useTranslation } from "react-i18next";
+import "src/i18n/config";
 
 const { Sider } = Layout;
 declare global {
@@ -114,6 +116,8 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const CallBase: React.FC<PropsFromRedux> = React.memo(
   ({ call, authInfo, push, initials }) => {
+    const { t } = useTranslation("call");
+
     const [isAuthed, setIsAuthed] = useState(false);
     const [rc, setRc] = useState<RoomClient>();
     const [socket, setSocket] = useState<SocketIOClient.Socket>();
@@ -192,14 +196,10 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
           // Enumerate media devices
           const devices = await navigator.mediaDevices.enumerateDevices();
 
-          console.log(devices);
-
           // Get a video input (should be the only one) to send
           const videoInput = Array.from(devices).filter(
             (device) => device.kind === "videoinput"
           )[0];
-
-          console.log("producing video");
 
           // Produce video with it
           await rc.produce("videoType", videoInput);
@@ -210,8 +210,6 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
           const audioInput = Array.from(devices).filter(
             (device) => device.kind === "audioinput"
           )[0];
-
-          console.log("producing audio");
 
           // Produce video with it
           await rc.produce("audioType", audioInput);
@@ -236,7 +234,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
           }) => {
             setHasUnreadMessages(true);
             if (from.type === "monitor") {
-              openNotificationWithIcon("DOC Warning", contents, "warning");
+              openNotificationWithIcon(t("doc.warning"), contents, "warning");
             }
             setMessages((messages) => [
               ...messages,
@@ -268,7 +266,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
           }
         );
       }
-    }, [isAuthed, rc]);
+    }, [isAuthed, rc, t]);
 
     useEffect(() => {
       if (!chatCollapsed) setHasUnreadMessages(false);
@@ -278,23 +276,23 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
       if (call && participantHasJoined)
         showToast(
           "peerVideo",
-          `${call.connection.user.firstName} turned ${
-            peerVideoOn ? "on" : "off"
-          } their video`,
+          `${call.connection.user.firstName} ${
+            peerVideoOn ? t("peer.videoOn") : t("peer.videoOff")
+          }`,
           "info"
         );
-    }, [peerVideoOn, call, participantHasJoined]);
+    }, [peerVideoOn, call, participantHasJoined, t]);
 
     useEffect(() => {
       if (call && participantHasJoined)
         showToast(
           "peerAudio",
           `${call.connection.user.firstName} ${
-            peerAudioOn ? "unmuted" : "muted`"
-          } their microphone`,
+            peerAudioOn ? t("peer.unmuted") : t("peer.muted")
+          }`,
           "info"
         );
-    }, [peerAudioOn, call, participantHasJoined]);
+    }, [peerAudioOn, call, participantHasJoined, t]);
 
     const measuredRef = useCallback(
       (node) => {
@@ -336,21 +334,23 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
     useEffect(() => {
       if (participantHasJoined && call)
         openNotificationWithIcon(
-          `${call.connection.user.firstName} joined the call.`,
-          "Your call will connect soon.",
+          `${call.connection.user.firstName} ${t("peer.joinedCallTitle")}.`,
+          t("peer.joinedCallBody"),
           "info"
         );
-    }, [participantHasJoined, call]);
+    }, [participantHasJoined, call, t]);
 
     if (!call) return <div />;
 
     const getMessage = (): string => {
       if (!isAuthed) {
-        return "Initializing video call...";
+        return t("waitingRoom.initialization");
       } else if (!participantHasJoined) {
-        return `Waiting for ${call.connection.user.firstName} to join the call...`;
+        return `${t("waitingRoom.waitingForPrefix")} ${
+          call.connection.user.firstName
+        } ${t("waitingRoom.waitingForSuffix")}...`;
       }
-      return "Loading...";
+      return t("waitingRoom.loading");
     };
 
     let timeout: any;
@@ -363,7 +363,6 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
     };
 
     const onSendMessage = async () => {
-      console.log("sending message");
       if (!socket || !call) return;
       setDraftMessage("");
       //TODO add property sent and change image visibility depending on whether it actually went through
@@ -529,7 +528,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
             collapsed={chatCollapsed}
             onCollapse={(collapsed) => setChatCollapsed(collapsed)}
           >
-            {!chatCollapsed && <PageHeader title="Chat" />}
+            {!chatCollapsed && <PageHeader title={t("chat.title")} />}
 
             {!chatCollapsed && (
               <div className="chat-container" style={WRAPPER_PADDING}>
@@ -546,7 +545,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
                     onChange={(e) => setDraftMessage(e.target.value)}
                     onPressEnter={(_e) => onSendMessage()}
                     onSubmit={(_e) => onSendMessage()}
-                    placeholder="Type here..."
+                    placeholder={t("chat.placeholder")}
                     autoFocus
                     bordered={false}
                   />
