@@ -31,7 +31,6 @@ import {
 } from "src/utils/utils";
 import { Quote } from "src/types/Common";
 import "./index.css";
-import { EllipsisOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import "src/i18n/config";
 
