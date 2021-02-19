@@ -5,7 +5,7 @@ import {
 } from "@reduxjs/toolkit";
 import camelcaseKeys from "camelcase-keys";
 import { fetchAuthenticated } from "src/api/Common";
-import { Call } from "src/types/Call";
+import { BaseCall } from "src/types/Call";
 
 export const fetchCalls = createAsyncThunk("calls/fetchAll", async () => {
   const body = await fetchAuthenticated(`calls`);
@@ -14,12 +14,12 @@ export const fetchCalls = createAsyncThunk("calls/fetchAll", async () => {
   }
 
   const calls = ((body.data as Record<string, unknown>)
-    .calls as Call[]).map((call) => camelcaseKeys(call));
+    .calls as BaseCall[]).map((call) => camelcaseKeys(call));
 
   return calls;
 });
 
-export const callAdapter = createEntityAdapter<Call>();
+export const callAdapter = createEntityAdapter<BaseCall>();
 
 export const callSlice = createSlice({
   name: "calls",

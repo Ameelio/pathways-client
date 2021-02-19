@@ -12,7 +12,6 @@ export const ROUTES: Route[] = [
 ];
 
 export const TOKEN_KEY = "apiToken";
-export const REMEMBER_TOKEN_KEY = "rememberToken";
 
 export const WRAPPER_PADDING = { padding: 24, paddingTop: 0 };
 
@@ -47,5 +46,3 @@ export const QUOTES: Quote[] = [
       "https://images.unsplash.com/photo-1564521456797-9f176245daa9?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1951&q=80",
   },
 ];
-
-export const HEARTBEAT_INTERVAL = 200;

@@ -1,18 +1,24 @@
-import React, { useState, ReactElement } from "react";
+import React, { ReactElement } from "react";
 import { RootState } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
-import { Input, Layout, Button, Form, Checkbox, Typography, Card } from "antd";
-
-// import { ReactComponent as Operator } from "src/assets/avatars/bald.svg";
-// import { ReactComponent as Supervisor } from "src/assets/avatars/woman.svg";
-// import { ReactComponent as Admin } from "src/assets/avatars/professor.svg";
-// import { ReactComponent as Investigator } from "src/assets/avatars/investigator.svg";
-// import { OPERATOR, SUPERVISOR, ADMIN, INVESTIGATOR } from "src/data/sample";
-
-import "./index.css";
+import {
+  Input,
+  Layout,
+  Button,
+  Form,
+  Typography,
+  Card,
+  Space,
+  Row,
+} from "antd";
 import { Redirect } from "react-router";
 import { loginWithCredentials } from "src/api/User";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { showToast } from "src/utils/utils";
+import { ReactComponent as Logo } from "src/assets/logo.svg";
+import "./index.css";
+import "src/i18n/config";
+import { useTranslation } from "react-i18next";
 
 const { Content } = Layout;
 
@@ -25,7 +31,7 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function LoginContainer({ session }: PropsFromRedux): ReactElement {
-  const [error, setError] = useState("");
+  const { t } = useTranslation("login");
 
   if (session.isLoggedIn) {
     return <Redirect to="/" />;
@@ -38,51 +44,57 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
         pin: values.pin,
       });
     } catch (err) {
-      setError("Invalid ID or Pin Code");
+      showToast("login_error", "Invalid ID or Pin Code", "error");
     }
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    setError("Invalid ID or Pin Code");
+    showToast("login_error", "Invalid ID or Pin Code", "error");
   };
 
   return (
-    <Content>
-      <Card className="login-form-container">
-        <Typography.Title level={3}>Welcome to Pathways!</Typography.Title>
-        <Form
-          name="basic"
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          className="login-form"
-        >
-          <Form.Item
-            name="inmateNumber"
-            rules={[{ required: true, message: "Inmate ID is required." }]}
-          >
-            <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="Inmate Number"
-            />
-          </Form.Item>
+    <Content className="d-flex flex-column">
+      <Space className="m-auto" direction="vertical" size="large">
+        <Row justify="center">
+          <Logo className="login-logo" />
+        </Row>
 
-          <Form.Item
-            name="pin"
-            rules={[{ required: true, message: "Password is required." }]}
+        <Card className="login-form-container">
+          <Typography.Title level={3}>{t("title")}</Typography.Title>
+          <Form
+            name="basic"
+            onFinish={onFinish}
+            onFinishFailed={onFinishFailed}
+            className="login-form"
           >
-            <Input.Password
-              prefix={<LockOutlined className="site-form-item-icon" />}
-              placeholder="Pin Code"
-            />
-          </Form.Item>
+            <Form.Item
+              name="inmateNumber"
+              rules={[{ required: true, message: "Inmate ID is required." }]}
+            >
+              <Input
+                prefix={<UserOutlined className="site-form-item-icon" />}
+                placeholder={t("placeholder.inmateNumber")}
+              />
+            </Form.Item>
 
-          <Form.Item>
-            <Button type="primary" htmlType="submit" size="large" block>
-              Log In
-            </Button>
-          </Form.Item>
-        </Form>
-      </Card>
+            <Form.Item
+              name="pin"
+              rules={[{ required: true, message: "Password is required." }]}
+            >
+              <Input.Password
+                prefix={<LockOutlined className="site-form-item-icon" />}
+                placeholder={t("placeholder.pinCode")}
+              />
+            </Form.Item>
+
+            <Form.Item>
+              <Button type="primary" htmlType="submit" size="large" block>
+                {t("buttonText")}
+              </Button>
+            </Form.Item>
+          </Form>
+        </Card>
+      </Space>
     </Content>
   );
 }

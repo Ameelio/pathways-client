@@ -5,7 +5,6 @@ import {
 } from "@reduxjs/toolkit";
 import camelcaseKeys from "camelcase-keys";
 import { Connection } from "src/types/Connection";
-import { Inmate } from "src/types/User";
 import { fetchAuthenticated } from "src/api/Common";
 
 export const fetchConnections = createAsyncThunk(

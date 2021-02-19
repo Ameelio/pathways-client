@@ -1,6 +1,5 @@
 import React from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import "./App.scss";
 import { RootState } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
 import { ConnectedRouter, push } from "connected-react-router";
@@ -15,8 +14,6 @@ import { ROUTES } from "./utils/constants";
 import { useEffect } from "react";
 import { fetchConnections } from "./redux/modules/connection";
 import Sidebar from "./components/menu/Sidebar";
-
-const { Footer, Header } = Layout;
 
 const mapStateToProps = (state: RootState) => ({
   session: state.session,
@@ -42,7 +39,7 @@ function App({
 
   useEffect(() => {
     if (session.isLoggedIn) fetchConnections();
-  }, [session.isLoggedIn]);
+  }, [session.isLoggedIn, fetchConnections]);
 
   return (
     <ConnectedRouter history={history}>

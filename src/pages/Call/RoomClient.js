@@ -73,6 +73,8 @@ class RoomClient {
     // Consumers and producers
     this.consumers = {};
     this.producers = {};
+    this.micProducer = null;
+    this.videoProducer = null;
 
     // Event handlers
     this.handlers = { consume: [] };
@@ -201,8 +203,11 @@ class RoomClient {
     }
 
     const producer = await this.producerTransport.produce(params);
+    console.log(producer);
     window.producers.push(producer);
     this.producers[producer.id] = producer;
+    if (producer._kind === "audio") this.micProducer = producer;
+    else if (producer._kind === "video") this.videoProducer = producer;
   }
 
   async loadDevice(routerRtpCapabilities) {
@@ -232,6 +237,57 @@ class RoomClient {
 
   async terminate() {
     await this.request("terminate", { callId: this.callId });
+  }
+
+  pauseAudio() {
+    this.socket.emit("producerUpdate", {
+      callId: this.callId,
+      contents: {
+        producerId: this.micProducer.id,
+        active: true,
+        type: "audio",
+      },
+    });
+
+    if (this.micProducer) this.micProducer.pause();
+  }
+
+  resumeAudio() {
+    this.socket.emit("producerUpdate", {
+      callId: this.callId,
+      contents: {
+        producerId: this.micProducer.id,
+        active: false,
+        type: "audio",
+      },
+    });
+    if (this.micProducer) this.micProducer.resume();
+  }
+
+  // TODO need to access producer track and stop
+  resumeWebcam() {
+    this.socket.emit("producerUpdate", {
+      callId: this.callId,
+      contents: {
+        producerId: this.videoProducer.id,
+        active: true,
+        type: "video",
+      },
+    });
+    if (this.videoProducer) this.videoProducer.resume();
+  }
+
+  pauseWebcam() {
+    this.socket.emit("producerUpdate", {
+      callId: this.callId,
+      contents: {
+        callId: this.videoProducer.id,
+        active: false,
+        type: "video",
+      },
+    });
+
+    if (this.videoProducer) this.videoProducer.pause();
   }
 }
 

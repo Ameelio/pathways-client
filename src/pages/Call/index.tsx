@@ -5,7 +5,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useSelector } from "react-redux";
 import { RootState } from "src/redux";
 import RoomClient from "src/pages/Call/RoomClient";
 import * as mediasoupClient from "mediasoup-client";
@@ -19,24 +18,33 @@ import {
   PageHeader,
   Input,
   Divider,
+  Avatar,
+  Badge,
 } from "antd";
-import { Call, CallMessage, CallParticipant } from "src/types/Call";
+import { CallMessage, CallParticipant } from "src/types/Call";
 import { connect, ConnectedProps } from "react-redux";
 import { RouteComponentProps } from "react-router";
-import { selectCallById } from "src/redux/selectors";
+import { selectAllCallInfo } from "src/redux/selectors";
 import "./index.css";
 import {
   AudioMutedOutlined,
   AudioOutlined,
   MessageOutlined,
   PoweroffOutlined,
-  ShopTwoTone,
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { format } from "date-fns";
 import { useUserMedia } from "./useUserMedia";
 import { push } from "connected-react-router";
-import { HEARTBEAT_INTERVAL, WRAPPER_PADDING } from "src/utils/constants";
+import { WRAPPER_PADDING } from "src/utils/constants";
+import {
+  genFullName,
+  getInitials,
+  openNotificationWithIcon,
+  showToast,
+} from "src/utils/utils";
+import { useTranslation } from "react-i18next";
+import "src/i18n/config";
 
 const { Sider } = Layout;
 declare global {
@@ -44,21 +52,6 @@ declare global {
     Debug: any;
   }
 }
-
-type TParams = { id: string };
-
-const mapStateToProps = (
-  state: RootState,
-  ownProps: RouteComponentProps<TParams>
-) => ({
-  call: selectCallById(state, ownProps.match.params.id),
-  authInfo: state.session.authInfo,
-});
-
-const mapDispatchToProps = { push };
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function Loader({ message }: { message: string }): ReactElement {
   return (
@@ -105,8 +98,26 @@ function MessageDisplay({ message }: { message: CallMessage }): ReactElement {
   );
 }
 
+type TParams = { id: string };
+
+const mapStateToProps = (
+  state: RootState,
+  ownProps: RouteComponentProps<TParams>
+) => ({
+  call: selectAllCallInfo(state, parseInt(ownProps.match.params.id)),
+  authInfo: state.session.authInfo,
+  initials: getInitials(genFullName(state.session.user)),
+});
+
+const mapDispatchToProps = { push };
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
 const CallBase: React.FC<PropsFromRedux> = React.memo(
-  ({ call, authInfo, push }) => {
+  ({ call, authInfo, push, initials }) => {
+    const { t } = useTranslation("call");
+
     const [isAuthed, setIsAuthed] = useState(false);
     const [rc, setRc] = useState<RoomClient>();
     const [socket, setSocket] = useState<SocketIOClient.Socket>();
@@ -116,12 +127,16 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
     const mediaStream = useUserMedia(CAPTURE_OPTIONS);
     const [draftMessage, setDraftMessage] = useState("");
     const [messages, setMessages] = useState<CallMessage[]>([]);
+    const [audioOn, setAudioOn] = useState(true);
+    const [videoOn, setVideoOn] = useState(true);
+    const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
+    const [peerAudioOn, setPeerAudioOn] = useState(true);
+    const [peerVideoOn, setPeerVideoOn] = useState(true);
 
     const meRef = useRef<HTMLVideoElement>(null);
     if (meRef.current && !meRef.current.srcObject && mediaStream) {
       meRef.current.srcObject = mediaStream;
     }
-
     useEffect(() => {
       if (!socket) {
         const s = io.connect(
@@ -181,14 +196,10 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
           // Enumerate media devices
           const devices = await navigator.mediaDevices.enumerateDevices();
 
-          console.log(devices);
-
           // Get a video input (should be the only one) to send
           const videoInput = Array.from(devices).filter(
             (device) => device.kind === "videoinput"
           )[0];
-
-          console.log("producing video");
 
           // Produce video with it
           await rc.produce("videoType", videoInput);
@@ -200,14 +211,13 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
             (device) => device.kind === "audioinput"
           )[0];
 
-          console.log("producing audio");
-
           // Produce video with it
           await rc.produce("audioType", audioInput);
         })();
       }
     }, [isAuthed, rc]);
 
+    // TODO fix this
     useEffect(() => {
       if (rc && isAuthed) {
         console.log("listening to text message");
@@ -222,9 +232,11 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
             contents: string;
             meta: string;
           }) => {
-            console.log(contents);
-            console.log(from);
-            setMessages([
+            setHasUnreadMessages(true);
+            if (from.type === "monitor") {
+              openNotificationWithIcon(t("doc.warning"), contents, "warning");
+            }
+            setMessages((messages) => [
               ...messages,
               {
                 content: contents,
@@ -234,8 +246,53 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
             ]);
           }
         );
+
+        rc.socket.on(
+          "peerUpdate",
+          async ({
+            from,
+            contents,
+          }: {
+            from: CallParticipant;
+            contents: {
+              producerId: string;
+              active: boolean;
+              type: "audio" | "video";
+            };
+          }) => {
+            from.type === "user" && contents.type === "audio"
+              ? setPeerAudioOn(contents.active)
+              : setPeerVideoOn(contents.active);
+          }
+        );
       }
-    }, [isAuthed, rc]);
+    }, [isAuthed, rc, t]);
+
+    useEffect(() => {
+      if (!chatCollapsed) setHasUnreadMessages(false);
+    }, [hasUnreadMessages, chatCollapsed]);
+
+    useEffect(() => {
+      if (call && participantHasJoined)
+        showToast(
+          "peerVideo",
+          `${call.connection.user.firstName} ${
+            peerVideoOn ? t("peer.videoOn") : t("peer.videoOff")
+          }`,
+          "info"
+        );
+    }, [peerVideoOn, call, participantHasJoined, t]);
+
+    useEffect(() => {
+      if (call && participantHasJoined)
+        showToast(
+          "peerAudio",
+          `${call.connection.user.firstName} ${
+            peerAudioOn ? t("peer.unmuted") : t("peer.muted")
+          }`,
+          "info"
+        );
+    }, [peerAudioOn, call, participantHasJoined, t]);
 
     const measuredRef = useCallback(
       (node) => {
@@ -248,9 +305,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
                 stream: MediaStream,
                 user: CallParticipant
               ) => {
-                console.log(`CONSUME RECEIVED: ${user.type} ${kind}`);
                 if (node && user.type === "user") {
-                  console.log("CONSUME: user stream");
                   if (kind === "video") {
                     const video = document.createElement("video");
                     video.style.width = "100%";
@@ -276,13 +331,26 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
       [rc, isAuthed]
     );
 
+    useEffect(() => {
+      if (participantHasJoined && call)
+        openNotificationWithIcon(
+          `${call.connection.user.firstName} ${t("peer.joinedCallTitle")}.`,
+          t("peer.joinedCallBody"),
+          "info"
+        );
+    }, [participantHasJoined, call, t]);
+
+    if (!call) return <div />;
+
     const getMessage = (): string => {
       if (!isAuthed) {
-        return "Initializing video call...";
+        return t("waitingRoom.initialization");
       } else if (!participantHasJoined) {
-        return `Waiting for ${"Gabe"} to join the call...`;
+        return `${t("waitingRoom.waitingForPrefix")} ${
+          call.connection.user.firstName
+        } ${t("waitingRoom.waitingForSuffix")}...`;
       }
-      return "Loading...";
+      return t("waitingRoom.loading");
     };
 
     let timeout: any;
@@ -295,7 +363,6 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
     };
 
     const onSendMessage = async () => {
-      console.log("sending message");
       if (!socket || !call) return;
       setDraftMessage("");
       //TODO add property sent and change image visibility depending on whether it actually went through
@@ -333,26 +400,121 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
           className="video-wrapper ant-layout-content"
           ref={measuredRef}
           onMouseMove={() => onMouseMove()}
+          onMouseOver={() => onMouseMove()}
         >
-          <video className="video-me" autoPlay={true} ref={meRef} />
+          {!peerVideoOn && (
+            <div className="vh-100 vw-100 d-flex">
+              <Avatar
+                size={128}
+                style={{
+                  color: "#fff",
+                  backgroundColor: "#00a2ae",
+                  margin: "auto",
+                }}
+              >
+                {getInitials(genFullName(call.connection.user)).toUpperCase()}
+              </Avatar>
+            </div>
+          )}
+          {!peerAudioOn && (
+            <div className="peer-name-container">
+              <AudioMutedOutlined className="peer-muted-audio" />
+              <Typography.Text style={{ color: "white", fontSize: 16 }}>
+                {" "}
+                {genFullName(call.connection.user)}
+              </Typography.Text>
+            </div>
+          )}
+          {videoOn ? (
+            <video className="video-me" autoPlay={true} ref={meRef} />
+          ) : (
+            <div className="video-me" style={{ backgroundColor: "black" }}>
+              <Avatar
+                size={64}
+                style={{
+                  color: "#f56a00",
+                  backgroundColor: "#fde3cf",
+                  margin: "auto",
+                }}
+              >
+                {initials}
+              </Avatar>
+            </div>
+          )}
           {!participantHasJoined && <Loader message={getMessage()} />}
           {showOverlay && (
-            <Space className="video-overlay-actions" align="center">
+            <Space
+              className="video-overlay-actions"
+              align="center"
+              size="large"
+            >
               <Button
                 shape="round"
-                icon={true ? <AudioOutlined /> : <AudioMutedOutlined />}
+                icon={
+                  audioOn ? (
+                    <AudioOutlined style={{ fontSize: 24 }} />
+                  ) : (
+                    <AudioMutedOutlined style={{ fontSize: 24 }} />
+                  )
+                }
                 size="large"
+                danger={!audioOn}
+                type={audioOn ? "default" : "primary"}
+                onClick={() => {
+                  audioOn ? rc?.pauseAudio() : rc?.resumeAudio();
+                  showToast(
+                    "microphone",
+                    `You ${audioOn ? "muted" : "unmuted"} your microphone`,
+                    "info"
+                  );
+                  setAudioOn((audioOn) => !audioOn);
+                }}
               />
               <Button
                 shape="round"
-                icon={<PoweroffOutlined />}
+                icon={<PoweroffOutlined color="red" />}
                 size="large"
                 onClick={() => push(`/feedback/${call?.id}`)}
               />
               <Button
                 shape="round"
-                icon={true ? <VideoCameraOutlined /> : <AudioMutedOutlined />}
+                danger={!videoOn}
+                icon={
+                  videoOn ? (
+                    <VideoCameraOutlined style={{ fontSize: 24 }} />
+                  ) : (
+                    <VideoCameraOutlined style={{ fontSize: 24 }} />
+                  )
+                }
                 size="large"
+                type={videoOn ? "default" : "primary"}
+                onClick={() => {
+                  videoOn ? rc?.pauseWebcam() : rc?.resumeWebcam();
+                  showToast(
+                    "webcam",
+                    `You ${videoOn ? "turned off" : "turned on"} your webcam`,
+                    "info"
+                  );
+                  setVideoOn((isVideoOn) => !isVideoOn);
+                }}
+              />
+              <Button
+                shape="round"
+                style={{ backgroundColor: chatCollapsed ? "#fff" : "#f5f5f5" }}
+                icon={
+                  chatCollapsed ? (
+                    <Badge dot={hasUnreadMessages}>
+                      <MessageOutlined style={{ fontSize: 24 }} />
+                    </Badge>
+                  ) : (
+                    <MessageOutlined style={{ fontSize: 24 }} />
+                  )
+                }
+                size="large"
+                onClick={() => {
+                  if (chatCollapsed) setHasUnreadMessages(false);
+                  setChatCollapsed((collapsed) => !collapsed);
+                }}
               />
             </Space>
           )}
@@ -366,7 +528,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
             collapsed={chatCollapsed}
             onCollapse={(collapsed) => setChatCollapsed(collapsed)}
           >
-            {!chatCollapsed && <PageHeader title="Chat" />}
+            {!chatCollapsed && <PageHeader title={t("chat.title")} />}
 
             {!chatCollapsed && (
               <div className="chat-container" style={WRAPPER_PADDING}>
@@ -383,7 +545,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
                     onChange={(e) => setDraftMessage(e.target.value)}
                     onPressEnter={(_e) => onSendMessage()}
                     onSubmit={(_e) => onSendMessage()}
-                    placeholder="Type here..."
+                    placeholder={t("chat.placeholder")}
                     autoFocus
                     bordered={false}
                   />

@@ -1,24 +1,22 @@
 import React, { ReactElement } from "react";
 import { Layout, Rate, Button, Space, Typography, Card } from "antd";
 import {
-  FrownOutlined,
   HeartOutlined,
-  SmileOutlined,
-  MehOutlined,
+  // FrownOutlined,
+  // SmileOutlined,
+  // MehOutlined,
 } from "@ant-design/icons";
 
-interface Props {}
-
 const desc = ["terrible", "bad", "normal", "good", "wonderful"];
-const customIcons = {
-  1: <FrownOutlined style={{ fontSize: 36 }} />,
-  2: <FrownOutlined style={{ fontSize: 36 }} />,
-  3: <MehOutlined style={{ fontSize: 36 }} />,
-  4: <SmileOutlined style={{ fontSize: 36 }} />,
-  5: <SmileOutlined style={{ fontSize: 36 }} />,
-};
+// const customIcons = {
+//   1: <FrownOutlined style={{ fontSize: 36 }} />,
+//   2: <FrownOutlined style={{ fontSize: 36 }} />,
+//   3: <MehOutlined style={{ fontSize: 36 }} />,
+//   4: <SmileOutlined style={{ fontSize: 36 }} />,
+//   5: <SmileOutlined style={{ fontSize: 36 }} />,
+// };
 
-function CallFeedbackBase({}: Props): ReactElement {
+function CallFeedbackBase(): ReactElement {
   return (
     <Layout.Content
       style={{

@@ -1,8 +1,8 @@
 import React, { ReactElement, useState } from "react";
 import { Menu, Layout } from "antd";
-import { UserOutlined, HomeOutlined } from "@ant-design/icons";
+import { HomeOutlined } from "@ant-design/icons";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Sider } = Layout;
 interface Props {
   navigate: (path: string) => void;
   isVisible: boolean;

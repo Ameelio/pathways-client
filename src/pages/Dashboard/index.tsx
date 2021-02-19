@@ -4,37 +4,35 @@ import { connect, ConnectedProps } from "react-redux";
 import { fetchCalls } from "src/redux/modules/call";
 import {
   Avatar,
+  Badge,
   Button,
   Card,
   Col,
   Layout,
-  Menu,
   PageHeader,
   Row,
   Space,
   Typography,
 } from "antd";
-import { selectAllCalls, selectAllConnections } from "src/redux/selectors";
+import { selectAllConnections, selectUpcomingCalls } from "src/redux/selectors";
 import { push } from "connected-react-router";
-import { differenceInMinutes, format } from "date-fns";
+import { differenceInMinutes, format, isToday, isTomorrow } from "date-fns";
 import { QUOTES, WRAPPER_PADDING } from "src/utils/constants";
-import { Call } from "src/types/Call";
-import { genFullName, getRandomItem } from "src/utils/utils";
+import {
+  genFullName,
+  getInitials,
+  getRandomItem,
+  generateBgColor,
+} from "src/utils/utils";
 import { Quote } from "src/types/Common";
 import "./index.css";
-import { Connection } from "src/types/Connection";
-import {
-  EllipsisOutlined,
-  UserAddOutlined,
-  VideoCameraFilled,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
+import "src/i18n/config";
 
-const { Header, Footer, Sider, Content } = Layout;
-const { Meta } = Card;
+const { Content } = Layout;
 
 const mapStateToProps = (state: RootState) => ({
-  calls: selectAllCalls(state),
+  calls: selectUpcomingCalls(state),
   connections: selectAllConnections(state),
   firstName: state.session.user.firstName,
 });
@@ -52,12 +50,22 @@ function DashboardPage({
   push,
   firstName,
 }: PropsFromRedux): ReactElement {
-  const [appointments, setAppointments] = useState<
-    { call: Call; connection: Connection }[]
-  >([]);
-  const [dailyQuote, setDailyQuote] = useState(getRandomItem(QUOTES) as Quote);
+  const { t } = useTranslation("dashboard");
+
+  const tabList = [
+    {
+      key: "approved",
+      tab: t("connection.approved"),
+    },
+    {
+      key: "pending",
+      tab: t("connection.pending"),
+    },
+  ];
+  const [dailyQuote] = useState(getRandomItem(QUOTES) as Quote);
 
   const [currTime, setCurrTime] = useState(new Date());
+  const [activeContactTab, setActiveContactTab] = useState("approved");
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -70,46 +78,22 @@ function DashboardPage({
     (async () => await fetchCalls())();
   }, [fetchCalls]);
 
-  useEffect(() => {
-    // TODO sort
-    const upcoming = calls
-      .filter(
-        (call) =>
-          (call.status === "scheduled" || call.status === "live") &&
-          new Date(call.end) > new Date()
-      )
-      .map((call) => ({
-        call,
-        connection:
-          connections.find((connection) => connection.id === call.id) ||
-          ({
-            user: { firstName: "", lastName: "", profileImgPath: "" },
-          } as Connection),
-      }));
-
-    setAppointments(upcoming);
-  }, [calls, connections]);
-
-  const getStatusType = (
-    connection: Connection
-  ): "success" | "warning" | "danger" | "secondary" => {
-    switch (connection.status) {
-      case "approved":
-        return "success";
-      case "pending":
-        return "warning";
-      case "rejected":
-        return "danger";
-      default:
-        return "secondary";
-    }
+  const getDateLabel = (date: Date) => {
+    if (isToday(date)) return "Today";
+    if (isTomorrow(date)) return "Tomorrow";
+    return format(date, "EEEE, MMMM d");
   };
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Content>
         <PageHeader title={`Hi ${firstName}!`}></PageHeader>
-        <Space direction="vertical" size="large" style={WRAPPER_PADDING}>
+        <Space
+          direction="vertical"
+          size="large"
+          style={WRAPPER_PADDING}
+          className="w-100"
+        >
           <Row>
             <Col span={24}>
               <div>
@@ -122,12 +106,15 @@ function DashboardPage({
                   }}
                   className="dashboard-header-container"
                 >
-                  <Typography.Title
-                    level={3}
-                    className="dashboard-header-content"
-                  >
-                    {format(currTime, "HH:mm")}
-                  </Typography.Title>
+                  <div>
+                    <Typography.Title
+                      level={2}
+                      className="dashboard-header-content"
+                    >
+                      {format(currTime, "HH:mm")}
+                    </Typography.Title>
+                    {/* <Typography.Text>{format(currTime, "EEEE MMMM dd")}</Typography.Text> */}
+                  </div>
                   <Typography.Title
                     level={5}
                     className="dashboard-header-content"
@@ -138,104 +125,122 @@ function DashboardPage({
                     {dailyQuote.author}
                   </Typography.Text>
                 </Space>
-                <div style={{ width: "100%", backgroundColor: "white" }}>
-                  {!appointments.length && (
-                    <Card>
-                      <span>No upcoming calls today</span>
-                    </Card>
-                  )}
-                  {appointments.map((appointment) => {
-                    const tMinus = differenceInMinutes(
-                      new Date(appointment.call.start),
-                      new Date()
-                    );
-
-                    return (
-                      <Card key={appointment.call.id}>
-                        <Space size="large">
-                          <Avatar
-                            src={appointment.connection.user.profileImgPath}
-                          />
-                          <div>
-                            <Typography.Title level={3}>
-                              Call with {appointment.connection.user.firstName}
-                            </Typography.Title>
-                            <Typography.Text>
-                              {format(
-                                new Date(appointment.call.start),
-                                "HH:mm"
-                              )}{" "}
-                              -{" "}
-                              {format(new Date(appointment.call.end), "HH:mm")}{" "}
-                              | {tMinus > 0 ? "starts in " : "started "}
-                              <Typography.Text
-                                type={tMinus >= 0 ? "warning" : "danger"}
-                              >
-                                {Math.abs(tMinus)} minutes{" "}
-                                {tMinus < 0 && " ago"}
-                              </Typography.Text>
-                            </Typography.Text>
-                          </div>
-                          <Space>
-                            <Button
-                              onClick={() =>
-                                push(`call/${appointment.call.id}`)
-                              }
-                            >
-                              <EllipsisOutlined />
-                            </Button>
-                            <Button
-                              type="primary"
-                              onClick={() =>
-                                push(`call/${appointment.call.id}`)
-                              }
-                            >
-                              Join
-                            </Button>
-                          </Space>
-                        </Space>
-                      </Card>
-                    );
-                  })}
-                </div>
+                <div style={{ width: "100%", backgroundColor: "white" }}></div>
               </div>
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={12}>
-              <Card>
-                <VideoCameraFilled />
-                <Typography.Title level={4}>Schedule Call</Typography.Title>
+            <Col span={16}>
+              <Card
+                title={t("call.title")}
+                extra={
+                  <Typography.Link onClick={() => push("/")}>
+                    {t("call.seeAll")}
+                  </Typography.Link>
+                }
+              >
+                {!calls.length && (
+                  <Typography.Text>{t("call.noCalls")}</Typography.Text>
+                )}
+                <Space></Space>
+                {calls.map((call) => {
+                  const tMinus = differenceInMinutes(
+                    new Date(call.start),
+                    new Date()
+                  );
+
+                  return (
+                    <Badge.Ribbon text={isToday(currTime) ? "Today" : ""}>
+                      <Card key={call.id}>
+                        <Row justify="space-between" align="bottom">
+                          <Space direction="vertical">
+                            <Typography.Title level={5}>
+                              {getDateLabel(new Date(call.start))}
+                            </Typography.Title>
+                            <Typography.Text>
+                              {format(new Date(call.start), "HH:mm")} -{" "}
+                              {format(new Date(call.end), "HH:mm")} •{" "}
+                              {tMinus > 0 ? "starts in " : "started "}
+                              <Typography.Text
+                                type={tMinus >= 0 ? "warning" : "danger"}
+                              >
+                                {Math.abs(tMinus)} {t("call.minutes")}{" "}
+                                {tMinus < 0 && `${t("call.ago")}`}
+                              </Typography.Text>
+                            </Typography.Text>
+                            <Space>
+                              <Avatar
+                                src={call.connection.user.profileImgPath}
+                              />
+                              <Typography.Text type="secondary">
+                                {genFullName(call.connection.user)}
+                              </Typography.Text>
+                            </Space>
+                          </Space>
+                          <Space>
+                            {/* TODO: add back this button with call options */}
+                            {/* <Button
+                              onClick={() =>
+                                push(`call/${call.id}`)
+                              }
+                            >
+                              <EllipsisOutlined />
+                            </Button> */}
+                            <Button
+                              size="large"
+                              type="primary"
+                              onClick={() => push(`call/${call.id}`)}
+                            >
+                              {t("call.join")}
+                            </Button>
+                          </Space>
+                        </Row>
+                      </Card>
+                    </Badge.Ribbon>
+                  );
+                })}
               </Card>
             </Col>
-            <Col span={12}>
-              <Card>
-                <UserAddOutlined />
-                <Typography.Title level={4}>Add Contact</Typography.Title>
+            <Col span={8}>
+              <Card
+                title={t("connection.title")}
+                tabList={tabList}
+                activeTabKey={activeContactTab}
+                onTabChange={(key) => setActiveContactTab(key)}
+              >
+                <Row justify="space-around">
+                  {connections
+                    .filter(
+                      (connection) => connection.status === activeContactTab
+                    )
+                    .map((connection) => (
+                      <Col
+                        key={connection.id}
+                        className="d-flex flex-column align-items-center"
+                      >
+                        <Space direction="vertical">
+                          <Avatar
+                            size={80}
+                            style={{
+                              backgroundColor: generateBgColor(
+                                genFullName(connection.user)
+                              ),
+                            }}
+                          >
+                            {getInitials(genFullName(connection.user))}
+                          </Avatar>
+                          <Typography.Text>
+                            {genFullName(connection.user)}
+                          </Typography.Text>
+                        </Space>
+                      </Col>
+                    ))}
+                </Row>
               </Card>
             </Col>
           </Row>
         </Space>
       </Content>
-      <Sider theme="light" width={400}>
-        <PageHeader title={"Your Loved Ones"} />
-        {connections.map((connection) => (
-          <Card key={connection.id}>
-            <Card.Meta
-              title={genFullName(connection.user)}
-              avatar={<Avatar src={connection.user.profileImgPath} />}
-              description={
-                <Typography.Text type="secondary">
-                  Status:{" "}
-                  <Typography.Text type={getStatusType(connection)}>
-                    {connection.status}
-                  </Typography.Text>
-                </Typography.Text>
-              }
-            ></Card.Meta>
-          </Card>
-        ))}
-      </Sider>
     </Layout>
   );
 }
