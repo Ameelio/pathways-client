@@ -128,6 +128,8 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
     const [audioOn, setAudioOn] = useState(true);
     const [videoOn, setVideoOn] = useState(true);
     const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
+    const [peerAudioOn, setPeerAudioOn] = useState(true);
+    const [peerVideoOn, setPeerVideoOn] = useState(true);
 
     const meRef = useRef<HTMLVideoElement>(null);
     if (meRef.current && !meRef.current.srcObject && mediaStream) {
@@ -219,6 +221,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
       }
     }, [isAuthed, rc]);
 
+    // TODO fix this
     useEffect(() => {
       if (rc && isAuthed) {
         console.log("listening to text message");
@@ -233,11 +236,11 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
             contents: string;
             meta: string;
           }) => {
-            if (chatCollapsed) setHasUnreadMessages(true);
+            setHasUnreadMessages(true);
             if (from.type === "monitor") {
               openNotificationWithIcon("DOC Warning", contents, "warning");
             }
-            setMessages([
+            setMessages((messages) => [
               ...messages,
               {
                 content: contents,
@@ -247,8 +250,53 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
             ]);
           }
         );
+
+        rc.socket.on(
+          "peerUpdate",
+          async ({
+            from,
+            contents,
+          }: {
+            from: CallParticipant;
+            contents: {
+              producerId: string;
+              active: boolean;
+              type: "audio" | "video";
+            };
+          }) => {
+            from.type === "user" && contents.type === "audio"
+              ? setPeerAudioOn(contents.active)
+              : setPeerVideoOn(contents.active);
+          }
+        );
       }
-    }, [isAuthed, rc, messages, chatCollapsed]);
+    }, [isAuthed, rc]);
+
+    useEffect(() => {
+      if (!chatCollapsed) setHasUnreadMessages(false);
+    }, [hasUnreadMessages, chatCollapsed]);
+
+    useEffect(() => {
+      if (call && participantHasJoined)
+        showToast(
+          "peerVideo",
+          `${call.connection.user.firstName} turned ${
+            peerVideoOn ? "on" : "off"
+          } their video`,
+          "info"
+        );
+    }, [peerVideoOn, call, participantHasJoined]);
+
+    useEffect(() => {
+      if (call && participantHasJoined)
+        showToast(
+          "peerAudio",
+          `${call.connection.user.firstName} ${
+            peerAudioOn ? "unmuted" : "muted`"
+          } their microphone`,
+          "info"
+        );
+    }, [peerAudioOn, call, participantHasJoined]);
 
     const measuredRef = useCallback(
       (node) => {
@@ -262,11 +310,6 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
                 user: CallParticipant
               ) => {
                 if (node && user.type === "user") {
-                  openNotificationWithIcon(
-                    `${call?.connection.user.firstName} joined the call.`,
-                    "Your call will connect soon.",
-                    "info"
-                  );
                   if (kind === "video") {
                     const video = document.createElement("video");
                     video.style.width = "100%";
@@ -289,8 +332,17 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
           })();
         }
       },
-      [rc, isAuthed, call?.connection.user.firstName]
+      [rc, isAuthed]
     );
+
+    useEffect(() => {
+      if (participantHasJoined && call)
+        openNotificationWithIcon(
+          `${call.connection.user.firstName} joined the call.`,
+          "Your call will connect soon.",
+          "info"
+        );
+    }, [participantHasJoined, call]);
 
     if (!call) return <div />;
 
@@ -353,6 +405,29 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
           onMouseMove={() => onMouseMove()}
           onMouseOver={() => onMouseMove()}
         >
+          {!peerVideoOn && (
+            <div className="vh-100 vw-100 d-flex">
+              <Avatar
+                size={128}
+                style={{
+                  color: "#fff",
+                  backgroundColor: "#00a2ae",
+                  margin: "auto",
+                }}
+              >
+                {getInitials(genFullName(call.connection.user)).toUpperCase()}
+              </Avatar>
+            </div>
+          )}
+          {!peerAudioOn && (
+            <div className="peer-name-container">
+              <AudioMutedOutlined className="peer-muted-audio" />
+              <Typography.Text style={{ color: "white", fontSize: 16 }}>
+                {" "}
+                {genFullName(call.connection.user)}
+              </Typography.Text>
+            </div>
+          )}
           {videoOn ? (
             <video className="video-me" autoPlay={true} ref={meRef} />
           ) : (

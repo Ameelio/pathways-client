@@ -239,23 +239,54 @@ class RoomClient {
     await this.request("terminate", { callId: this.callId });
   }
 
-  async turnOffVideo() {
-    // await this.producer.pause()
-  }
-
   muteAudio() {
+    this.socket.emit("producerUpdate", {
+      callId: this.callId,
+      contents: {
+        producerId: this.micProducer.id,
+        active: true,
+        type: "audio",
+      },
+    });
+
     if (this.micProducer) this.micProducer.pause();
   }
 
   unmuteAudio() {
+    this.socket.emit("producerUpdate", {
+      callId: this.callId,
+      contents: {
+        producerId: this.micProducer.id,
+        active: false,
+        type: "audio",
+      },
+    });
     if (this.micProducer) this.micProducer.resume();
   }
 
+  // TODO need to access producer track and stop
   enableWebcam() {
+    this.socket.emit("producerUpdate", {
+      callId: this.callId,
+      contents: {
+        producerId: this.videoProducer.id,
+        active: true,
+        type: "video",
+      },
+    });
     if (this.videoProducer) this.videoProducer.resume();
   }
 
   disableWebcam() {
+    this.socket.emit("producerUpdate", {
+      callId: this.callId,
+      contents: {
+        callId: this.videoProducer.id,
+        active: false,
+        type: "video",
+      },
+    });
+
     if (this.videoProducer) this.videoProducer.pause();
   }
 }

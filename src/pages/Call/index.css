@@ -45,3 +45,16 @@
   /* background-color: black; */
   display: flex;
 }
+
+.peer-name-container {
+  position: absolute;
+  z-index: 9999;
+  bottom: 80px;
+  left: 16px;
+  background-color: black;
+  opacity: 0.5;
+}
+.peer-muted-audio {
+  font-size: 24;
+  color: red;
+}

@@ -1,6 +1,6 @@
 import React from "react";
 import logo from "./logo.svg";
-import "./App.css";
+import "./App.scss";
 import { RootState } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
 import { ConnectedRouter, push } from "connected-react-router";

@@ -49,3 +49,30 @@ export const showToast = (
       break;
   }
 };
+
+function hashCode(str: string): number {
+  var hash = 0;
+  for (var i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 6) - hash);
+  }
+  return hash;
+}
+
+export function generateBgColor(label: string): string {
+  const BACKGROUND_COLORS = [
+    "#093145",
+    "#3C6478",
+    "#107896",
+    "#43ABC9",
+    "#C2571A",
+    "#9A2617",
+  ];
+  return BACKGROUND_COLORS[
+    Math.abs(hashCode(label) % BACKGROUND_COLORS.length)
+  ];
+}
+export function notEmpty<TParam>(
+  value: TParam | null | undefined
+): value is TParam {
+  return value !== null && value !== undefined;
+}
