@@ -4,6 +4,7 @@ import { connect, ConnectedProps } from "react-redux";
 import { fetchCalls } from "src/redux/modules/call";
 import {
   Avatar,
+  Badge,
   Button,
   Card,
   Col,
@@ -46,7 +47,8 @@ const { Meta } = Card;
 const mapStateToProps = (state: RootState) => ({
   calls: selectAllCalls(state)
     .map((call) => selectAllCallInfo(state, call.id))
-    .filter(notEmpty),
+    .filter(notEmpty)
+    .filter((call) => call.status !== "ended" && call.status !== "terminated"),
   connections: selectAllConnections(state),
   firstName: state.session.user.firstName,
 });
@@ -153,9 +155,7 @@ function DashboardPage({
                 }
               >
                 {!calls.length && (
-                  <Card>
-                    <span>No upcoming calls today</span>
-                  </Card>
+                  <Typography.Text>No upcoming calls</Typography.Text>
                 )}
                 <Space></Space>
                 {calls.map((call) => {
@@ -165,48 +165,53 @@ function DashboardPage({
                   );
 
                   return (
-                    <Card key={call.id}>
-                      <Row justify="space-between" align="bottom">
-                        <Space direction="vertical">
-                          <Typography.Title level={5}>
-                            {getDateLabel(new Date(call.start))}
-                          </Typography.Title>
-                          <Typography.Text>
-                            {format(new Date(call.start), "HH:mm")} -{" "}
-                            {format(new Date(call.end), "HH:mm")} •{" "}
-                            {tMinus > 0 ? "starts in " : "started "}
-                            <Typography.Text
-                              type={tMinus >= 0 ? "warning" : "danger"}
-                            >
-                              {Math.abs(tMinus)} minutes {tMinus < 0 && " ago"}
+                    <Badge.Ribbon text={isToday(currTime) ? "Today" : ""}>
+                      <Card key={call.id}>
+                        <Row justify="space-between" align="bottom">
+                          <Space direction="vertical">
+                            <Typography.Title level={5}>
+                              {getDateLabel(new Date(call.start))}
+                            </Typography.Title>
+                            <Typography.Text>
+                              {format(new Date(call.start), "HH:mm")} -{" "}
+                              {format(new Date(call.end), "HH:mm")} •{" "}
+                              {tMinus > 0 ? "starts in " : "started "}
+                              <Typography.Text
+                                type={tMinus >= 0 ? "warning" : "danger"}
+                              >
+                                {Math.abs(tMinus)} minutes{" "}
+                                {tMinus < 0 && " ago"}
+                              </Typography.Text>
                             </Typography.Text>
-                          </Typography.Text>
-                          <Space>
-                            <Avatar src={call.connection.user.profileImgPath} />
-                            <Typography.Text type="secondary">
-                              {genFullName(call.connection.user)}
-                            </Typography.Text>
+                            <Space>
+                              <Avatar
+                                src={call.connection.user.profileImgPath}
+                              />
+                              <Typography.Text type="secondary">
+                                {genFullName(call.connection.user)}
+                              </Typography.Text>
+                            </Space>
                           </Space>
-                        </Space>
-                        <Space>
-                          {/* TODO: add back this button with call options */}
-                          {/* <Button
+                          <Space>
+                            {/* TODO: add back this button with call options */}
+                            {/* <Button
                               onClick={() =>
                                 push(`call/${call.id}`)
                               }
                             >
                               <EllipsisOutlined />
                             </Button> */}
-                          <Button
-                            size="large"
-                            type="primary"
-                            onClick={() => push(`call/${call.id}`)}
-                          >
-                            Join
-                          </Button>
-                        </Space>
-                      </Row>
-                    </Card>
+                            <Button
+                              size="large"
+                              type="primary"
+                              onClick={() => push(`call/${call.id}`)}
+                            >
+                              Join
+                            </Button>
+                          </Space>
+                        </Row>
+                      </Card>
+                    </Badge.Ribbon>
                   );
                 })}
               </Card>
