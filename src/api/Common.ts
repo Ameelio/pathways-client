@@ -1,7 +1,4 @@
 import { Store } from "src/redux";
-import url from "url";
-// import { getApprovedConnections } from "./Connection";
-// import { getContacts, getInmates, getStaff } from "./Persona";
 
 export const API_URL = `${process.env.REACT_APP_BASE_URL}api/`;
 
@@ -48,9 +45,6 @@ export async function fetchAuthenticated(
     },
   };
 
-  console.log(
-    url.resolve(`${API_URL}/inmate/${state.session.authInfo.id}`, fetchUrl)
-  );
   const response = await fetchTimeout(
     `${API_URL}/inmate/${state.session.authInfo.id}/${fetchUrl}`,
     requestOptions,
@@ -61,12 +55,3 @@ export async function fetchAuthenticated(
 
   return body;
 }
-
-// export async function initializeAppData() {
-//   await Promise.allSettled([
-//     getInmates(),
-//     getApprovedConnections(),
-//     getStaff(),
-//     getContacts(),
-//   ]);
-// }

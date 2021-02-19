@@ -14,11 +14,7 @@ import {
   Space,
   Typography,
 } from "antd";
-import {
-  selectAllCallInfo,
-  selectAllCalls,
-  selectAllConnections,
-} from "src/redux/selectors";
+import { selectAllConnections, selectUpcomingCalls } from "src/redux/selectors";
 import { push } from "connected-react-router";
 import { differenceInMinutes, format, isToday, isTomorrow } from "date-fns";
 import { QUOTES, WRAPPER_PADDING } from "src/utils/constants";
@@ -27,7 +23,6 @@ import {
   getInitials,
   getRandomItem,
   generateBgColor,
-  notEmpty,
 } from "src/utils/utils";
 import { Quote } from "src/types/Common";
 import "./index.css";
@@ -37,10 +32,7 @@ import "src/i18n/config";
 const { Content } = Layout;
 
 const mapStateToProps = (state: RootState) => ({
-  calls: selectAllCalls(state)
-    .map((call) => selectAllCallInfo(state, call.id))
-    .filter(notEmpty)
-    .filter((call) => call.status !== "ended" && call.status !== "terminated"),
+  calls: selectUpcomingCalls(state),
   connections: selectAllConnections(state),
   firstName: state.session.user.firstName,
 });

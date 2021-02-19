@@ -239,7 +239,7 @@ class RoomClient {
     await this.request("terminate", { callId: this.callId });
   }
 
-  muteAudio() {
+  pauseAudio() {
     this.socket.emit("producerUpdate", {
       callId: this.callId,
       contents: {
@@ -252,7 +252,7 @@ class RoomClient {
     if (this.micProducer) this.micProducer.pause();
   }
 
-  unmuteAudio() {
+  resumeAudio() {
     this.socket.emit("producerUpdate", {
       callId: this.callId,
       contents: {
@@ -265,7 +265,7 @@ class RoomClient {
   }
 
   // TODO need to access producer track and stop
-  enableWebcam() {
+  resumeWebcam() {
     this.socket.emit("producerUpdate", {
       callId: this.callId,
       contents: {
@@ -277,7 +277,7 @@ class RoomClient {
     if (this.videoProducer) this.videoProducer.resume();
   }
 
-  disableWebcam() {
+  pauseWebcam() {
     this.socket.emit("producerUpdate", {
       callId: this.callId,
       contents: {

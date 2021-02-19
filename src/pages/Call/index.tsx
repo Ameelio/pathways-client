@@ -461,7 +461,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
                 danger={!audioOn}
                 type={audioOn ? "default" : "primary"}
                 onClick={() => {
-                  audioOn ? rc?.muteAudio() : rc?.unmuteAudio();
+                  audioOn ? rc?.pauseAudio() : rc?.resumeAudio();
                   showToast(
                     "microphone",
                     `You ${audioOn ? "muted" : "unmuted"} your microphone`,
@@ -489,7 +489,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
                 size="large"
                 type={videoOn ? "default" : "primary"}
                 onClick={() => {
-                  videoOn ? rc?.disableWebcam() : rc?.enableWebcam();
+                  videoOn ? rc?.pauseWebcam() : rc?.resumeWebcam();
                   showToast(
                     "webcam",
                     `You ${videoOn ? "turned off" : "turned on"} your webcam`,
