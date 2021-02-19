@@ -5,7 +5,6 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { useSelector } from "react-redux";
 import { RootState } from "src/redux";
 import RoomClient from "src/pages/Call/RoomClient";
 import * as mediasoupClient from "mediasoup-client";
@@ -32,13 +31,12 @@ import {
   AudioOutlined,
   MessageOutlined,
   PoweroffOutlined,
-  ShopTwoTone,
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { format } from "date-fns";
 import { useUserMedia } from "./useUserMedia";
 import { push } from "connected-react-router";
-import { HEARTBEAT_INTERVAL, WRAPPER_PADDING } from "src/utils/constants";
+import { WRAPPER_PADDING } from "src/utils/constants";
 import {
   genFullName,
   getInitials,

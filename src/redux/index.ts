@@ -1,7 +1,7 @@
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import { combineReducers } from "redux";
 import { History, createBrowserHistory } from "history";
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { sessionReducer } from "./modules/session";
 import { callSlice } from "./modules/call";
 import { connectionSlice } from "./modules/connection";

@@ -1,7 +1,7 @@
-import React, { useState, ReactElement } from "react";
+import React, { ReactElement } from "react";
 import { RootState } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
-import { Input, Layout, Button, Form, Checkbox, Typography, Card } from "antd";
+import { Input, Layout, Button, Form, Typography, Card } from "antd";
 
 // import { ReactComponent as Operator } from "src/assets/avatars/bald.svg";
 // import { ReactComponent as Supervisor } from "src/assets/avatars/woman.svg";
@@ -13,6 +13,7 @@ import "./index.css";
 import { Redirect } from "react-router";
 import { loginWithCredentials } from "src/api/User";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { showToast } from "src/utils/utils";
 
 const { Content } = Layout;
 
@@ -25,8 +26,6 @@ const connector = connect(mapStateToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function LoginContainer({ session }: PropsFromRedux): ReactElement {
-  const [error, setError] = useState("");
-
   if (session.isLoggedIn) {
     return <Redirect to="/" />;
   }
@@ -38,12 +37,12 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
         pin: values.pin,
       });
     } catch (err) {
-      setError("Invalid ID or Pin Code");
+      showToast("login_error", "Invalid ID or Pin Code", "error");
     }
   };
 
   const onFinishFailed = (errorInfo: any) => {
-    setError("Invalid ID or Pin Code");
+    showToast("login_error", "Invalid ID or Pin Code", "error");
   };
 
   return (

@@ -9,7 +9,6 @@ import {
   Card,
   Col,
   Layout,
-  Menu,
   PageHeader,
   Row,
   Space,
@@ -23,7 +22,6 @@ import {
 import { push } from "connected-react-router";
 import { differenceInMinutes, format, isToday, isTomorrow } from "date-fns";
 import { QUOTES, WRAPPER_PADDING } from "src/utils/constants";
-import { BaseCall } from "src/types/Call";
 import {
   genFullName,
   getInitials,
@@ -33,16 +31,9 @@ import {
 } from "src/utils/utils";
 import { Quote } from "src/types/Common";
 import "./index.css";
-import { Connection } from "src/types/Connection";
-import {
-  EllipsisOutlined,
-  UserAddOutlined,
-  VideoCameraFilled,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
+import { EllipsisOutlined } from "@ant-design/icons";
 
-const { Header, Footer, Sider, Content } = Layout;
-const { Meta } = Card;
+const { Content } = Layout;
 
 const mapStateToProps = (state: RootState) => ({
   calls: selectAllCalls(state)

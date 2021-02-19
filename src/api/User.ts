@@ -2,7 +2,7 @@ import { API_URL, fetchTimeout } from "./Common";
 import url from "url";
 import { setSession } from "src/redux/modules/session";
 import { Store } from "src/redux";
-import { REMEMBER_TOKEN_KEY, TOKEN_KEY } from "src/utils/constants";
+import { TOKEN_KEY } from "src/utils/constants";
 import { User } from "src/types/User";
 
 async function initializeSession(body: any) {

@@ -1,12 +1,10 @@
 import { Store } from "src/redux";
 import url from "url";
-import path from "path";
 // import { getApprovedConnections } from "./Connection";
 // import { getContacts, getInmates, getStaff } from "./Persona";
 
 export const API_URL = `${process.env.REACT_APP_BASE_URL}api/`;
 
-console.log(process.env.REACT_APP_BASE_URL);
 export interface ApiResponse {
   date: number;
   good: boolean;
