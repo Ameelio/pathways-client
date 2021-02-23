@@ -3,9 +3,11 @@
     "title": "Próximas llamadas",
     "seeAll": "Ver Todo",
     "noCalls": "No hay próximas llamadas",
+    "upcomingCalls": "Próximas llamada",
     "minutes": "minutos",
     "ago": "atrás",
-    "join": "Únete"
+    "join": "Únete Ahora",
+    "seeDetails": "Ver Detalles"
   },
   "connection": {
     "approved": "Aprobada(o)s",

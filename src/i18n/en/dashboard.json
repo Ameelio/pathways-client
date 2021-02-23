@@ -2,10 +2,12 @@
   "call": {
     "title": "Upcoming Calls",
     "seeAll": "See All",
-    "noCalls": "No upcoming calls",
+    "noCalls": "Upcoming calls will appear here when your contacts schedule a call with you.",
+    "upcomingCalls": "upcoming call",
     "minutes": "minutes",
     "ago": "ago",
-    "join": "join"
+    "join": "Join Now",
+    "seeDetails": "See Details"
   },
   "connection": {
     "approved": "Approved",

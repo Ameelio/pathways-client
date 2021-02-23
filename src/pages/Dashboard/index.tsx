@@ -149,65 +149,86 @@ function DashboardPage({
                     {t("call.seeAll")}
                   </Typography.Link>
                 }
+                style={{ borderRadius: 8 }}
               >
-                {!calls.length && (
-                  <Typography.Text>{t("call.noCalls")}</Typography.Text>
-                )}
-                <Space></Space>
+                <div style={{ paddingBottom: 16 }}>
+                  <Typography.Text>
+                    {calls.length === 0
+                      ? t("call.noCalls")
+                      : `${calls.length} ${t("call.upcomingCalls")}${
+                          calls.length > 1 ? "s" : ""
+                        }`}
+                  </Typography.Text>
+                </div>
                 {calls.map((call) => {
-                  const tMinus = differenceInMinutes(
-                    new Date(call.start),
-                    new Date()
+                  // const tMinus = differenceInMinutes(
+                  //   new Date(call.start),
+                  //   new Date()
+                  // );
+                  const duration = differenceInMinutes(
+                    new Date(call.end),
+                    new Date(call.start)
                   );
 
+                  const started = new Date(call.start) < new Date();
+                  console.log(started);
+
                   return (
-                    <Badge.Ribbon text={isToday(currTime) ? "Today" : ""}>
-                      <Card key={call.id}>
-                        <Row justify="space-between" align="bottom">
-                          <Space direction="vertical">
-                            <Typography.Title level={5}>
-                              {getDateLabel(new Date(call.start))}
-                            </Typography.Title>
-                            <Typography.Text>
-                              {format(new Date(call.start), "HH:mm")} -{" "}
-                              {format(new Date(call.end), "HH:mm")} •{" "}
-                              {tMinus > 0 ? "starts in " : "started "}
+                    <Card key={call.id}>
+                      <Row justify="space-between" align="bottom">
+                        <Space direction="vertical">
+                          <Typography.Title level={5}>
+                            {getDateLabel(new Date(call.start))}
+                          </Typography.Title>
+                          <Typography.Text>
+                            {format(new Date(call.start), "h:mm aaa")} •{" "}
+                            {`${duration} minutes`}
+                            {/* {tMinus > 0 ? "starts in " : "started "}
                               <Typography.Text
                                 type={tMinus >= 0 ? "warning" : "danger"}
                               >
                                 {Math.abs(tMinus)} {t("call.minutes")}{" "}
                                 {tMinus < 0 && `${t("call.ago")}`}
-                              </Typography.Text>
+                              </Typography.Text> */}
+                          </Typography.Text>
+                          <Space style={{ paddingTop: 18 }}>
+                            <Avatar src={call.connection.user.profileImgPath} />
+                            <Typography.Text type="secondary">
+                              {genFullName(call.connection.user)}
                             </Typography.Text>
-                            <Space>
-                              <Avatar
-                                src={call.connection.user.profileImgPath}
-                              />
-                              <Typography.Text type="secondary">
-                                {genFullName(call.connection.user)}
-                              </Typography.Text>
-                            </Space>
                           </Space>
-                          <Space>
-                            {/* TODO: add back this button with call options */}
-                            {/* <Button
+                        </Space>
+                        <Space>
+                          {/* TODO: add back this button with call options */}
+                          {/* <Button
                               onClick={() =>
                                 push(`call/${call.id}`)
                               }
                             >
                               <EllipsisOutlined />
                             </Button> */}
+                          {started ? (
                             <Button
                               size="large"
                               type="primary"
+                              style={{ borderRadius: 4 }}
                               onClick={() => push(`call/${call.id}`)}
                             >
                               {t("call.join")}
                             </Button>
-                          </Space>
-                        </Row>
-                      </Card>
-                    </Badge.Ribbon>
+                          ) : (
+                            <Button
+                              size="large"
+                              type="default"
+                              style={{ borderRadius: 4, color: "#448AF3" }}
+                              onClick={() => console.log("hello second button")}
+                            >
+                              {t("call.seeDetails")}
+                            </Button>
+                          )}
+                        </Space>
+                      </Row>
+                    </Card>
                   );
                 })}
               </Card>
