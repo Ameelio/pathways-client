@@ -87,11 +87,13 @@ function DashboardPage({
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Content>
-        <PageHeader title={`Hi ${firstName}!`}></PageHeader>
+        <div
+          style={{ height: "60px", backgroundColor: "#F0DEFF", opacity: 0.4 }}
+        />
         <Space
           direction="vertical"
           size="large"
-          style={WRAPPER_PADDING}
+          style={{ padding: 24, paddingTop: 36 }}
           className="w-100"
         >
           <Row>
@@ -101,28 +103,38 @@ function DashboardPage({
                   direction="vertical"
                   align="center"
                   style={{
+                    display: "flex",
+                    justifyContent: "center",
                     backgroundImage: `url(${dailyQuote.background})`,
+                    height: "215px",
+                    borderRadius: "8px",
                   }}
                   className="dashboard-header-container banner-background"
                 >
-                  <div>
-                    <Typography.Title
-                      level={2}
-                      className="dashboard-header-content"
-                    >
-                      {format(currTime, "HH:mm")}
-                    </Typography.Title>
-                    {/* <Typography.Text>{format(currTime, "EEEE MMMM dd")}</Typography.Text> */}
-                  </div>
+                  <Typography.Title
+                    className="dashboard-header-content"
+                    style={{
+                      paddingTop: 65,
+                      paddingBottom: 0,
+                      fontSize: "48px",
+                      marginBottom: 0,
+                    }}
+                  >
+                    {format(currTime, "HH:mm")}
+                  </Typography.Title>
+                  <Typography.Title
+                    className="dashboard-header-content"
+                    style={{ fontSize: "14px" }}
+                  >
+                    {format(currTime, "eeee, MMMM d")}
+                  </Typography.Title>
                   <Typography.Title
                     level={5}
                     className="dashboard-header-content"
+                    style={{ paddingTop: 35, paddingBottom: 8 }}
                   >
-                    {dailyQuote.quote}
+                    {`${dailyQuote.quote} - ${dailyQuote.author}`}
                   </Typography.Title>
-                  <Typography.Text className="dashboard-header-content">
-                    {dailyQuote.author}
-                  </Typography.Text>
                 </Space>
                 <div style={{ width: "100%", backgroundColor: "white" }}></div>
               </div>
