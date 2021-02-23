@@ -1,5 +1,12 @@
 @import "~antd/dist/antd.css";
 
+/* Common Components */
+.banner-background {
+  width: 100%;
+  background-size: cover;
+}
+
+/* Common Layouts */
 .d-flex {
   display: flex;
 }

@@ -1,5 +1,5 @@
 .login-form-container {
-  width: 500px;
+  width: 425px;
   height: 450px;
   background-color: white;
   padding: 32px;
@@ -14,5 +14,5 @@
 }
 
 .login-logo {
-  width: 250px;
+  width: 150px;
 }

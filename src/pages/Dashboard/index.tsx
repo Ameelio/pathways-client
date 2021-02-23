@@ -102,9 +102,8 @@ function DashboardPage({
                   align="center"
                   style={{
                     backgroundImage: `url(${dailyQuote.background})`,
-                    width: "100%",
                   }}
-                  className="dashboard-header-container"
+                  className="dashboard-header-container banner-background"
                 >
                   <div>
                     <Typography.Title
