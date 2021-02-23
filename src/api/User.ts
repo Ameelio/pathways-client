@@ -4,8 +4,9 @@ import { setSession } from "src/redux/modules/session";
 import { Store } from "src/redux";
 import { TOKEN_KEY } from "src/utils/constants";
 import { User } from "src/types/User";
+import { Language } from "src/types/Session";
 
-async function initializeSession(body: any) {
+async function initializeSession(body: any, language: Language) {
   const user = body.data.user as User;
   const { token, id } = body.data.user;
   Store.dispatch(
@@ -13,6 +14,7 @@ async function initializeSession(body: any) {
       user,
       authInfo: { token, id, type: "inmate" },
       isLoggedIn: true,
+      language,
     })
   );
 
@@ -23,6 +25,7 @@ async function initializeSession(body: any) {
 export async function loginWithCredentials(cred: {
   inmateNumber: string;
   pin: string;
+  language: Language;
 }): Promise<void> {
   const response = await fetchTimeout(url.resolve(API_URL, "inmate/auth"), {
     method: "POST",
@@ -38,5 +41,5 @@ export async function loginWithCredentials(cred: {
   });
   const body = await response.json();
   if (body.status !== 200) throw body;
-  await initializeSession(body);
+  await initializeSession(body, cred.language);
 }

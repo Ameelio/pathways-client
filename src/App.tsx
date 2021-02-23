@@ -14,6 +14,7 @@ import { ROUTES } from "./utils/constants";
 import { useEffect } from "react";
 import { fetchConnections } from "./redux/modules/connection";
 import Sidebar from "./components/menu/Sidebar";
+import { useTranslation } from "react-i18next";
 
 const mapStateToProps = (state: RootState) => ({
   session: state.session,
@@ -32,6 +33,8 @@ function App({
   fetchConnections,
   push,
 }: PropsFromRedux & { history: History }) {
+  const { i18n } = useTranslation();
+
   const defaultProtectedRouteProps: ProtectedRouteProps = {
     isAuthenticated: session.authInfo.token !== "", // TODO: improve this later
     authenticationPath: "/login",
@@ -40,6 +43,10 @@ function App({
   useEffect(() => {
     if (session.isLoggedIn) fetchConnections();
   }, [session.isLoggedIn, fetchConnections]);
+
+  useEffect(() => {
+    i18n.changeLanguage(session.language);
+  }, [session.language, i18n]);
 
   return (
     <ConnectedRouter history={history}>

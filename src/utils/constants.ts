@@ -2,6 +2,7 @@ import { Quote, Route } from "src/types/Common";
 import DashboardPage from "src/pages/Dashboard";
 import CallPage from "src/pages/Call";
 import CallFeedbackPage from "src/pages/CallFeedback";
+import { Language } from "src/types/Session";
 
 export const UNAUTHENTICATED_USER_ID = -1;
 
@@ -46,3 +47,8 @@ export const QUOTES: Quote[] = [
       "https://images.unsplash.com/photo-1564521456797-9f176245daa9?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1951&q=80",
   },
 ];
+
+export const LANGUAGES: Record<Language, string> = {
+  en: "English",
+  es: "Español",
+};

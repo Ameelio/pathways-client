@@ -1,5 +1,6 @@
 import { UNAUTHENTICATED_USER_ID } from "src/utils/constants";
 import { User } from "src/types/User";
+import { Language } from "src/types/Session";
 
 interface AuthInfo {
   token: string;
@@ -11,6 +12,7 @@ interface SessionState {
   isLoggedIn: boolean;
   authInfo: AuthInfo;
   user: User;
+  language: Language;
 }
 
 // Constants & Shapes
@@ -50,6 +52,7 @@ const initialState: SessionState = {
     email: "",
   },
   isLoggedIn: false,
+  language: "en",
 };
 
 export function sessionReducer(

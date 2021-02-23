@@ -1,5 +1,9 @@
 {
   "title": "Welcome to pathways",
+  "caption": "To login, please enter your ID number and 6-digit PIN code. By using Ameelio Connect, you agree to",
+  "tos": "Terms of Service",
+  "pp": "Privacy Policy",
+  "and": "and",
   "buttonText": "Login",
   "placeholder": {
     "inmateNumber": "Inmate Number",
