@@ -8,8 +8,9 @@ import { genFullName } from "src/utils/utils";
 
 interface Props {
   call: Call;
+  selectCall: Function;
 }
-const CallItem: React.FC<Props> = ({ call }: Props) => {
+const CallItem: React.FC<Props> = ({ call, selectCall }: Props) => {
   const { t } = useTranslation("dashboard");
 
   const duration = differenceInMinutes(
@@ -34,13 +35,6 @@ const CallItem: React.FC<Props> = ({ call }: Props) => {
           </Typography.Title>
           <Typography.Text>
             {format(new Date(call.start), "h:mm aaa")} • {`${duration} minutes`}
-            {/* {tMinus > 0 ? "starts in " : "started "}
-                    <Typography.Text
-                        type={tMinus >= 0 ? "warning" : "danger"}
-                    >
-                        {Math.abs(tMinus)} {t("call.minutes")}{" "}
-                        {tMinus < 0 && `${t("call.ago")}`}
-                    </Typography.Text> */}
           </Typography.Text>
           <Space style={{ paddingTop: 18 }}>
             <Avatar src={call.connection.user.profileImgPath} />
@@ -50,14 +44,6 @@ const CallItem: React.FC<Props> = ({ call }: Props) => {
           </Space>
         </Space>
         <Space>
-          {/* TODO: add back this button with call options */}
-          {/* <Button
-                    onClick={() =>
-                        push(`call/${call.id}`)
-                    }
-                    >
-                    <EllipsisOutlined />
-                    </Button> */}
           {started ? (
             <Button
               size="large"
@@ -70,9 +56,8 @@ const CallItem: React.FC<Props> = ({ call }: Props) => {
           ) : (
             <Button
               size="large"
-              type="default"
               style={{ borderRadius: 4, color: "#448AF3" }}
-              onClick={() => console.log("hello second button")}
+              onClick={() => selectCall(call)}
             >
               {t("call.seeDetails")}
             </Button>

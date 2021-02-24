@@ -7,7 +7,11 @@
     "minutes": "minutes",
     "ago": "ago",
     "join": "Join Now",
-    "seeDetails": "See Details"
+    "seeDetails": "See Details",
+    "cancelDescription": "Can’t make this time? You can cancel this call and select a cancellation reason to send to your contact.",
+    "cancel": "Cancel",
+    "whatToExpect": "What to expect for my call",
+    "privacyNotice": "Privacy Notice"
   },
   "connection": {
     "approved": "Approved",

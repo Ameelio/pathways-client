@@ -7,9 +7,10 @@ import CallItem from "./CallItem";
 
 interface Props {
   calls: Call[];
+  selectCall: Function;
 }
 
-const CallsList: React.FC<Props> = ({ calls }: Props) => {
+const CallsList: React.FC<Props> = ({ calls, selectCall }: Props) => {
   const { t } = useTranslation("dashboard");
 
   return (
@@ -32,7 +33,11 @@ const CallsList: React.FC<Props> = ({ calls }: Props) => {
         </Typography.Text>
       </div>
       {calls.map((call) => (
-        <CallItem call={call} key={`callItem-${call.id}`} />
+        <CallItem
+          call={call}
+          selectCall={selectCall}
+          key={`callItem-${call.id}`}
+        />
       ))}
     </Card>
   );

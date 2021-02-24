@@ -1,17 +1,19 @@
 import { Col, Row, Space } from "antd";
 import Layout, { Content } from "antd/lib/layout/layout";
-import React from "react";
+import React, { useState } from "react";
 import { Call } from "src/types/Call";
 import { Connection } from "src/types/Connection";
 import CallsList from "./CallsList";
 import ConnectionsList from "./ConnectionsList";
 import DashboardHeader from "./DashboardHeader";
+import SelectedCall from "./SelectedCall";
 
 interface Props {
   calls: Call[];
   connections: Connection[];
 }
 const Dashboard: React.FC<Props> = ({ calls, connections }) => {
+  const [selectedCall, setSelectedCall] = useState(null);
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Content>
@@ -35,7 +37,7 @@ const Dashboard: React.FC<Props> = ({ calls, connections }) => {
           </Row>
           <Row gutter={16}>
             <Col span={16}>
-              <CallsList calls={calls} />
+              <CallsList calls={calls} selectCall={setSelectedCall} />
             </Col>
             <Col span={8}>
               <ConnectionsList connections={connections} />
@@ -43,6 +45,10 @@ const Dashboard: React.FC<Props> = ({ calls, connections }) => {
           </Row>
         </Space>
       </Content>
+      <SelectedCall
+        selectedCall={selectedCall}
+        onClose={() => setSelectedCall(null)}
+      />
     </Layout>
   );
 };
