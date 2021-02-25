@@ -6,7 +6,7 @@ import { sessionReducer } from "./modules/session";
 import { callSlice } from "./modules/call";
 import { connectionSlice } from "./modules/connection";
 import { modalsSlice } from "src/components/Modals/modalsSlice";
-import { useDispatch } from "react-redux";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const history = createBrowserHistory();
 

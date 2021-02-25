@@ -10,8 +10,8 @@
     "seeDetails": "Ver Detalles"
   },
   "connection": {
-    "approved": "Aprobada(o)s",
+    "active": "Aprobada(o)s",
     "pending": "Pendientes",
-    "title": "Conexiones"
+    "title": "Contactos"
   }
 }

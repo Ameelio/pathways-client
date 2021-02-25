@@ -19,7 +19,7 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const CancelCallModal: React.FC<PropsFromRedux> = ({ call, closeModal }) => {
-  const { t } = useTranslation("dashboard");
+  const { t } = useTranslation("modals");
   const fullName = call ? genFullName(call.connection.user) : "";
   const startDate = call ? format(new Date(call.start), "EEEE, MMMM d") : "";
   const startTime = call ? format(new Date(call.start), "h:mm aaa OOO") : "";
@@ -29,9 +29,9 @@ const CancelCallModal: React.FC<PropsFromRedux> = ({ call, closeModal }) => {
 
   return (
     <Modal
-      title={t("call.cancelModal.title")}
+      title={t("cancelCallModal.title")}
       visible={true}
-      okText={t("call.cancelModal.okText")}
+      okText={t("cancelCallModal.okText")}
       onOk={closeModal}
       onCancel={closeModal}
       style={{ borderRadius: 4 }}
@@ -39,7 +39,7 @@ const CancelCallModal: React.FC<PropsFromRedux> = ({ call, closeModal }) => {
       <Space direction="vertical" size="large">
         <Row>
           <Typography.Text>
-            {t("call.cancelModal.messageOne", { connectionName: fullName })}
+            {t("cancelCallModal.messageOne", { connectionName: fullName })}
           </Typography.Text>
         </Row>
         <Row>
@@ -56,7 +56,7 @@ const CancelCallModal: React.FC<PropsFromRedux> = ({ call, closeModal }) => {
         </Row>
         <Row>
           <Typography.Text>
-            {t("call.cancelModal.messageTwo", {
+            {t("cancelCallModal.messageTwo", {
               connectionFirstName: firstName,
             })}
           </Typography.Text>
@@ -64,7 +64,7 @@ const CancelCallModal: React.FC<PropsFromRedux> = ({ call, closeModal }) => {
         <Row />
       </Space>
       <Select
-        placeholder={t("call.cancelModal.dropdownPlaceholder")}
+        placeholder={t("cancelCallModal.dropdownPlaceholder")}
         style={{ width: "100%" }}
       ></Select>
     </Modal>

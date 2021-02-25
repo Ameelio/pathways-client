@@ -40,7 +40,7 @@ const Dashboard: React.FC<Props> = ({ calls, connections }) => {
               <CallsList calls={calls} selectCall={setSelectedCall} />
             </Col>
             <Col span={8}>
-              <ConnectionsList connections={connections} />
+              <ConnectionsList calls={calls} connections={connections} />
             </Col>
           </Row>
         </Space>

@@ -11,18 +11,12 @@
     "cancelDescription": "Can’t make this time? You can cancel this call and select a cancellation reason to send to your contact.",
     "cancel": "Cancel",
     "whatToExpect": "What to expect for my call",
-    "privacyNotice": "Privacy Notice",
-    "cancelModal": {
-      "title": "Cancel Call?",
-      "okText": "Confirm",
-      "messageOne": "You are about to cancel your call with {{connectionName}} for:",
-      "messageTwo": "Please select a cancellation reason to send to {{connectionFirstName}}.",
-      "dropdownPlaceholder": "Cancellation reason"
-    }
+    "privacyNotice": "Privacy Notice"
   },
   "connection": {
-    "approved": "Approved",
+    "active": "Active",
     "pending": "Pending",
-    "title": "Connections"
+    "title": "Contacts",
+    "lastCall": "Last call: {{daysPastNum}} days"
   }
 }

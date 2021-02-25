@@ -40,3 +40,9 @@ export const selectUpcomingCalls = (state: RootState) => {
     .filter(notEmpty)
     .filter((call) => call.status !== "ended" && call.status !== "terminated");
 };
+
+export const selectEndedCalls = (state: RootState) => {
+  return selectAllCalls(state).filter(
+    (call) => call.status === "ended" || call.status === "terminated"
+  );
+};
