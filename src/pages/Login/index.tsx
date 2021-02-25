@@ -102,8 +102,27 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
             name="login"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            style={{ width: "100%" }}
+            style={{ width: "100%", borderRadius: 8 }}
+            initialValues={{
+              language: Object.keys(LANGUAGES)[0],
+            }}
           >
+            <Form.Item
+              label="Language"
+              name="language"
+              rules={[{ required: true, message: "Language is required." }]}
+            >
+              <Radio.Group
+                defaultValue={Object.keys(LANGUAGES)[0]}
+                className="w-100"
+                onChange={(e) => i18n.changeLanguage(e.target.value)}
+              >
+                {Object.entries(LANGUAGES).map(([key, value]) => (
+                  <Radio.Button value={key}>{value}</Radio.Button>
+                ))}
+              </Radio.Group>
+            </Form.Item>
+
             <Form.Item
               name="inmateNumber"
               label="ID Number"
@@ -126,24 +145,8 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
               />
             </Form.Item>
 
-            <Form.Item
-              label="Language"
-              name="language"
-              rules={[{ required: true, message: "Language is required." }]}
-            >
-              <Radio.Group
-                defaultValue={Object.keys(LANGUAGES)[0]}
-                className="w-100"
-                onChange={(e) => i18n.changeLanguage(e.target.value)}
-              >
-                {Object.entries(LANGUAGES).map(([key, value]) => (
-                  <Radio.Button value={key}>{value}</Radio.Button>
-                ))}
-              </Radio.Group>
-            </Form.Item>
-
-            <Form.Item {...FORM_TAIL_LAYOUT}>
-              <Button type="primary" htmlType="submit" size="large" block>
+            <Form.Item {...FORM_TAIL_LAYOUT} style={{ borderRadius: 4 }}>
+              <Button type="primary" htmlType="submit" size="large">
                 {t("buttonText")}
               </Button>
             </Form.Item>
