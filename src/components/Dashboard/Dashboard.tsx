@@ -6,7 +6,7 @@ import { Connection } from "src/types/Connection";
 import CallsList from "./CallsList";
 import ConnectionsList from "./ConnectionsList";
 import DashboardHeader from "./DashboardHeader";
-import SelectedCall from "./SelectedCall";
+import CallDetails from "./CallDetails";
 
 interface Props {
   calls: Call[];
@@ -45,7 +45,7 @@ const Dashboard: React.FC<Props> = ({ calls, connections }) => {
           </Row>
         </Space>
       </Content>
-      <SelectedCall
+      <CallDetails
         selectedCall={selectedCall}
         onClose={() => setSelectedCall(null)}
       />
