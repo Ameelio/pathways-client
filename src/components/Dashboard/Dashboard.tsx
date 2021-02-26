@@ -13,7 +13,7 @@ interface Props {
   connections: Connection[];
 }
 const Dashboard: React.FC<Props> = ({ calls, connections }) => {
-  const [selectedCall, setSelectedCall] = useState(null);
+  const [selectedCall, setSelectedCall] = useState<null | Call>(null);
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Content>
@@ -37,7 +37,10 @@ const Dashboard: React.FC<Props> = ({ calls, connections }) => {
           </Row>
           <Row gutter={16}>
             <Col span={16}>
-              <CallsList calls={calls} selectCall={setSelectedCall} />
+              <CallsList
+                calls={calls}
+                selectCall={(call: Call) => setSelectedCall(call)}
+              />
             </Col>
             <Col span={8}>
               <ConnectionsList calls={calls} connections={connections} />

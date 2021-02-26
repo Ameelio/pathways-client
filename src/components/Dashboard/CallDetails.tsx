@@ -19,7 +19,7 @@ import { openCancelCallModal } from "../Modals/modalsSlice";
 
 interface Props {
   selectedCall: Call | null;
-  onClose: Function;
+  onClose: () => void;
 }
 
 const CallDetails: React.FC<Props> = ({ selectedCall, onClose }) => {

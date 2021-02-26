@@ -8,7 +8,7 @@ import { genFullName } from "src/utils/utils";
 
 interface Props {
   call: Call;
-  selectCall: Function;
+  selectCall: (call: Call) => void;
 }
 const CallItem: React.FC<Props> = ({ call, selectCall }: Props) => {
   const { t } = useTranslation("dashboard");

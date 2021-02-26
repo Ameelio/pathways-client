@@ -7,7 +7,7 @@ import CallItem from "./CallItem";
 
 interface Props {
   calls: Call[];
-  selectCall: Function;
+  selectCall: (call: Call) => void;
 }
 
 const CallsList: React.FC<Props> = ({ calls, selectCall }: Props) => {
