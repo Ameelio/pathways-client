@@ -36,16 +36,13 @@ const DashboardHeader: React.FC = () => {
           style={{
             paddingTop: 65,
             paddingBottom: 0,
-            fontSize: "48px",
             marginBottom: 0,
           }}
+          level={1}
         >
           {format(currTime, "HH:mm")}
         </Typography.Title>
-        <Typography.Title
-          className="dashboard-header-content"
-          style={{ fontSize: "14px" }}
-        >
+        <Typography.Title className="dashboard-header-content" level={5}>
           {format(currTime, "eeee, MMMM d")}
         </Typography.Title>
         <Typography.Title
