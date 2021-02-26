@@ -2,23 +2,14 @@ import { Space, Row, Col, Typography, Select } from "antd";
 import Modal from "antd/lib/modal/Modal";
 import { differenceInMinutes, format } from "date-fns";
 import React from "react";
-import { connect, ConnectedProps } from "react-redux";
 import { genFullName } from "src/utils/utils";
 import { closeModal } from "src/components/Modals/modalsSlice";
 import { useTranslation } from "react-i18next";
-import { RootState } from "src/redux";
+import { useAppDispatch, useAppSelector } from "src/redux";
 
-const mapStateToProps = (state: RootState) => ({
-  call: state.modals.cancelCall,
-});
-
-const mapDispatchToProps = { closeModal };
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-const CancelCallModal: React.FC<PropsFromRedux> = ({ call, closeModal }) => {
+const CancelCallModal: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const call = useAppSelector((state) => state.modals.cancelCall);
   const { t } = useTranslation("modals");
   const fullName = call ? genFullName(call.connection.user) : "";
   const startDate = call ? format(new Date(call.start), "EEEE, MMMM d") : "";
@@ -32,8 +23,8 @@ const CancelCallModal: React.FC<PropsFromRedux> = ({ call, closeModal }) => {
       title={t("cancelCallModal.title")}
       visible={true}
       okText={t("cancelCallModal.okText")}
-      onOk={closeModal}
-      onCancel={closeModal}
+      onOk={() => dispatch(closeModal())}
+      onCancel={() => dispatch(closeModal())}
       style={{ borderRadius: 4 }}
     >
       <Space direction="vertical" size="large">
@@ -71,4 +62,4 @@ const CancelCallModal: React.FC<PropsFromRedux> = ({ call, closeModal }) => {
   );
 };
 
-export default connector(CancelCallModal);
+export default CancelCallModal;

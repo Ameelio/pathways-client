@@ -38,7 +38,7 @@ const CallDetails: React.FC<Props> = ({ selectedCall, onClose }) => {
       title="Call Details"
       placement="right"
       closable={false}
-      onClose={() => onClose()}
+      onClose={onClose}
       visible={selectedCall ? true : false}
       getContainer={false}
       style={{ position: "absolute" }}
