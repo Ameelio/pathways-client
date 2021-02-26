@@ -4,18 +4,25 @@ import Avatar from "antd/lib/avatar/avatar";
 import Layout, { Content } from "antd/lib/layout/layout";
 import Title from "antd/lib/typography/Title";
 import Text from "antd/lib/typography/Text";
-import { format } from "date-fns";
+import { differenceInMinutes, format } from "date-fns";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { User } from "src/types/User";
 import { genFullName } from "src/utils/utils";
+import { BaseCall } from "src/types/Call";
 
 interface Props {
   user: User;
+  calls: BaseCall[];
   onEdit: () => void;
 }
-const ProfileInfo: React.FC<Props> = ({ user, onEdit }) => {
+const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
   const { t } = useTranslation("profile");
+  const totalMinutes = calls
+    .map((call) =>
+      differenceInMinutes(new Date(call.end), new Date(call.start))
+    )
+    .reduce((a, b) => a + b);
   return (
     <Layout style={{ minHeight: "100vh", backgroundColor: "#FFFFFF" }}>
       <Content>
@@ -97,7 +104,7 @@ const ProfileInfo: React.FC<Props> = ({ user, onEdit }) => {
                       </Text>
                     </p>
                     <p>
-                      <Text>Insert Call Number here</Text>
+                      <Text>{calls.length}</Text>
                     </p>
                   </Col>
                   <Col span={2} />
@@ -108,7 +115,7 @@ const ProfileInfo: React.FC<Props> = ({ user, onEdit }) => {
                       </Text>
                     </p>
                     <p>
-                      <Text>Insert Minutes Number here</Text>
+                      <Text>{totalMinutes}</Text>
                     </p>
                   </Col>
                 </Row>

@@ -12,7 +12,7 @@ const Profile: React.FC<Props> = ({ calls, user }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   return isEditing ? null : (
-    <ProfileInfo user={user} onEdit={() => setIsEditing(true)} />
+    <ProfileInfo user={user} calls={calls} onEdit={() => setIsEditing(true)} />
   );
 };
 
