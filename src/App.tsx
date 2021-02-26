@@ -2,7 +2,7 @@ import React from "react";
 import "./App.scss";
 import { RootState } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
-import { ConnectedRouter, push } from "connected-react-router";
+import { ConnectedRouter } from "connected-react-router";
 import { Layout } from "antd";
 import { Redirect, Route, Switch } from "react-router";
 import { History } from "history";
@@ -20,7 +20,7 @@ const mapStateToProps = (state: RootState) => ({
   session: state.session,
   pathname: state.router.location.pathname,
 });
-const mapDispatchToProps = { fetchConnections, push };
+const mapDispatchToProps = { fetchConnections };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -31,7 +31,6 @@ function App({
   history,
   pathname,
   fetchConnections,
-  push,
 }: PropsFromRedux & { history: History }) {
   const { i18n } = useTranslation();
 
@@ -52,7 +51,6 @@ function App({
     <ConnectedRouter history={history}>
       <Layout style={{ minHeight: "100vh" }}>
         <Sidebar
-          navigate={(path: string) => push(path)}
           isVisible={session.isLoggedIn}
           pathname={pathname}
           user={session.user}

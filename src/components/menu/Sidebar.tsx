@@ -10,22 +10,21 @@ import logo from "src/assets/logo.svg";
 import { User } from "src/types/User";
 import { ReactComponent as Logo } from "src/assets/logo.svg";
 import { genFullName } from "src/utils/utils";
-import { push } from "connected-react-router";
+import { useHistory } from "react-router";
 
 const { Sider } = Layout;
 interface Props {
-  navigate: (path: string) => void;
   isVisible: boolean;
   pathname: string;
   user: User;
 }
 
 export default function Sidebar({
-  navigate,
   isVisible,
   pathname,
   user,
 }: Props): ReactElement {
+  const history = useHistory();
   if (
     !isVisible ||
     pathname.indexOf("call") !== -1 ||
@@ -45,7 +44,7 @@ export default function Sidebar({
         <Row
           align="middle"
           style={{ paddingLeft: 10, cursor: "pointer" }}
-          onClick={() => navigate(`profile/${user.id}`)}
+          onClick={() => history.push(`/profile/${user.id}`)}
         >
           <Space>
             <Avatar src={user.profileImgPath} size="large" />
@@ -60,7 +59,7 @@ export default function Sidebar({
           <Menu.Item
             key="home"
             icon={<HomeOutlined />}
-            onClick={() => navigate("home")}
+            onClick={() => history.push("/")}
           >
             Home
           </Menu.Item>
