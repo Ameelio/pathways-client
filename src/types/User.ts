@@ -2,6 +2,8 @@ export interface BasePersona {
   id: number;
   firstName: string;
   lastName: string;
+  location: string;
+  dateOfBirth: string;
   profileImgPath?: string;
 }
 

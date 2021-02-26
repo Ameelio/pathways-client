@@ -55,6 +55,7 @@ function App({
           navigate={(path: string) => push(path)}
           isVisible={session.isLoggedIn}
           pathname={pathname}
+          user={session.user}
         />
         <Layout>
           <Switch>
