@@ -25,7 +25,7 @@ const CancelCallModal: React.FC = () => {
       okText={t("cancelCallModal.okText")}
       onOk={() => dispatch(closeModal())}
       onCancel={() => dispatch(closeModal())}
-      style={{ borderRadius: 4 }}
+      className="rounded-sm"
     >
       <Space direction="vertical" size="large">
         <Row>

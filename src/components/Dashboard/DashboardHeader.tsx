@@ -27,20 +27,34 @@ const DashboardHeader: React.FC = () => {
       className="w-full h-52 rounded-md bg-cover bg-center text-center flex-1 justify-end"
     >
       <Col className="pb-4">
-        <Typography.Title level={1} style={{ color: "white", marginBottom: 0 }}>
+        <Typography.Title level={1} style={Styles.headerTime}>
           {format(currTime, "HH:mm")}
         </Typography.Title>
-        <Typography.Title level={5} style={{ color: "white", marginTop: 0 }}>
+        <Typography.Title level={5} style={Styles.headerDate}>
           {format(currTime, "eeee, MMMM d")}
         </Typography.Title>
       </Col>
       <Col>
-        <Typography.Title level={5} style={{ color: "white" }}>
+        <Typography.Title level={5} style={Styles.quote}>
           {`${dailyQuote.quote} - ${dailyQuote.author}`}
         </Typography.Title>
       </Col>
     </Space>
   );
+};
+
+const Styles = {
+  headerTime: {
+    color: "white",
+    marginBottom: 0,
+  },
+  headerDate: {
+    color: "white",
+    marginTop: 0,
+  },
+  quote: {
+    color: "white",
+  },
 };
 
 export default DashboardHeader;

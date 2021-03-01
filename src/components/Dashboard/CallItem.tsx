@@ -48,7 +48,7 @@ const CallItem: React.FC<Props> = ({ call, selectCall }: Props) => {
             <Button
               size="large"
               type="primary"
-              style={{ borderRadius: 4 }}
+              className="rounded-sm"
               onClick={() => push(`call/${call.id}`)}
             >
               {t("call.join")}
@@ -56,7 +56,7 @@ const CallItem: React.FC<Props> = ({ call, selectCall }: Props) => {
           ) : (
             <Button
               size="large"
-              style={{ borderRadius: 4, color: "#448AF3" }}
+              className="rounded-sm"
               onClick={() => selectCall(call)}
             >
               {t("call.seeDetails")}

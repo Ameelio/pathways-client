@@ -86,7 +86,7 @@ const CallDetails: React.FC<Props> = ({ selectedCall, onClose }) => {
         </Row>
         <Row>
           <Button
-            style={{ borderRadius: 4, color: "#448AF3" }}
+            className="rounded-sm"
             onClick={() => dispatch(openCancelCallModal(selectedCall))}
           >
             {t("call.cancel")}

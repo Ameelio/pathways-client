@@ -21,7 +21,7 @@ const CallsList: React.FC<Props> = ({ calls, selectCall }: Props) => {
           {t("call.seeAll")}
         </Typography.Link>
       }
-      style={{ borderRadius: 8 }}
+      className="rounded-md"
     >
       <div style={{ paddingBottom: 16 }}>
         <Typography.Text>
