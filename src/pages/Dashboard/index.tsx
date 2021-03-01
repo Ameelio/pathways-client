@@ -4,7 +4,6 @@ import { connect, ConnectedProps } from "react-redux";
 import { fetchCalls } from "src/redux/modules/call";
 import { selectAllConnections, selectUpcomingCalls } from "src/redux/selectors";
 import { push } from "connected-react-router";
-import "./index.css";
 import "src/i18n/config";
 import Dashboard from "src/components/Dashboard";
 

@@ -1,4 +1,4 @@
-import { Space, Typography } from "antd";
+import { Col, Row, Space, Typography } from "antd";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Quote } from "src/types/Common";
@@ -18,43 +18,28 @@ const DashboardHeader: React.FC = () => {
   });
 
   return (
-    <div>
-      <Space
-        direction="vertical"
-        align="center"
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          backgroundImage: `url(${dailyQuote.background})`,
-          height: "215px",
-          borderRadius: "8px",
-        }}
-        className="dashboard-header-container banner-background"
-      >
-        <Typography.Title
-          className="dashboard-header-content"
-          style={{
-            paddingTop: 65,
-            paddingBottom: 0,
-            marginBottom: 0,
-          }}
-          level={1}
-        >
+    <Space
+      direction="vertical"
+      align="center"
+      style={{
+        backgroundImage: `url(${dailyQuote.background})`,
+      }}
+      className="w-full h-52 rounded-md bg-cover bg-center text-center flex-1 justify-end"
+    >
+      <Col className="pb-4">
+        <Typography.Title level={1} style={{ color: "white", marginBottom: 0 }}>
           {format(currTime, "HH:mm")}
         </Typography.Title>
-        <Typography.Title className="dashboard-header-content" level={5}>
+        <Typography.Title level={5} style={{ color: "white", marginTop: 0 }}>
           {format(currTime, "eeee, MMMM d")}
         </Typography.Title>
-        <Typography.Title
-          level={5}
-          className="dashboard-header-content"
-          style={{ paddingTop: 35, paddingBottom: 8 }}
-        >
+      </Col>
+      <Col>
+        <Typography.Title level={5} style={{ color: "white" }}>
           {`${dailyQuote.quote} - ${dailyQuote.author}`}
         </Typography.Title>
-      </Space>
-      <div style={{ width: "100%", backgroundColor: "white" }}></div>
-    </div>
+      </Col>
+    </Space>
   );
 };
 
