@@ -30,10 +30,7 @@ export default function Sidebar({
   )
     return <div />;
   return (
-    <Sider
-      theme="light"
-      style={{ boxShadow: "2px 0px 8px rgba(0, 0, 0, 0.15)" }}
-    >
+    <Sider theme="light" className="shadow-lg">
       <Space direction="vertical" className="w-full">
         <Row className="pt-2">
           <Logo className="login-logo" />
