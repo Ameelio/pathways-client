@@ -1,0 +1,9 @@
+{
+  "cancelCallModal": {
+    "title": "Cancel Call?",
+    "okText": "Confirm",
+    "messageOne": "You are about to cancel your call with {{connectionName}} for:",
+    "messageTwo": "Please select a cancellation reason to send to {{connectionFirstName}}.",
+    "dropdownPlaceholder": "Cancellation reason"
+  }
+}

@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { history, Store } from "./redux";
+import "./styles/tailwind.css";
 
 ReactDOM.render(
   <React.StrictMode>
