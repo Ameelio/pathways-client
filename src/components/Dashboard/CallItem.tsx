@@ -1,8 +1,8 @@
 import { Avatar, Button, Card, Row, Space, Typography } from "antd";
-import { push } from "connected-react-router";
 import { differenceInMinutes, format, isToday, isTomorrow } from "date-fns";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useHistory } from "react-router";
 import { Call } from "src/types/Call";
 import { genFullName } from "src/utils/utils";
 
@@ -12,6 +12,8 @@ interface Props {
 }
 const CallItem: React.FC<Props> = ({ call, selectCall }: Props) => {
   const { t } = useTranslation("dashboard");
+
+  const history = useHistory();
 
   const duration = differenceInMinutes(
     new Date(call.end),
@@ -49,7 +51,7 @@ const CallItem: React.FC<Props> = ({ call, selectCall }: Props) => {
               size="large"
               type="primary"
               className="rounded-sm"
-              onClick={() => push(`call/${call.id}`)}
+              onClick={() => history.push(`call/${call.id}`)}
             >
               {t("call.join")}
             </Button>

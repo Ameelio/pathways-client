@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { RootState } from "src/redux";
+import { RootState, useAppDispatch } from "src/redux";
 import RoomClient from "src/pages/Call/RoomClient";
 import * as mediasoupClient from "mediasoup-client";
 import io from "socket.io-client";
@@ -45,6 +45,10 @@ import {
 } from "src/utils/utils";
 import { useTranslation } from "react-i18next";
 import "src/i18n/config";
+import {
+  enterFullScreen,
+  exitFullScreen,
+} from "src/components/common/commonSlice";
 
 const { Sider } = Layout;
 declare global {
@@ -116,6 +120,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const CallBase: React.FC<PropsFromRedux> = React.memo(
   ({ call, authInfo, push, initials }) => {
+    const dispatch = useAppDispatch();
     const { t } = useTranslation("call");
 
     const [isAuthed, setIsAuthed] = useState(false);
@@ -137,6 +142,15 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
     if (meRef.current && !meRef.current.srcObject && mediaStream) {
       meRef.current.srcObject = mediaStream;
     }
+
+    useEffect(() => {
+      dispatch(enterFullScreen());
+
+      return () => {
+        dispatch(exitFullScreen());
+      };
+    }, [dispatch]);
+
     useEffect(() => {
       if (!socket) {
         const s = io.connect(

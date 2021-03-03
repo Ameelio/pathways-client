@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.scss";
-import { RootState } from "src/redux";
+import { RootState, useAppSelector } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
 import { Layout } from "antd";
@@ -19,7 +19,6 @@ import Modals from "./components/Modals/Modals";
 
 const mapStateToProps = (state: RootState) => ({
   session: state.session,
-  pathname: state.router.location.pathname,
 });
 const mapDispatchToProps = { fetchConnections };
 
@@ -30,15 +29,17 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 function App({
   session,
   history,
-  pathname,
   fetchConnections,
 }: PropsFromRedux & { history: History }) {
   const { i18n } = useTranslation();
+  const fullScreenMode = useAppSelector((state) => state.common.fullScreen);
 
   const defaultProtectedRouteProps: ProtectedRouteProps = {
     isAuthenticated: session.authInfo.token !== "", // TODO: improve this later
     authenticationPath: "/login",
   };
+
+  const showSideBar = session.isLoggedIn && !fullScreenMode;
 
   useEffect(() => {
     if (session.isLoggedIn) fetchConnections();
@@ -52,11 +53,7 @@ function App({
     <ConnectedRouter history={history}>
       <Modals />
       <Layout style={{ minHeight: "100vh" }}>
-        <Sidebar
-          isVisible={session.isLoggedIn}
-          pathname={pathname}
-          user={session.user}
-        />
+        {showSideBar && <Sidebar user={session.user} />}
         <Layout>
           <Switch>
             <Route exact path="/login" component={LoginPage}></Route>

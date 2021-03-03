@@ -1,12 +1,10 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement } from "react";
 import { Menu, Layout, Space, Row, Avatar, Typography, Divider } from "antd";
-import Icon, {
+import {
   EllipsisOutlined,
   HomeOutlined,
   ScheduleOutlined,
-  SettingFilled,
 } from "@ant-design/icons";
-import logo from "src/assets/logo.svg";
 import { User } from "src/types/User";
 import { ReactComponent as Logo } from "src/assets/logo.svg";
 import { genFullName } from "src/utils/utils";
@@ -14,23 +12,11 @@ import { useHistory } from "react-router";
 
 const { Sider } = Layout;
 interface Props {
-  isVisible: boolean;
-  pathname: string;
   user: User;
 }
 
-export default function Sidebar({
-  isVisible,
-  pathname,
-  user,
-}: Props): ReactElement {
+export default function Sidebar({ user }: Props): ReactElement {
   const history = useHistory();
-  if (
-    !isVisible ||
-    pathname.indexOf("call") !== -1 ||
-    pathname.indexOf("feedback") !== -1
-  )
-    return <div />;
   return (
     <Sider
       theme="light"
@@ -66,7 +52,7 @@ export default function Sidebar({
           <Menu.Item
             key="calls"
             icon={<ScheduleOutlined />}
-            onClick={() => console.log("take me to calls")}
+            onClick={() => history.push("/calls")}
           >
             Calls
           </Menu.Item>
