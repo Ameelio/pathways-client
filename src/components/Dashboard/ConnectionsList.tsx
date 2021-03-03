@@ -1,5 +1,5 @@
 import { Card, Row } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Call } from "src/types/Call";
 import { Connection } from "src/types/Connection";
@@ -12,6 +12,10 @@ interface Props {
 
 const ConnectionsList: React.FC<Props> = ({ calls, connections }: Props) => {
   const { t } = useTranslation("dashboard");
+  const [connectionItems, setConnectionItems] = useState<JSX.Element[] | null>(
+    null
+  );
+  const [activeContactTab, setActiveContactTab] = useState("approved");
   const tabList = [
     {
       key: "approved",
@@ -23,7 +27,13 @@ const ConnectionsList: React.FC<Props> = ({ calls, connections }: Props) => {
     },
   ];
 
-  const [activeContactTab, setActiveContactTab] = useState("approved");
+  useEffect(() => {
+    setConnectionItems(
+      connections
+        .filter((connection) => connection.status === activeContactTab)
+        .map((connection) => <ConnectionItem connection={connection} />)
+    );
+  }, [activeContactTab, connections]);
 
   return (
     <Card
@@ -32,13 +42,7 @@ const ConnectionsList: React.FC<Props> = ({ calls, connections }: Props) => {
       activeTabKey={activeContactTab}
       onTabChange={(key) => setActiveContactTab(key)}
     >
-      <Row justify="space-around">
-        {connections
-          .filter((connection) => connection.status === activeContactTab)
-          .map((connection) => (
-            <ConnectionItem connection={connection} />
-          ))}
-      </Row>
+      <Row justify="space-around">{connectionItems}</Row>
     </Card>
   );
 };
