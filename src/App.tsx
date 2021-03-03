@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import { fetchConnections } from "./redux/modules/connection";
 import Sidebar from "./components/menu/Sidebar";
 import { useTranslation } from "react-i18next";
+import Modals from "./components/Modals/Modals";
 
 const mapStateToProps = (state: RootState) => ({
   session: state.session,
@@ -49,6 +50,7 @@ function App({
 
   return (
     <ConnectedRouter history={history}>
+      <Modals />
       <Layout style={{ minHeight: "100vh" }}>
         <Sidebar
           isVisible={session.isLoggedIn}
