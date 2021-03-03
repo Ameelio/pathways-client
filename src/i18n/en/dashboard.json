@@ -2,14 +2,21 @@
   "call": {
     "title": "Upcoming Calls",
     "seeAll": "See All",
-    "noCalls": "No upcoming calls",
+    "noCalls": "Upcoming calls will appear here when your contacts schedule a call with you.",
+    "upcomingCalls": "upcoming call",
     "minutes": "minutes",
     "ago": "ago",
-    "join": "join"
+    "join": "Join Now",
+    "seeDetails": "See Details",
+    "cancelDescription": "Can’t make this time? You can cancel this call and select a cancellation reason to send to your contact.",
+    "cancel": "Cancel",
+    "whatToExpect": "What to expect for my call",
+    "privacyNotice": "Privacy Notice"
   },
   "connection": {
-    "approved": "Approved",
+    "active": "Active",
     "pending": "Pending",
-    "title": "Connections"
+    "title": "Contacts",
+    "lastCall": "Last call: {{daysPastNum}} days"
   }
 }
