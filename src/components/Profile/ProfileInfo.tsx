@@ -1,11 +1,17 @@
 import { SaveOutlined } from "@ant-design/icons";
-import { Space, PageHeader, Button, Row, Card, Typography, Col } from "antd";
+import {
+  Space,
+  PageHeader,
+  Button,
+  Row,
+  Card,
+  Typography,
+  Col,
+  Layout,
+} from "antd";
 import Avatar from "antd/lib/avatar/avatar";
-import Layout, { Content } from "antd/lib/layout/layout";
-import Title from "antd/lib/typography/Title";
-import Text from "antd/lib/typography/Text";
 import { differenceInMinutes, format } from "date-fns";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { User } from "src/types/User";
 import { genFullName } from "src/utils/utils";
@@ -20,14 +26,20 @@ interface Props {
 
 const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
   const { t } = useTranslation("profile");
-  const totalMinutes = calls
-    .map((call) =>
-      differenceInMinutes(new Date(call.end), new Date(call.start))
-    )
-    .reduce((a, b) => a + b);
+  const [totalMinutes, setTotalMinutes] = useState(0);
+
+  useEffect(() => {
+    const total = calls
+      .map((call) =>
+        differenceInMinutes(new Date(call.end), new Date(call.start))
+      )
+      .reduce((a, b) => a + b);
+    setTotalMinutes(total);
+  }, [calls]);
+
   return (
     <Layout style={{ minHeight: "100vh", backgroundColor: "#FFFFFF" }}>
-      <Content>
+      <Layout.Content>
         <div
           className="h-16 opacity-40"
           style={{ backgroundColor: "#F0DEFF" }}
@@ -38,12 +50,14 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
               <Space>
                 <Avatar src={user.profileImgPath} size={AVATAR_LARGE} />
                 <Space direction="vertical">
-                  <Title level={4}>
-                    <Text strong>{genFullName(user)}</Text>
-                  </Title>
-                  <Title level={5}>
-                    <Text>{user.location}</Text>
-                  </Title>
+                  <Typography.Title level={4}>
+                    <Typography.Text strong>
+                      {genFullName(user)}
+                    </Typography.Text>
+                  </Typography.Title>
+                  <Typography.Title level={5}>
+                    <Typography.Text>{user.location}</Typography.Text>
+                  </Typography.Title>
                 </Space>
               </Space>
               <Button
@@ -60,18 +74,20 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
             <Col span={16}>
               <Card title={t("profileInfo.about")}>
                 <p>
-                  <Text>{`${t("profileInfo.name")}: ${genFullName(
+                  <Typography.Text>{`${t("profileInfo.name")}: ${genFullName(
                     user
-                  )}`}</Text>
+                  )}`}</Typography.Text>
                 </p>
                 <p>
-                  <Text>{`${t("profileInfo.home")}: ${user.location}`}</Text>
+                  <Typography.Text>{`${t("profileInfo.home")}: ${
+                    user.location
+                  }`}</Typography.Text>
                 </p>
                 <p>
-                  <Text>{`${t("profileInfo.birthday")}: ${format(
+                  <Typography.Text>{`${t("profileInfo.birthday")}: ${format(
                     new Date(user.dateOfBirth),
                     "MMMM d, yyyy"
-                  )}`}</Text>
+                  )}`}</Typography.Text>
                 </p>
               </Card>
             </Col>
@@ -80,22 +96,22 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
                 <Row>
                   <Col span={4}>
                     <p>
-                      <Text type="secondary">
+                      <Typography.Text type="secondary">
                         {t("profileInfo.totalCalls")}
-                      </Text>
+                      </Typography.Text>
                     </p>
                     <p>
-                      <Text>{calls.length}</Text>
+                      <Typography.Text>{calls.length}</Typography.Text>
                     </p>
                   </Col>
                   <Col span={16} offset={2}>
                     <p>
-                      <Text type="secondary">
+                      <Typography.Text type="secondary">
                         {t("profileInfo.totalMinutes")}
-                      </Text>
+                      </Typography.Text>
                     </p>
                     <p>
-                      <Text>{totalMinutes}</Text>
+                      <Typography.Text>{totalMinutes}</Typography.Text>
                     </p>
                   </Col>
                 </Row>
@@ -103,7 +119,7 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
             </Col>
           </Row>
         </Space>
-      </Content>
+      </Layout.Content>
     </Layout>
   );
 };

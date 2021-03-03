@@ -8,21 +8,21 @@ import {
 import { User } from "src/types/User";
 import { ReactComponent as Logo } from "src/assets/logo.svg";
 import { genFullName } from "src/utils/utils";
-import { useHistory } from "react-router";
 
 const { Sider } = Layout;
 interface Props {
   isVisible: boolean;
   pathname: string;
   user: User;
+  navigate: (path: string) => void;
 }
 
 export default function Sidebar({
   isVisible,
   pathname,
   user,
+  navigate,
 }: Props): ReactElement {
-  const history = useHistory();
   if (
     !isVisible ||
     pathname.indexOf("call") !== -1 ||
@@ -34,30 +34,26 @@ export default function Sidebar({
       theme="light"
       style={{ boxShadow: "2px 0px 8px rgba(0, 0, 0, 0.15)" }}
     >
-      <Space direction="vertical" style={{ width: "100%" }}>
-        <Row style={{ paddingTop: 8 }}>
+      <Space direction="vertical" className="w-full">
+        <Row className="pt-2">
           <Logo className="login-logo" />
         </Row>
         <Row></Row>
         <Row
           align="middle"
           style={{ paddingLeft: 10, cursor: "pointer" }}
-          onClick={() => history.push(`/profile/${user.id}`)}
+          onClick={() => navigate(`/profile/${user.id}`)}
         >
           <Space>
             <Avatar src={user.profileImgPath} size="large" />
             <Typography.Text>{genFullName(user)}</Typography.Text>
           </Space>
         </Row>
-        <Menu
-          mode="inline"
-          defaultSelectedKeys={["home"]}
-          style={{ width: "100%" }}
-        >
+        <Menu mode="inline" defaultSelectedKeys={["home"]} className="w-full">
           <Menu.Item
             key="home"
             icon={<HomeOutlined />}
-            onClick={() => history.push("/")}
+            onClick={() => navigate("/")}
           >
             Home
           </Menu.Item>
