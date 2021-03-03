@@ -10,12 +10,14 @@ import { useTranslation } from "react-i18next";
 import { User } from "src/types/User";
 import { genFullName } from "src/utils/utils";
 import { BaseCall } from "src/types/Call";
+import { AVATAR_LARGE } from "src/utils/constants";
 
 interface Props {
   user: User;
   calls: BaseCall[];
   onEdit: () => void;
 }
+
 const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
   const { t } = useTranslation("profile");
   const totalMinutes = calls
@@ -27,34 +29,14 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
     <Layout style={{ minHeight: "100vh", backgroundColor: "#FFFFFF" }}>
       <Content>
         <div
-          style={{
-            height: "60px",
-            backgroundColor: "#F0DEFF",
-            opacity: 0.4,
-          }}
+          className="h-16 opacity-40"
+          style={{ backgroundColor: "#F0DEFF" }}
         />
-        <Space
-          direction="vertical"
-          size="large"
-          style={{ padding: 24, paddingTop: 36 }}
-          className="w-100"
-        >
-          <PageHeader
-            style={{
-              border: "1px solid #EEEEEE",
-              padding: "25px",
-            }}
-          >
+        <Space direction="vertical" size="large" className="w-100 p-6 pt-9">
+          <PageHeader className="p-6 border border-solid border-opacity-1 border-gray-200">
             <Space style={{ display: "flex", justifyContent: "space-between" }}>
               <Space>
-                <Avatar
-                  src={user.profileImgPath}
-                  size="large"
-                  style={{
-                    width: "135px",
-                    height: "135px",
-                  }}
-                />
+                <Avatar src={user.profileImgPath} size={AVATAR_LARGE} />
                 <Space direction="vertical">
                   <Title level={4}>
                     <Text strong>{genFullName(user)}</Text>
@@ -74,8 +56,8 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
               </Button>
             </Space>
           </PageHeader>
-          <Row>
-            <Col span={15}>
+          <Row gutter={32}>
+            <Col span={16}>
               <Card title={t("profileInfo.about")}>
                 <p>
                   <Text>{`${t("profileInfo.name")}: ${genFullName(
@@ -93,7 +75,6 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
                 </p>
               </Card>
             </Col>
-            <Col span={1} />
             <Col span={8}>
               <Card title={t("profileInfo.history")}>
                 <Row>
@@ -107,8 +88,7 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
                       <Text>{calls.length}</Text>
                     </p>
                   </Col>
-                  <Col span={2} />
-                  <Col span={16}>
+                  <Col span={16} offset={2}>
                     <p>
                       <Text type="secondary">
                         {t("profileInfo.totalMinutes")}

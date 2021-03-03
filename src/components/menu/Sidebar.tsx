@@ -1,12 +1,10 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement } from "react";
 import { Menu, Layout, Space, Row, Avatar, Typography, Divider } from "antd";
-import Icon, {
+import {
   EllipsisOutlined,
   HomeOutlined,
   ScheduleOutlined,
-  SettingFilled,
 } from "@ant-design/icons";
-import logo from "src/assets/logo.svg";
 import { User } from "src/types/User";
 import { ReactComponent as Logo } from "src/assets/logo.svg";
 import { genFullName } from "src/utils/utils";
