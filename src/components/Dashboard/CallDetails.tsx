@@ -47,9 +47,9 @@ const CallDetails: React.FC<Props> = ({ selectedCall, onClose }) => {
         <Row>
           <Space>
             <Col>
-              <CalendarOutlined style={{ fontSize: "22px" }} />
+              <CalendarOutlined className="text-2xl" />
             </Col>
-            <Col style={{ fontSize: 14 }}>
+            <Col className="text-sm">
               <div>
                 <Typography.Text>
                   {format(new Date(selectedCall.start), "EEEE, MMMM d")}
@@ -67,7 +67,7 @@ const CallDetails: React.FC<Props> = ({ selectedCall, onClose }) => {
         <Row>
           <Space>
             <Col>
-              <TeamOutlined style={{ fontSize: "22px" }} />
+              <TeamOutlined className="text-2xl" />
             </Col>
             <Col>
               <Avatar src={selectedCall.connection.user.profileImgPath} />

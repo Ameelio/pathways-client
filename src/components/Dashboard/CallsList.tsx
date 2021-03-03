@@ -23,9 +23,9 @@ const CallsList: React.FC<Props> = ({ calls, selectCall }: Props) => {
       }
       className="rounded-md"
     >
-      <div style={{ paddingBottom: 16 }}>
+      <div className="pb-5">
         <Typography.Text>
-          {calls.length === 0
+          {!calls.length
             ? t("call.noCalls")
             : `${calls.length} ${t("call.upcomingCalls")}${
                 calls.length > 1 ? "s" : ""

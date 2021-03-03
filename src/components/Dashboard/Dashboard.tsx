@@ -24,12 +24,7 @@ const Dashboard: React.FC<Props> = ({ calls, connections }) => {
             opacity: 0.4,
           }}
         />
-        <Space
-          direction="vertical"
-          size="large"
-          style={{ padding: 24, paddingTop: 36 }}
-          className="w-100"
-        >
+        <Space direction="vertical" size="large" className="w-100 p-6 pt-9">
           <Row>
             <Col span={24}>
               <DashboardHeader />
