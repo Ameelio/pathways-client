@@ -18,9 +18,13 @@ const ConnectionItem: React.FC<Props> = ({ connection }) => {
   // TODO: Remove this messy function and pass the days past in the api endpoint
   const getDaysPastNum = (connectionId: number) => {
     if (!endedCalls || !endedCalls.length) return null;
-    const sortedEndedCalls = endedCalls
-      .filter((call) => call.connectionId === connectionId)
-      .sort((callOne, callTwo) => callOne.end - callTwo.end);
+    const filteredEndedCalls = endedCalls.filter(
+      (call) => call.connectionId === connectionId
+    );
+    if (!filteredEndedCalls || !filteredEndedCalls.length) return null;
+    const sortedEndedCalls = filteredEndedCalls.sort(
+      (callOne, callTwo) => callOne.end - callTwo.end
+    );
     const lastCall = sortedEndedCalls[sortedEndedCalls.length - 1];
     return differenceInDays(new Date(lastCall.end), new Date());
   };

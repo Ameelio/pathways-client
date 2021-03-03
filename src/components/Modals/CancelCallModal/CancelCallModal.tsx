@@ -55,8 +55,8 @@ const CancelCallModal: React.FC = () => {
         <Row />
       </Space>
       <Select
+        className="w-full"
         placeholder={t("cancelCallModal.dropdownPlaceholder")}
-        style={{ width: "100%" }}
       ></Select>
     </Modal>
   );
