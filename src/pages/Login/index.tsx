@@ -100,9 +100,9 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
           <Form
             {...FORM_LAYOUT}
             name="login"
+            className="w-full rounded-lg"
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
-            style={{ width: "100%", borderRadius: 8 }}
             initialValues={{
               language: Object.keys(LANGUAGES)[0],
             }}
