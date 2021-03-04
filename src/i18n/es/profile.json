@@ -1,0 +1,12 @@
+{
+  "profileInfo": {
+    "editProfile": "Editar Perfil",
+    "about": "About",
+    "history": "Historia",
+    "name": "Nombre",
+    "home": "Home",
+    "birthday": "Birthday",
+    "totalCalls": "Total Calls",
+    "totalMinutes": "Total Minutes Talked"
+  }
+}

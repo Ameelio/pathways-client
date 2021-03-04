@@ -54,9 +54,10 @@ function App({
       <Modals />
       <Layout style={{ minHeight: "100vh" }}>
         <Sidebar
-          navigate={(path: string) => push(path)}
           isVisible={session.isLoggedIn}
           pathname={pathname}
+          user={session.user}
+          navigate={push}
         />
         <Layout>
           <Switch>
