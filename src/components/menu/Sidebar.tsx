@@ -32,13 +32,12 @@ export default function Sidebar({
   return (
     <Sider theme="light" className="shadow-lg">
       <Space direction="vertical" className="w-full">
-        <Row className="pt-2">
+        <Row className="p-2 cursor-pointer" onClick={() => navigate("/")}>
           <Logo className="login-logo" />
         </Row>
-        <Row></Row>
         <Row
           align="middle"
-          style={{ paddingLeft: 10, cursor: "pointer" }}
+          className="pl-4 cursor-pointer"
           onClick={() => navigate(`/profile/${user.id}`)}
         >
           <Space>
