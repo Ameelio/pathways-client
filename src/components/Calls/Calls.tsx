@@ -1,4 +1,4 @@
-import { Avatar, Col, Row, Space, Table, Typography } from "antd";
+import { Avatar, Button, Col, Row, Space, Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { BaseCall, Call } from "src/types/Call";
 import { User } from "src/types/User";
@@ -38,7 +38,7 @@ const Calls: React.FC<Props> = ({ calls, user }) => {
       dataIndex: "participants",
     },
     {
-      title: "Cancel",
+      title: "",
       dataIndex: "cancel",
     },
   ];
@@ -59,9 +59,9 @@ const Calls: React.FC<Props> = ({ calls, user }) => {
             </Space>
           ),
           cancel: (
-            <Space>
-              <Typography.Text>Cancel</Typography.Text>
-            </Space>
+            <Button type="link" onClick={() => console.log("Cancel call")}>
+              Cancel
+            </Button>
           ),
         };
       })
