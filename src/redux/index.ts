@@ -7,11 +7,13 @@ import { callSlice } from "./modules/call";
 import { connectionSlice } from "./modules/connection";
 import { modalsSlice } from "src/components/Modals/modalsSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { commonSlice } from "src/components/Common/commonSlice";
 
 export const history = createBrowserHistory();
 
 export const createRootReducer = (history: History) =>
   combineReducers({
+    common: commonSlice.reducer,
     session: sessionReducer,
     calls: callSlice.reducer,
     modals: modalsSlice.reducer,

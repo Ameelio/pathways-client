@@ -11,24 +11,11 @@ import { genFullName } from "src/utils/utils";
 
 const { Sider } = Layout;
 interface Props {
-  isVisible: boolean;
-  pathname: string;
   user: User;
   navigate: (path: string) => void;
 }
 
-export default function Sidebar({
-  isVisible,
-  pathname,
-  user,
-  navigate,
-}: Props): ReactElement {
-  if (
-    !isVisible ||
-    pathname.indexOf("call") !== -1 ||
-    pathname.indexOf("feedback") !== -1
-  )
-    return <div />;
+export default function Sidebar({ user, navigate }: Props): ReactElement {
   return (
     <Sider theme="light" className="shadow-lg">
       <Space direction="vertical" className="w-full">
@@ -56,7 +43,7 @@ export default function Sidebar({
           <Menu.Item
             key="calls"
             icon={<ScheduleOutlined />}
-            onClick={() => console.log("take me to calls")}
+            onClick={() => navigate("/calls")}
           >
             Calls
           </Menu.Item>

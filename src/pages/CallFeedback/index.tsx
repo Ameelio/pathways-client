@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { Layout, Rate, Button, Space, Typography, Card } from "antd";
 import {
   HeartOutlined,
@@ -6,6 +6,11 @@ import {
   // SmileOutlined,
   // MehOutlined,
 } from "@ant-design/icons";
+import {
+  enterFullScreen,
+  exitFullScreen,
+} from "src/components/Common/commonSlice";
+import { useAppDispatch } from "src/redux";
 
 const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 // const customIcons = {
@@ -17,6 +22,16 @@ const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 // };
 
 function CallFeedbackBase(): ReactElement {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(enterFullScreen());
+
+    return () => {
+      dispatch(exitFullScreen());
+    };
+  }, [dispatch]);
+
   return (
     <Layout.Content
       style={{

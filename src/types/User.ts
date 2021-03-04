@@ -8,15 +8,10 @@ export interface BasePersona {
 }
 
 export interface User extends BasePersona {
-  email: string;
-}
-
-export interface Inmate extends BasePersona {
   inmateNumber: string;
-  dob: string;
   quota: number;
   sentence: string;
-  sentnceLength: string;
+  sentenceLength: string;
   location: string;
   race: string;
 }

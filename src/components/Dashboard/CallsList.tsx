@@ -36,6 +36,7 @@ const CallsList: React.FC<Props> = ({ calls, selectCall }: Props) => {
         <CallItem
           call={call}
           selectCall={selectCall}
+          navigate={push}
           key={`callItem-${call.id}`}
         />
       ))}
