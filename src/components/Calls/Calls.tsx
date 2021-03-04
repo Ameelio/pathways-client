@@ -1,11 +1,13 @@
 import { Avatar, Button, Col, Row, Space, Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
-import { BaseCall, Call } from "src/types/Call";
+import { BaseCall } from "src/types/Call";
 import { User } from "src/types/User";
 import PageLayout from "src/components/Common/PageLayout";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { genFullName } from "src/utils/utils";
+import { useAppDispatch } from "src/redux";
+import { openCancelCallModal } from "../Modals/modalsSlice";
 
 interface Props {
   calls: BaseCall[];
@@ -20,6 +22,7 @@ interface TableData {
 }
 
 const Calls: React.FC<Props> = ({ calls, user }) => {
+  const dispatch = useAppDispatch();
   const [tableData, setTableData] = useState<TableData[] | undefined>(
     undefined
   );
@@ -59,8 +62,11 @@ const Calls: React.FC<Props> = ({ calls, user }) => {
             </Space>
           ),
           cancel: (
-            <Button type="link" onClick={() => console.log("Cancel call")}>
-              Cancel
+            <Button
+              type="link"
+              onClick={() => dispatch(openCancelCallModal(call))}
+            >
+              {t("cancel")}
             </Button>
           ),
         };
