@@ -10,6 +10,8 @@ import esDashboard from "./es/dashboard.json";
 import esCall from "./es/call.json";
 import enModals from "./en/modals.json";
 import esModals from "./es/modals.json";
+import enSettings from "./en/settings.json";
+import esSettings from "./es/settings.json";
 
 import { initReactI18next } from "react-i18next";
 
@@ -21,6 +23,7 @@ export const resources = {
     call: enCall,
     calls: enCalls,
     modals: enModals,
+    settings: enSettings,
   },
   es: {
     login: esLogin,
@@ -28,6 +31,7 @@ export const resources = {
     profile: esProfile,
     call: esCall,
     modals: esModals,
+    settings: esSettings,
   },
 } as const;
 
