@@ -7,10 +7,6 @@ export interface BasePersona {
   profileImgPath?: string;
 }
 
-// export interface User extends BasePersona {
-//   email: string;
-// }
-
 export interface User extends BasePersona {
   inmateNumber: string;
   quota: number;

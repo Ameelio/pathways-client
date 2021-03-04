@@ -9,8 +9,9 @@ import { genFullName } from "src/utils/utils";
 interface Props {
   call: Call;
   selectCall: (call: Call) => void;
+  navigate: (path: string) => void;
 }
-const CallItem: React.FC<Props> = ({ call, selectCall }: Props) => {
+const CallItem: React.FC<Props> = ({ call, selectCall, navigate }: Props) => {
   const { t } = useTranslation("dashboard");
 
   const history = useHistory();
@@ -51,7 +52,7 @@ const CallItem: React.FC<Props> = ({ call, selectCall }: Props) => {
               size="large"
               type="primary"
               className="rounded-sm"
-              onClick={() => history.push(`call/${call.id}`)}
+              onClick={() => navigate(`call/${call.id}`)}
             >
               {t("call.join")}
             </Button>

@@ -17,30 +17,27 @@ import Sidebar from "./components/menu/Sidebar";
 import { useTranslation } from "react-i18next";
 import Modals from "./components/Modals/Modals";
 
-const mapStateToProps = (state: RootState) => ({
-  session: state.session,
-});
 const mapDispatchToProps = { fetchConnections, push };
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(null, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function App({
-  session,
   history,
   fetchConnections,
   push,
 }: PropsFromRedux & { history: History }) {
   const { i18n } = useTranslation();
-  const fullScreenMode = useAppSelector((state) => state.common.fullScreen);
+  const hasSideBar = useAppSelector((state) => state.common.fullScreen);
+  const session = useAppSelector((state) => state.session);
 
   const defaultProtectedRouteProps: ProtectedRouteProps = {
     isAuthenticated: session.authInfo.token !== "", // TODO: improve this later
     authenticationPath: "/login",
   };
 
-  const showSideBar = session.isLoggedIn && !fullScreenMode;
+  const showSideBar = session.isLoggedIn && !hasSideBar;
 
   useEffect(() => {
     if (session.isLoggedIn) fetchConnections();

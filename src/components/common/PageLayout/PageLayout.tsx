@@ -6,7 +6,7 @@ interface Props {
 }
 
 const PageLayout: React.FC = ({ children }: Props) => (
-  <Layout style={{ minHeight: "100vh" }}>
+  <Layout className="min-h-screen">
     <Layout.Content>
       <div
         style={{

@@ -1,5 +1,4 @@
-import { SaveOutlined } from "@ant-design/icons";
-import { Space, PageHeader, Button, Row, Card, Typography, Col } from "antd";
+import { Space, PageHeader, Row, Card, Typography, Col } from "antd";
 import Avatar from "antd/lib/avatar/avatar";
 import { differenceInMinutes, format } from "date-fns";
 import React, { useEffect, useState } from "react";
@@ -9,6 +8,7 @@ import { genFullName } from "src/utils/utils";
 import { BaseCall } from "src/types/Call";
 import { AVATAR_LARGE } from "src/utils/constants";
 import PageLayout from "src/components/Common/PageLayout";
+import EditButton from "../common/Buttons/EditButton";
 
 interface Props {
   user: User;
@@ -33,7 +33,7 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
     <PageLayout>
       <Space direction="vertical" size="large" className="w-100 p-6 pt-9">
         <PageHeader className="p-6 border border-solid border-opacity-1 border-gray-200">
-          <Space style={{ display: "flex", justifyContent: "space-between" }}>
+          <Space className="flex justify-between">
             <Space>
               <Avatar src={user.profileImgPath} size={AVATAR_LARGE} />
               <Space direction="vertical">
@@ -45,14 +45,7 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
                 </Typography.Title>
               </Space>
             </Space>
-            <Button
-              type="primary"
-              icon={<SaveOutlined />}
-              size="large"
-              style={{ borderRadius: 4 }}
-            >
-              {t("profileInfo.editProfile")}
-            </Button>
+            <EditButton>{t("profileInfo.editProfile")}</EditButton>
           </Space>
         </PageHeader>
         <Row gutter={32}>

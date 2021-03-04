@@ -21,30 +21,31 @@ interface TableData {
   cancel: JSX.Element;
 }
 
+const tableColumns = [
+  {
+    title: "Date",
+    dataIndex: "date",
+  },
+  {
+    title: "Time",
+    dataIndex: "time",
+  },
+  {
+    title: "Participants",
+    dataIndex: "participants",
+  },
+  {
+    title: "",
+    dataIndex: "cancel",
+  },
+];
+
 const Calls: React.FC<Props> = ({ calls, user }) => {
   const dispatch = useAppDispatch();
   const [tableData, setTableData] = useState<TableData[] | undefined>(
     undefined
   );
   const { t } = useTranslation("calls");
-  const tableColumns = [
-    {
-      title: "Date",
-      dataIndex: "date",
-    },
-    {
-      title: "Time",
-      dataIndex: "time",
-    },
-    {
-      title: "Participants",
-      dataIndex: "participants",
-    },
-    {
-      title: "",
-      dataIndex: "cancel",
-    },
-  ];
 
   useEffect(() => {
     setTableData(
