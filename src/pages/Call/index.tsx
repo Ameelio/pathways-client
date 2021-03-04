@@ -48,7 +48,7 @@ import "src/i18n/config";
 import {
   enterFullScreen,
   exitFullScreen,
-} from "src/components/common/commonSlice";
+} from "src/components/Common/commonSlice";
 
 const { Sider } = Layout;
 declare global {

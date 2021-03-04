@@ -8,6 +8,8 @@ import { Language } from "src/types/Session";
 
 export const UNAUTHENTICATED_USER_ID = -1;
 
+export const AVATAR_LARGE = 135;
+
 export const ROUTES: Route[] = [
   { path: "/calls", component: CallsPage, label: "Calls" },
   { path: "/profile/:id", component: ProfilePage, label: "Profile" },

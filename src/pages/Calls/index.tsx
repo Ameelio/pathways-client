@@ -1,13 +1,13 @@
 import React from "react";
 import { RootState } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
-import { selectAllCalls } from "src/redux/selectors";
+import { selectUpcomingCalls } from "src/redux/selectors";
 import "src/i18n/config";
 import Calls from "src/components/Calls";
 
 const mapStateToProps = (state: RootState) => ({
   user: state.session.user,
-  calls: selectAllCalls(state),
+  calls: selectUpcomingCalls(state),
 });
 
 const connector = connect(mapStateToProps);

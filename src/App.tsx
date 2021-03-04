@@ -2,7 +2,7 @@ import React from "react";
 import "./App.scss";
 import { RootState, useAppSelector } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
-import { ConnectedRouter } from "connected-react-router";
+import { ConnectedRouter, push } from "connected-react-router";
 import { Layout } from "antd";
 import { Redirect, Route, Switch } from "react-router";
 import { History } from "history";
@@ -20,7 +20,7 @@ import Modals from "./components/Modals/Modals";
 const mapStateToProps = (state: RootState) => ({
   session: state.session,
 });
-const mapDispatchToProps = { fetchConnections };
+const mapDispatchToProps = { fetchConnections, push };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -30,6 +30,7 @@ function App({
   session,
   history,
   fetchConnections,
+  push,
 }: PropsFromRedux & { history: History }) {
   const { i18n } = useTranslation();
   const fullScreenMode = useAppSelector((state) => state.common.fullScreen);
@@ -53,7 +54,7 @@ function App({
     <ConnectedRouter history={history}>
       <Modals />
       <Layout style={{ minHeight: "100vh" }}>
-        {showSideBar && <Sidebar user={session.user} />}
+        {showSideBar && <Sidebar user={session.user} navigate={push} />}
         <Layout>
           <Switch>
             <Route exact path="/login" component={LoginPage}></Route>

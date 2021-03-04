@@ -9,7 +9,7 @@ import {
 import {
   enterFullScreen,
   exitFullScreen,
-} from "src/components/common/commonSlice";
+} from "src/components/Common/commonSlice";
 import { useAppDispatch } from "src/redux";
 
 const desc = ["terrible", "bad", "normal", "good", "wonderful"];
