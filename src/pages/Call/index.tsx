@@ -9,19 +9,8 @@ import { RootState, useAppDispatch } from "src/redux";
 import RoomClient from "src/pages/Call/RoomClient";
 import * as mediasoupClient from "mediasoup-client";
 import io from "socket.io-client";
-import {
-  Button,
-  Space,
-  Spin,
-  Typography,
-  Layout,
-  PageHeader,
-  Input,
-  Divider,
-  Avatar,
-  Badge,
-} from "antd";
-import { CallMessage, CallParticipant } from "src/types/Call";
+import { Button, Space, Spin, Typography, Layout, Avatar, Badge } from "antd";
+import { CallParticipant } from "src/types/Call";
 import { connect, ConnectedProps } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { selectAllCallInfo } from "src/redux/selectors";
@@ -33,10 +22,8 @@ import {
   PoweroffOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { format } from "date-fns";
 import { useUserMedia } from "./useUserMedia";
 import { push } from "connected-react-router";
-import { WRAPPER_PADDING } from "src/utils/constants";
 import {
   genFullName,
   getInitials,
@@ -49,8 +36,8 @@ import {
   enterFullScreen,
   exitFullScreen,
 } from "src/components/Common/commonSlice";
+import Chat from "src/components/Call/Chat";
 
-const { Sider } = Layout;
 declare global {
   interface Window {
     Debug: any;
@@ -72,35 +59,6 @@ const CAPTURE_OPTIONS = {
     height: { min: 400, ideal: 1080 },
   },
 };
-
-function MessageDisplay({ message }: { message: CallMessage }): ReactElement {
-  const { type } = message.from;
-  const getDisplayName = () => {
-    switch (type) {
-      case "inmate":
-        return "You";
-      case "monitor":
-        return "DOC";
-      case "user":
-        return "Loved One";
-    }
-  };
-  return (
-    <Space
-      direction="vertical"
-      align={type === "inmate" ? "end" : "start"}
-      style={{ width: "100%" }}
-    >
-      <Space>
-        <Typography.Text strong>{getDisplayName()}</Typography.Text>
-        <Typography.Text type="secondary">
-          {format(new Date(message.timestamp), "HH:mm")}
-        </Typography.Text>
-      </Space>
-      <Typography.Text>{message.content}</Typography.Text>
-    </Space>
-  );
-}
 
 type TParams = { id: string };
 
@@ -130,8 +88,6 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
     const [participantHasJoined, setParticipantHasJoined] = useState(false);
     const [chatCollapsed, setChatCollapsed] = useState(false);
     const mediaStream = useUserMedia(CAPTURE_OPTIONS);
-    const [draftMessage, setDraftMessage] = useState("");
-    const [messages, setMessages] = useState<CallMessage[]>([]);
     const [audioOn, setAudioOn] = useState(true);
     const [videoOn, setVideoOn] = useState(true);
     const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
@@ -234,33 +190,6 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
     // TODO fix this
     useEffect(() => {
       if (rc && isAuthed) {
-        console.log("listening to text message");
-        rc.socket.on(
-          "textMessage",
-          async ({
-            from,
-            contents,
-            meta,
-          }: {
-            from: CallParticipant;
-            contents: string;
-            meta: string;
-          }) => {
-            setHasUnreadMessages(true);
-            if (from.type === "monitor") {
-              openNotificationWithIcon(t("doc.warning"), contents, "warning");
-            }
-            setMessages((messages) => [
-              ...messages,
-              {
-                content: contents,
-                from,
-                timestamp: new Date().toLocaleDateString(),
-              },
-            ]);
-          }
-        );
-
         rc.socket.on(
           "peerUpdate",
           async ({
@@ -374,38 +303,6 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
         clearTimeout(timeout);
         timeout = setTimeout(() => setShowOverlay(false), 5000);
       })();
-    };
-
-    const onSendMessage = async () => {
-      if (!socket || !call) return;
-      setDraftMessage("");
-      //TODO add property sent and change image visibility depending on whether it actually went through
-      setMessages([
-        ...messages,
-        {
-          content: draftMessage,
-          from: {
-            type: "inmate",
-            id: authInfo.id,
-          },
-          timestamp: new Date().toLocaleDateString(),
-        },
-      ]);
-      const { participants } = await new Promise((resolve, reject) => {
-        socket.emit("info", { callId: call.id }, resolve);
-      });
-      await new Promise((resolve) => {
-        // TODO fetch actual credentials from redux
-        socket.emit(
-          "textMessage",
-          {
-            callId: call.id,
-            contents: draftMessage,
-            recipients: participants,
-          },
-          resolve
-        );
-      });
     };
 
     return (
@@ -534,39 +431,13 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
           )}
         </div>
         {(!chatCollapsed || showOverlay) && (
-          <Sider
-            theme="light"
-            style={{ height: "100vh", maxHeight: "100vh" }}
-            width={300}
-            collapsible
-            collapsed={chatCollapsed}
-            onCollapse={(collapsed) => setChatCollapsed(collapsed)}
-          >
-            {!chatCollapsed && <PageHeader title={t("chat.title")} />}
-
-            {!chatCollapsed && (
-              <div className="chat-container" style={WRAPPER_PADDING}>
-                <Space direction="vertical" style={{ overflowY: "scroll" }}>
-                  {messages.map((message) => (
-                    <MessageDisplay message={message} />
-                  ))}
-                </Space>
-                <div className="chat-input">
-                  <Divider />
-                  <Input.TextArea
-                    value={draftMessage}
-                    rows={2}
-                    onChange={(e) => setDraftMessage(e.target.value)}
-                    onPressEnter={(_e) => onSendMessage()}
-                    onSubmit={(_e) => onSendMessage()}
-                    placeholder={t("chat.placeholder")}
-                    autoFocus
-                    bordered={false}
-                  />
-                </div>
-              </div>
-            )}
-          </Sider>
+          <Chat
+            roomClient={rc}
+            isAuthed={isAuthed}
+            authInfo={authInfo}
+            socket={socket}
+            call={call}
+          />
         )}
       </Layout>
     );
