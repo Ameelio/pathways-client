@@ -1,0 +1,13 @@
+{
+  "language": {
+    "title": "Language",
+    "messageOne": "Please select your preferred language.",
+    "messageTwo": "Por favor elija su idioma preferido."
+  },
+  "resources": {
+    "title": "Resources",
+    "contactVerification": "How does contact verification work",
+    "callInfo": "What can I expect for a call",
+    "privacyInfo": "Your privacy on Ameelio Connect video calls"
+  }
+}
