@@ -8,7 +8,7 @@ import { genFullName } from "src/utils/utils";
 import { BaseCall } from "src/types/Call";
 import { AVATAR_LARGE } from "src/utils/constants";
 import PageLayout from "src/components/Common/PageLayout";
-import EditButton from "../common/Buttons/EditButton";
+import EditButton from "src/components/Common/Buttons/EditButton";
 
 interface Props {
   user: User;

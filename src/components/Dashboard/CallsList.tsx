@@ -2,6 +2,7 @@ import { Card, Typography } from "antd";
 import { push } from "connected-react-router";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useAppDispatch } from "src/redux";
 import { Call } from "src/types/Call";
 import CallItem from "./CallItem";
 
@@ -12,12 +13,13 @@ interface Props {
 
 const CallsList: React.FC<Props> = ({ calls, selectCall }: Props) => {
   const { t } = useTranslation("dashboard");
+  const dispatch = useAppDispatch();
 
   return (
     <Card
       title={t("call.title")}
       extra={
-        <Typography.Link onClick={() => push("/")}>
+        <Typography.Link onClick={() => dispatch(push("/"))}>
           {t("call.seeAll")}
         </Typography.Link>
       }
@@ -36,7 +38,7 @@ const CallsList: React.FC<Props> = ({ calls, selectCall }: Props) => {
         <CallItem
           call={call}
           selectCall={selectCall}
-          navigate={push}
+          navigate={(path) => dispatch(push(path))}
           key={`callItem-${call.id}`}
         />
       ))}
