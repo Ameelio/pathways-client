@@ -11,7 +11,7 @@ const EditButton: React.FC = ({ children }: Props) => (
     type="primary"
     icon={<SaveOutlined />}
     size="large"
-    style={{ borderRadius: 4 }}
+    className="rounded"
   >
     {children}
   </Button>

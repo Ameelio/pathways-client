@@ -36,8 +36,10 @@ const Settings: React.FC = () => {
                   defaultValue={i18n.language}
                   onChange={(value) => i18n.changeLanguage(value)}
                 >
-                  {Object.keys(LANGUAGES).map((key) => (
-                    <Option value={key}>{LANGUAGES[key as Language]}</Option>
+                  {Object.keys(LANGUAGES).map((key, index) => (
+                    <Option key={`${key}-${index}`} value={key}>
+                      {LANGUAGES[key as Language]}
+                    </Option>
                   ))}
                 </Select>
               </div>
