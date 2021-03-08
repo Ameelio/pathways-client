@@ -1,26 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Language } from "src/types/Session";
 import PageLayout from "src/components/Common/PageLayout";
 import { Card, Col, Row, Select, Space, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 import { LANGUAGES } from "src/utils/constants";
+import modalConfirms from "src/constants/modalConfirms";
+import { openModal } from "../Modals/modalsSlice";
+import { useAppDispatch } from "src/redux";
 
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation("settings");
-  const [languageOptions, setLanguageOptions] = useState<
-    JSX.Element[] | undefined
-  >();
-
-  useEffect(() => {
-    const { Option } = Select;
-    const tempLanguageOptions = [];
-    for (const key in LANGUAGES) {
-      tempLanguageOptions.push(
-        <Option value={key}>{LANGUAGES[key as Language]}</Option>
-      );
-    }
-    setLanguageOptions(tempLanguageOptions);
-  }, []);
+  const dispatch = useAppDispatch();
+  const { Option } = Select;
 
   return (
     <PageLayout>
@@ -45,7 +36,9 @@ const Settings: React.FC = () => {
                   defaultValue={i18n.language}
                   onChange={(value) => i18n.changeLanguage(value)}
                 >
-                  {languageOptions}
+                  {Object.keys(LANGUAGES).map((key) => (
+                    <Option value={key}>{LANGUAGES[key as Language]}</Option>
+                  ))}
                 </Select>
               </div>
             </Card>
@@ -53,17 +46,29 @@ const Settings: React.FC = () => {
           <Col span={12}>
             <Card title={t("resources.title")}>
               <Row className="pb-2">
-                <Typography.Link href="/" target="_blank">
+                <Typography.Link
+                  onClick={() =>
+                    dispatch(openModal(modalConfirms.RESOURCES_MODAL))
+                  }
+                >
                   {t("resources.contactVerification")}
                 </Typography.Link>
               </Row>
               <Row className="pb-2">
-                <Typography.Link href="/" target="_blank">
+                <Typography.Link
+                  onClick={() =>
+                    dispatch(openModal(modalConfirms.RESOURCES_MODAL))
+                  }
+                >
                   {t("resources.callInfo")}
                 </Typography.Link>
               </Row>
               <Row className="pb-2">
-                <Typography.Link href="/" target="_blank">
+                <Typography.Link
+                  onClick={() =>
+                    dispatch(openModal(modalConfirms.RESOURCES_MODAL))
+                  }
+                >
                   {t("resources.privacyInfo")}
                 </Typography.Link>
               </Row>
