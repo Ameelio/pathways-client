@@ -51,7 +51,7 @@ export default function Sidebar({ user, navigate }: Props): ReactElement {
           <Menu.Item
             key="settings"
             icon={<EllipsisOutlined />}
-            onClick={() => console.log("take me to settings")}
+            onClick={() => navigate("/settings")}
           >
             Settings
           </Menu.Item>
