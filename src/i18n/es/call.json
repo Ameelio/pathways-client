@@ -11,10 +11,14 @@
     "videoOff": "turned off their video"
   },
   "waitingRoom": {
+    "questionOfDay": "Question of the day:",
     "initialization": "Initializing video call...",
     "waitingForPrefix": "Waiting for",
     "waitingForSuffix": "to join the call",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "whenWillCallConnect": "When willl my call connect?",
+    "checkConnection": "Check Connection",
+    "leaveWaitingRoom": "Leave Waiting Room"
   },
   "chat": {
     "title": "Chat",

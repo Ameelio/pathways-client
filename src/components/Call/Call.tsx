@@ -25,6 +25,7 @@ import Chat from "src/components/Call/Chat";
 import VideoOverlay from "src/components/Call/VideoOverlay";
 import VideoMePlaceholder from "src/components/Call/VideoMePlaceholder";
 import { AuthInfo } from "src/types/Session";
+import { WaitingRoomCard } from "./WaitingRoomCard";
 
 declare global {
   interface Window {
@@ -302,7 +303,13 @@ const CallBase: React.FC<Props> = React.memo(
           ) : (
             <VideoMePlaceholder initials={initials} />
           )}
-          {!participantHasJoined && <Loader message={getMessage()} />}
+          {!participantHasJoined && (
+            <WaitingRoomCard
+              call={call}
+              title={getMessage()}
+              navigateBack={() => push("/")}
+            />
+          )}
           {showOverlay && (
             <VideoOverlay
               audioOn={audioOn}

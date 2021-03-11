@@ -10,3 +10,8 @@ export interface Quote {
   description: string;
   background: string;
 }
+
+export interface Icebreaker {
+  en: string;
+  es: string;
+}

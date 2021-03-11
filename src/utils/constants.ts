@@ -1,4 +1,4 @@
-import { Quote, Route } from "src/types/Common";
+import { Icebreaker, Quote, Route } from "src/types/Common";
 import ProfilePage from "src/pages/Profile";
 import CallsPage from "src/pages/Calls";
 import SettingsPage from "src/pages/Settings";
@@ -60,3 +60,10 @@ export const LANGUAGES: Record<Language, string> = {
   en: "English",
   es: "Español",
 };
+
+export const QUESTIONS: Icebreaker[] = [
+  {
+    en: "If you had your own intro theme song, which song would it be and why?",
+    es: "If you had your own intro theme song, which song would it be and why?",
+  },
+];
