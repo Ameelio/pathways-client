@@ -1,12 +1,6 @@
 import { UNAUTHENTICATED_USER_ID } from "src/utils/constants";
 import { User } from "src/types/User";
-import { Language } from "src/types/Session";
-
-interface AuthInfo {
-  token: string;
-  id: number;
-  type: "inmate";
-}
+import { AuthInfo, Language } from "src/types/Session";
 
 interface SessionState {
   isLoggedIn: boolean;
