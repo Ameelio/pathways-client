@@ -49,7 +49,7 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
         authInfo={authInfo}
         push={(path: string) => dispatch(push(path))}
         initials={initials}
-        openResourceModal={(resource: FAQResource) =>
+        openInfoModal={(resource: FAQResource) =>
           dispatch(
             openModal({ activeType: "RESOURCE_MODAL", entity: resource })
           )

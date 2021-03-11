@@ -7,6 +7,9 @@ export type ModalType =
 export interface FAQResource {
   title: string;
   body: string;
+  hideCancel?: boolean;
+  okBtnText?: string;
+  cancelBtnText?: string;
 }
 export type CancelCallModal = { activeType: "CANCEL_CALL_MODAL"; entity: Call };
 export type ResourceModal = {

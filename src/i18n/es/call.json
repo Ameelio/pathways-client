@@ -16,12 +16,13 @@
     "waitingForPrefix": "Waiting for",
     "waitingForSuffix": "to join the call",
     "loading": "Loading...",
-    "whenWillCallConnect": "When willl my call connect?",
+    "whenWillCallConnect": "When will my call connect?",
     "checkConnection": "Check Connection",
     "leaveWaitingRoom": "Leave Waiting Room"
   },
   "chat": {
     "title": "Chat",
-    "placeholder": "Type here..."
+    "placeholder": "Type here...",
+    "monitorWarning": "Note: All messages are monitored for security purposes."
   }
 }

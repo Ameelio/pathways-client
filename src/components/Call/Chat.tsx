@@ -1,4 +1,4 @@
-import { Divider, Input, Layout, PageHeader, Space } from "antd";
+import { Divider, Input, Layout, PageHeader, Space, Typography } from "antd";
 import React, { useEffect, useState } from "react";
 import { Call, CallMessage, CallParticipant } from "src/types/Call";
 import { WRAPPER_PADDING } from "src/utils/constants";
@@ -117,6 +117,9 @@ const Chat: React.FC<Props> = ({
       {!chatCollapsed && (
         <div className="chat-container" style={WRAPPER_PADDING}>
           <Space direction="vertical" style={{ overflowY: "scroll" }}>
+            <Typography.Text type="warning">
+              {t("chat.monitorWarning")}
+            </Typography.Text>
             {messages.map((message) => (
               <MessageDisplay message={message} />
             ))}

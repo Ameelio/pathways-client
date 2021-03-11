@@ -13,7 +13,7 @@ interface Props {
   title: string;
   call: Call;
   navigateBack: () => void;
-  openResourceModal: (resource: FAQResource) => void;
+  openInfoModal: (resource: FAQResource) => void;
 }
 
 const getTranslatedDailyQuestion = (
@@ -34,7 +34,7 @@ export const WaitingRoomCard = ({
   title,
   call,
   navigateBack,
-  openResourceModal,
+  openInfoModal,
 }: Props) => {
   const { t, i18n } = useTranslation("call");
   const [icebreaker] = useState(getRandomItem(QUESTIONS) as Icebreaker);
@@ -59,7 +59,7 @@ export const WaitingRoomCard = ({
         </Typography.Text>
         <Typography.Link
           onClick={() =>
-            openResourceModal({
+            openInfoModal({
               title: t("waitingRoom.whenWillCallConnect"),
               body: "Soon.",
             })

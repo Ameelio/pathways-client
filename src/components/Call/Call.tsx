@@ -41,11 +41,11 @@ interface Props {
   authInfo: AuthInfo;
   initials: string;
   push: (path: string) => void;
-  openResourceModal: (resource: FAQResource) => void;
+  openInfoModal: (resource: FAQResource) => void;
 }
 
 const CallBase: React.FC<Props> = React.memo(
-  ({ call, authInfo, push, initials, openResourceModal }) => {
+  ({ call, authInfo, push, initials, openInfoModal }) => {
     const { t } = useTranslation("call");
 
     const [isAuthed, setIsAuthed] = useState(false);
@@ -53,7 +53,7 @@ const CallBase: React.FC<Props> = React.memo(
     const [socket, setSocket] = useState<SocketIOClient.Socket>();
     const [showOverlay, setShowOverlay] = useState(true);
     const [participantHasJoined, setParticipantHasJoined] = useState(false);
-    const [chatCollapsed, setChatCollapsed] = useState(false);
+    const [chatCollapsed, setChatCollapsed] = useState(true);
     const mediaStream = useUserMedia(CAPTURE_OPTIONS);
     const [audioOn, setAudioOn] = useState(true);
     const [videoOn, setVideoOn] = useState(true);
@@ -296,7 +296,7 @@ const CallBase: React.FC<Props> = React.memo(
               call={call}
               title={getMessage()}
               navigateBack={() => push("/")}
-              openResourceModal={openResourceModal}
+              openInfoModal={openInfoModal}
             />
           )}
           {showOverlay && (

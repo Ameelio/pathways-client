@@ -52,7 +52,7 @@ const Settings: React.FC = () => {
                     dispatch(
                       openModal({
                         activeType: "RESOURCE_MODAL",
-                        entity: { title: "Hello", body: "how" },
+                        entity: { title: "Hello", body: "World" },
                       })
                     )
                   }
@@ -66,7 +66,7 @@ const Settings: React.FC = () => {
                     dispatch(
                       openModal({
                         activeType: "RESOURCE_MODAL",
-                        entity: { title: "Hello", body: "how" },
+                        entity: { title: "Hello", body: "World" },
                       })
                     )
                   }
@@ -80,7 +80,7 @@ const Settings: React.FC = () => {
                     dispatch(
                       openModal({
                         activeType: "RESOURCE_MODAL",
-                        entity: { title: "Hello", body: "how" },
+                        entity: { title: "Hello", body: "World" },
                       })
                     )
                   }

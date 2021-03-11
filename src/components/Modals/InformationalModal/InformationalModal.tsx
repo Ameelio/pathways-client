@@ -3,7 +3,7 @@ import { closeModal } from "src/redux/modules/modalsSlice";
 import { useAppDispatch, useAppSelector } from "src/redux";
 import { Typography, Modal } from "antd";
 
-const ResourcesModal: React.FC = () => {
+const InformationalModal: React.FC = () => {
   const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state.modals.data);
 
@@ -14,6 +14,10 @@ const ResourcesModal: React.FC = () => {
     <Modal
       title={resource.title}
       visible={true}
+      okText={resource.okBtnText || "OK"}
+      cancelButtonProps={{
+        style: { display: data.entity.hideCancel ? "none" : "inline" },
+      }}
       onOk={() => dispatch(closeModal())}
       onCancel={() => dispatch(closeModal())}
       className="rounded-sm w-full"
@@ -23,4 +27,4 @@ const ResourcesModal: React.FC = () => {
   );
 };
 
-export default ResourcesModal;
+export default InformationalModal;
