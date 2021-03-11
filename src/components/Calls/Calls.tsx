@@ -1,6 +1,6 @@
 import { Avatar, Button, Col, Row, Space, Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
-import { BaseCall, Call } from "src/types/Call";
+import { Call } from "src/types/Call";
 import { User } from "src/types/User";
 import PageLayout from "src/components/Common/PageLayout";
 import { useTranslation } from "react-i18next";

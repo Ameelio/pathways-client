@@ -1,14 +1,8 @@
-import React, {
-  ReactElement,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import RoomClient from "src/pages/Call/RoomClient";
 import * as mediasoupClient from "mediasoup-client";
 import io from "socket.io-client";
-import { Spin, Typography, Layout, Avatar } from "antd";
+import { Typography, Layout, Avatar } from "antd";
 import { Call, CallParticipant } from "src/types/Call";
 import "./index.css";
 import { AudioMutedOutlined } from "@ant-design/icons";
@@ -26,21 +20,12 @@ import VideoOverlay from "src/components/Call/VideoOverlay";
 import VideoMePlaceholder from "src/components/Call/VideoMePlaceholder";
 import { AuthInfo } from "src/types/Session";
 import { WaitingRoomCard } from "./WaitingRoomCard";
-import { openModal } from "../../redux/modules/modalsSlice";
 import { FAQResource } from "src/types/UI";
 
 declare global {
   interface Window {
     Debug: any;
   }
-}
-
-function Loader({ message }: { message: string }): ReactElement {
-  return (
-    <div className="video-loading-spinner">
-      <Spin tip={message} />
-    </div>
-  );
 }
 
 const CAPTURE_OPTIONS = {
