@@ -1,5 +1,5 @@
 import { Avatar } from "antd";
-import React, { ReactElement } from "react";
+import React from "react";
 
 interface Props {
   initials: string;

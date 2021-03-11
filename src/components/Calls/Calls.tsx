@@ -73,7 +73,7 @@ const Calls: React.FC<Props> = ({ calls, user }) => {
         };
       })
     );
-  }, [calls, user]);
+  }, [calls, user, dispatch, t]);
 
   return (
     <PageLayout>

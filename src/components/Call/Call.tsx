@@ -161,7 +161,7 @@ const CallBase: React.FC<Props> = React.memo(
     useEffect(() => {
       if (rc && isAuthed) {
         rc.socket.on(
-          "peerUpdate",
+          "producerUpdate",
           async ({
             from,
             contents,
@@ -278,24 +278,15 @@ const CallBase: React.FC<Props> = React.memo(
     return (
       <Layout>
         <div
-          className="video-wrapper ant-layout-content"
+          className="ant-layout-content w-screen h-screen flex bg-gray-800"
           ref={measuredRef}
           onMouseMove={() => onMouseMove()}
           onMouseOver={() => onMouseMove()}
         >
           {!peerVideoOn && (
-            <div className="vh-100 vw-100 d-flex">
-              <Avatar
-                size={128}
-                style={{
-                  color: "#fff",
-                  backgroundColor: "#00a2ae",
-                  margin: "auto",
-                }}
-              >
-                {getInitials(genFullName(call.connection.user)).toUpperCase()}
-              </Avatar>
-            </div>
+            <Avatar size={128} className="bg-blue-500	m-auto text-white	">
+              {getInitials(genFullName(call.connection.user)).toUpperCase()}
+            </Avatar>
           )}
           {!peerAudioOn && (
             <div className="peer-name-container">
