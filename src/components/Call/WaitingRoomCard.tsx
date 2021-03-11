@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Call } from "src/types/Call";
 import { Icebreaker } from "src/types/Common";
 import { Language } from "src/types/Session";
+import { FAQResource } from "src/types/UI";
 import { QUESTIONS } from "src/utils/constants";
 import { getRandomItem } from "src/utils/utils";
 
@@ -12,6 +13,7 @@ interface Props {
   title: string;
   call: Call;
   navigateBack: () => void;
+  openResourceModal: (resource: FAQResource) => void;
 }
 
 const getTranslatedDailyQuestion = (
@@ -28,15 +30,17 @@ const getTranslatedDailyQuestion = (
   }
 };
 
-export const WaitingRoomCard = ({ title, call, navigateBack }: Props) => {
+export const WaitingRoomCard = ({
+  title,
+  call,
+  navigateBack,
+  openResourceModal,
+}: Props) => {
   const { t, i18n } = useTranslation("call");
   const [icebreaker] = useState(getRandomItem(QUESTIONS) as Icebreaker);
 
   return (
-    <Card
-      //   title={title}
-      className="bg-black	bg-opacity-80 text-white w-6/12	 h-6/12 m-auto"
-    >
+    <Card className="bg-black	bg-opacity-80 text-white w-6/12	 h-6/12 m-auto">
       <Space direction="vertical" className="text-white" size="large">
         <Space>
           <Typography.Text strong className="text-white text-xl	">
@@ -53,7 +57,14 @@ export const WaitingRoomCard = ({ title, call, navigateBack }: Props) => {
           {t("waitingRoom.questionOfDay")}:{" "}
           {getTranslatedDailyQuestion(i18n.language as Language, icebreaker)}
         </Typography.Text>
-        <Typography.Link>
+        <Typography.Link
+          onClick={() =>
+            openResourceModal({
+              title: t("waitingRoom.whenWillCallConnect"),
+              body: "Soon.",
+            })
+          }
+        >
           {t("waitingRoom.whenWillCallConnect")}
         </Typography.Link>
         <Space>

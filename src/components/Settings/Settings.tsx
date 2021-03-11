@@ -4,8 +4,7 @@ import PageLayout from "src/components/Common/PageLayout";
 import { Card, Col, Row, Select, Space, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 import { LANGUAGES } from "src/utils/constants";
-import modalConfirms from "src/constants/modalConfirms";
-import { openModal } from "../Modals/modalsSlice";
+import { openModal } from "../../redux/modules/modalsSlice";
 import { useAppDispatch } from "src/redux";
 
 const Settings: React.FC = () => {
@@ -50,7 +49,12 @@ const Settings: React.FC = () => {
               <Row className="pb-2">
                 <Typography.Link
                   onClick={() =>
-                    dispatch(openModal(modalConfirms.RESOURCES_MODAL))
+                    dispatch(
+                      openModal({
+                        activeType: "RESOURCE_MODAL",
+                        entity: { title: "Hello", body: "how" },
+                      })
+                    )
                   }
                 >
                   {t("resources.contactVerification")}
@@ -59,7 +63,12 @@ const Settings: React.FC = () => {
               <Row className="pb-2">
                 <Typography.Link
                   onClick={() =>
-                    dispatch(openModal(modalConfirms.RESOURCES_MODAL))
+                    dispatch(
+                      openModal({
+                        activeType: "RESOURCE_MODAL",
+                        entity: { title: "Hello", body: "how" },
+                      })
+                    )
                   }
                 >
                   {t("resources.callInfo")}
@@ -68,7 +77,12 @@ const Settings: React.FC = () => {
               <Row className="pb-2">
                 <Typography.Link
                   onClick={() =>
-                    dispatch(openModal(modalConfirms.RESOURCES_MODAL))
+                    dispatch(
+                      openModal({
+                        activeType: "RESOURCE_MODAL",
+                        entity: { title: "Hello", body: "how" },
+                      })
+                    )
                   }
                 >
                   {t("resources.privacyInfo")}

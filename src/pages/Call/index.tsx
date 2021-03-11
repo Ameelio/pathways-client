@@ -12,6 +12,8 @@ import {
   exitFullScreen,
 } from "src/components/Common/commonSlice";
 import Call from "src/components/Call";
+import { openModal } from "src/redux/modules/modalsSlice";
+import { FAQResource } from "src/types/UI";
 
 type TParams = { id: string };
 
@@ -47,6 +49,11 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
         authInfo={authInfo}
         push={(path: string) => dispatch(push(path))}
         initials={initials}
+        openResourceModal={(resource: FAQResource) =>
+          dispatch(
+            openModal({ activeType: "RESOURCE_MODAL", entity: resource })
+          )
+        }
       />
     );
   }

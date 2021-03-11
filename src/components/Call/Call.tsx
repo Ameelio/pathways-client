@@ -26,6 +26,8 @@ import VideoOverlay from "src/components/Call/VideoOverlay";
 import VideoMePlaceholder from "src/components/Call/VideoMePlaceholder";
 import { AuthInfo } from "src/types/Session";
 import { WaitingRoomCard } from "./WaitingRoomCard";
+import { openModal } from "../../redux/modules/modalsSlice";
+import { FAQResource } from "src/types/UI";
 
 declare global {
   interface Window {
@@ -54,10 +56,11 @@ interface Props {
   authInfo: AuthInfo;
   initials: string;
   push: (path: string) => void;
+  openResourceModal: (resource: FAQResource) => void;
 }
 
 const CallBase: React.FC<Props> = React.memo(
-  ({ call, authInfo, push, initials }) => {
+  ({ call, authInfo, push, initials, openResourceModal }) => {
     const { t } = useTranslation("call");
 
     const [isAuthed, setIsAuthed] = useState(false);
@@ -308,6 +311,7 @@ const CallBase: React.FC<Props> = React.memo(
               call={call}
               title={getMessage()}
               navigateBack={() => push("/")}
+              openResourceModal={openResourceModal}
             />
           )}
           {showOverlay && (
