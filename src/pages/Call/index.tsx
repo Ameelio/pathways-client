@@ -3,7 +3,6 @@ import { RootState, useAppDispatch } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { selectAllCallInfo } from "src/redux/selectors";
-import "./index.css";
 import { push } from "connected-react-router";
 import { genFullName, getInitials } from "src/utils/utils";
 import "src/i18n/config";

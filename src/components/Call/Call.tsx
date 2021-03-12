@@ -21,6 +21,7 @@ import VideoMePlaceholder from "src/components/Call/VideoMePlaceholder";
 import { AuthInfo } from "src/types/Session";
 import { WaitingRoomCard } from "./WaitingRoomCard";
 import { FAQResource } from "src/types/UI";
+import { Timer } from "./Timer";
 
 declare global {
   interface Window {
@@ -60,6 +61,7 @@ const CallBase: React.FC<Props> = React.memo(
     const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
     const [peerAudioOn, setPeerAudioOn] = useState(true);
     const [peerVideoOn, setPeerVideoOn] = useState(true);
+    const [timerOn, setTimerOn] = useState(false);
 
     const meRef = useRef<HTMLVideoElement>(null);
     if (meRef.current && !meRef.current.srcObject && mediaStream) {
@@ -272,6 +274,13 @@ const CallBase: React.FC<Props> = React.memo(
           onMouseMove={() => onMouseMove()}
           onMouseOver={() => onMouseMove()}
         >
+          {timerOn && (
+            <Timer
+              endTime={call.end}
+              style={Style.timer}
+              className="absolute right-4 top-4 bg-opacity-80	 bg-gray-900	 text-white px-4 py-2 rounded-md"
+            />
+          )}
           {!peerVideoOn && (
             <Avatar size={128} className="bg-blue-500	m-auto text-white	">
               {getInitials(genFullName(call.connection.user)).toUpperCase()}
@@ -280,7 +289,7 @@ const CallBase: React.FC<Props> = React.memo(
           {!peerAudioOn && (
             <div className="peer-name-container">
               <AudioMutedOutlined className="peer-muted-audio" />
-              <Typography.Text style={{ color: "white", fontSize: 16 }}>
+              <Typography.Text className="text-white text-l">
                 {" "}
                 {genFullName(call.connection.user)}
               </Typography.Text>
@@ -299,7 +308,7 @@ const CallBase: React.FC<Props> = React.memo(
               openInfoModal={openInfoModal}
             />
           )}
-          {showOverlay && (
+          {true && (
             <VideoOverlay
               audioOn={audioOn}
               toggleAudio={() => {
@@ -326,6 +335,8 @@ const CallBase: React.FC<Props> = React.memo(
                 if (chatCollapsed) setHasUnreadMessages(false);
                 setChatCollapsed((collapsed) => !collapsed);
               }}
+              timerOn={timerOn}
+              toggleTimer={() => setTimerOn((timerOn) => !timerOn)}
               navigate={() => push(`/feedback/${call?.id}`)}
               call={call}
               roomClient={rc}
@@ -333,7 +344,7 @@ const CallBase: React.FC<Props> = React.memo(
             />
           )}
         </div>
-        {(!chatCollapsed || showOverlay) && (
+        {!chatCollapsed && (
           <Chat
             roomClient={rc}
             isAuthed={isAuthed}
@@ -347,4 +358,17 @@ const CallBase: React.FC<Props> = React.memo(
   }
 );
 
+const Style = {
+  timer: {
+    // position: 'absolute',
+    // right: 16,
+    // top: 16,
+    // opacity: 0.8,
+    // backgroundColor: 'black',
+    // color: 'white',
+    zIndex: 9999,
+    // padding: 16,
+    // borderRadius: 8,
+  } as React.CSSProperties,
+};
 export default CallBase;

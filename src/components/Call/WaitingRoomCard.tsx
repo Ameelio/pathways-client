@@ -50,7 +50,7 @@ export const WaitingRoomCard = ({
         </Space>
 
         <Typography.Text className="text-white">
-          {format(new Date(call.start), "HH/mm")} •{" "}
+          {format(new Date(call.start), "HH:mm")} •{" "}
           {differenceInMinutes(new Date(call.end), new Date(call.start))}mins
         </Typography.Text>
         <Typography.Text className="text-white">

@@ -117,9 +117,7 @@ const Chat: React.FC<Props> = ({
       {!chatCollapsed && (
         <div className="chat-container" style={WRAPPER_PADDING}>
           <Space direction="vertical" style={{ overflowY: "scroll" }}>
-            <Typography.Text type="warning">
-              {t("chat.monitorWarning")}
-            </Typography.Text>
+            <Typography.Text mark>{t("chat.monitorWarning")}</Typography.Text>
             {messages.map((message) => (
               <MessageDisplay message={message} />
             ))}

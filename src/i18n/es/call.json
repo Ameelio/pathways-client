@@ -24,5 +24,22 @@
     "title": "Chat",
     "placeholder": "Type here...",
     "monitorWarning": "Note: All messages are monitored for security purposes."
+  },
+  "videoOverlay": {
+    "on": "On",
+    "off": "off",
+    "chat": "Chat",
+    "video": "Video",
+    "mic": "Mic",
+    "showTime": "Show Time",
+    "hideTime": "Hide Time",
+    "leaveCall": "Leave Call"
+  },
+  "you": {
+    "You": "You",
+    "enabledWebcam": "turned on your webcam",
+    "disabledWebcam": "turned off your webcam",
+    "mutedMic": "muted your microphone",
+    "unmutedMic": "unmuted your microphone"
   }
 }
