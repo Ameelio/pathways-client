@@ -115,14 +115,14 @@ const Chat: React.FC<Props> = ({
       {!chatCollapsed && <PageHeader title={t("chat.title")} />}
 
       {!chatCollapsed && (
-        <div className="chat-container" style={WRAPPER_PADDING}>
+        <div className="flex flex-col h-full" style={WRAPPER_PADDING}>
           <Space direction="vertical" style={{ overflowY: "scroll" }}>
             <Typography.Text mark>{t("chat.monitorWarning")}</Typography.Text>
             {messages.map((message) => (
               <MessageDisplay message={message} />
             ))}
           </Space>
-          <div className="chat-input">
+          <div className="mt-auto mb-8 flex-shrink-0">
             <Divider />
             <Input.TextArea
               value={draftMessage}

@@ -29,7 +29,7 @@ const renderer = ({
 export const Timer = ({ endTime, style, className }: Props) => {
   return (
     <div style={style} className={className}>
-      <Countdown date={endTime} renderer={renderer} />{" "}
+      <Countdown date={endTime} renderer={renderer} zeroPadTime={2} />{" "}
     </div>
   );
 };

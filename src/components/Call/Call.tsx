@@ -4,7 +4,6 @@ import * as mediasoupClient from "mediasoup-client";
 import io from "socket.io-client";
 import { Typography, Layout, Avatar } from "antd";
 import { Call, CallParticipant } from "src/types/Call";
-import "./index.css";
 import { AudioMutedOutlined } from "@ant-design/icons";
 import { useUserMedia } from "./useUserMedia";
 import {
@@ -277,8 +276,7 @@ const CallBase: React.FC<Props> = React.memo(
           {timerOn && (
             <Timer
               endTime={call.end}
-              style={Style.timer}
-              className="absolute right-4 top-4 bg-opacity-80	 bg-gray-900	 text-white px-4 py-2 rounded-md"
+              className="absolute right-4 top-4 bg-opacity-80	 bg-gray-900 text-white px-4 py-2 rounded-md"
             />
           )}
           {!peerVideoOn && (
@@ -287,16 +285,20 @@ const CallBase: React.FC<Props> = React.memo(
             </Avatar>
           )}
           {!peerAudioOn && (
-            <div className="peer-name-container">
-              <AudioMutedOutlined className="peer-muted-audio" />
-              <Typography.Text className="text-white text-l">
+            <div className="absolute bottom-20 left-4 bg-black bg-opacity-50 py-1 px-2">
+              <AudioMutedOutlined className="text-red-600 text-xs" />
+              <Typography.Text className="text-white text-base">
                 {" "}
                 {genFullName(call.connection.user)}
               </Typography.Text>
             </div>
           )}
           {videoOn ? (
-            <video className="video-me" autoPlay={true} ref={meRef} />
+            <video
+              className="w-2/12 absolute top-4 left-4 flex"
+              autoPlay={true}
+              ref={meRef}
+            />
           ) : (
             <VideoMePlaceholder initials={initials} />
           )}
@@ -308,7 +310,7 @@ const CallBase: React.FC<Props> = React.memo(
               openInfoModal={openInfoModal}
             />
           )}
-          {true && (
+          {showOverlay && (
             <VideoOverlay
               audioOn={audioOn}
               toggleAudio={() => {
@@ -357,18 +359,4 @@ const CallBase: React.FC<Props> = React.memo(
     );
   }
 );
-
-const Style = {
-  timer: {
-    // position: 'absolute',
-    // right: 16,
-    // top: 16,
-    // opacity: 0.8,
-    // backgroundColor: 'black',
-    // color: 'white',
-    zIndex: 9999,
-    // padding: 16,
-    // borderRadius: 8,
-  } as React.CSSProperties,
-};
 export default CallBase;
