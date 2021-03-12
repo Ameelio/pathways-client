@@ -3,7 +3,6 @@ import {
   AudioOutlined,
   ClockCircleOutlined,
   MessageOutlined,
-  PoweroffOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Badge, Button, Col, Row, Space } from "antd";
