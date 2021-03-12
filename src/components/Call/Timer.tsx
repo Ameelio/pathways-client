@@ -1,6 +1,7 @@
 import { Typography } from "antd";
 import React from "react";
 import Countdown from "react-countdown";
+import { mapCountdownTimeToStyle } from "src/utils";
 
 interface Props {
   endTime: number;
@@ -9,19 +10,23 @@ interface Props {
 }
 // Renderer callback with condition
 const renderer = ({
+  formatted,
   minutes,
   seconds,
   completed,
 }: {
+  formatted: { minutes: string; seconds: string };
   minutes: number;
   seconds: number;
   completed: boolean;
 }) => {
+  const style = mapCountdownTimeToStyle(minutes, seconds);
+
   return completed ? (
     <div />
   ) : (
-    <Typography.Text className="text-white">
-      {minutes}:{seconds}
+    <Typography.Text className={`${style} px-4 py-2 rounded-md`}>
+      {formatted.minutes}:{formatted.seconds}
     </Typography.Text>
   );
 };

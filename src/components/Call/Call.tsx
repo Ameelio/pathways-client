@@ -276,7 +276,7 @@ const CallBase: React.FC<Props> = React.memo(
           {timerOn && (
             <Timer
               endTime={call.end}
-              className="absolute right-4 top-4 bg-opacity-80	 bg-gray-900 text-white px-4 py-2 rounded-md"
+              className="absolute right-4 top-4 bg-opacity-80"
             />
           )}
           {!peerVideoOn && (
