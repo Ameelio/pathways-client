@@ -3,18 +3,16 @@ import Modal from "antd/lib/modal/Modal";
 import { differenceInMinutes, format } from "date-fns";
 import React from "react";
 import { genFullName } from "src/utils/utils";
-import { closeModal } from "src/redux/modules/modalsSlice";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "src/redux";
+import { CancelCallModalData } from "src/types/UI";
 
-const CancelCallModal: React.FC = () => {
-  const dispatch = useAppDispatch();
+interface Props {
+  data: CancelCallModalData;
+  closeModal: () => void;
+}
+
+const CancelCallModal: React.FC<Props> = ({ data, closeModal }) => {
   const { t } = useTranslation("modals");
-
-  const data = useAppSelector((state) => state.modals.data);
-
-  if (data.activeType !== "CANCEL_CALL_MODAL") return <div />;
-
   const call = data.entity;
   const fullName = genFullName(call.connection.user);
   const startDate = format(new Date(call.start), "EEEE, MMMM d");
@@ -28,8 +26,8 @@ const CancelCallModal: React.FC = () => {
       title={t("cancelCallModal.title")}
       visible={true}
       okText={t("cancelCallModal.okText")}
-      onOk={() => dispatch(closeModal())}
-      onCancel={() => dispatch(closeModal())}
+      onOk={closeModal}
+      onCancel={closeModal}
       className="rounded-sm"
     >
       <Space direction="vertical" size="large">

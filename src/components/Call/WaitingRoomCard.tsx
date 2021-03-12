@@ -14,6 +14,7 @@ interface Props {
   call: Call;
   navigateBack: () => void;
   openInfoModal: (resource: FAQResource) => void;
+  openTestConnectionModal: () => void;
 }
 
 const getTranslatedDailyQuestion = (
@@ -35,6 +36,7 @@ export const WaitingRoomCard = ({
   call,
   navigateBack,
   openInfoModal,
+  openTestConnectionModal,
 }: Props) => {
   const { t, i18n } = useTranslation("call");
   const [icebreaker] = useState(getRandomItem(QUESTIONS) as Icebreaker);
@@ -68,7 +70,9 @@ export const WaitingRoomCard = ({
           {t("waitingRoom.whenWillCallConnect")}
         </Typography.Link>
         <Space>
-          <Button type="primary">{t("waitingRoom.checkConnection")}</Button>
+          <Button type="primary" onClick={openTestConnectionModal}>
+            {t("waitingRoom.checkConnection")}
+          </Button>
           <Button onClick={navigateBack}>
             {t("waitingRoom.leaveWaitingRoom")}
           </Button>

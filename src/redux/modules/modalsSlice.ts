@@ -1,7 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { CancelCallModal, InactiveModal, ResourceModal } from "src/types/UI";
+import {
+  CancelCallModalData,
+  InactiveModalData,
+  ResourceModalData,
+  TestConnectionModalData,
+} from "src/types/UI";
 
-type ModalEntity = CancelCallModal | ResourceModal | InactiveModal;
+type ModalEntity =
+  | CancelCallModalData
+  | ResourceModalData
+  | TestConnectionModalData
+  | InactiveModalData;
 
 // type ModalsSliceState =  {activeType: ModalType | null, entity: Call |{ title: string; body: string } | null };
 type ModalsSliceState = { data: ModalEntity };

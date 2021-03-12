@@ -1,9 +1,11 @@
 import { Call } from "./Call";
 
 export type ModalType =
+  | "INACTIVE_MODAL"
   | "CANCEL_CALL_MODAL"
   | "RESOURCES_MODAL"
-  | "INACTIVE_MODAL";
+  | "TEST_CONNECTION_MODAL";
+
 export interface FAQResource {
   title: string;
   body: string;
@@ -11,9 +13,20 @@ export interface FAQResource {
   okBtnText?: string;
   cancelBtnText?: string;
 }
-export type CancelCallModal = { activeType: "CANCEL_CALL_MODAL"; entity: Call };
-export type ResourceModal = {
+export interface CancelCallModalData {
+  activeType: "CANCEL_CALL_MODAL";
+  entity: Call;
+}
+export interface ResourceModalData {
   activeType: "RESOURCE_MODAL";
   entity: FAQResource;
-};
-export type InactiveModal = { activeType: "INACTIVE_MODAL"; entity: null };
+}
+export interface InactiveModalData {
+  activeType: "INACTIVE_MODAL";
+  entity: null;
+}
+
+export interface TestConnectionModalData {
+  activeType: "TEST_CONNECTION_MODAL";
+  entity: null;
+}

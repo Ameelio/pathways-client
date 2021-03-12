@@ -42,10 +42,18 @@ interface Props {
   initials: string;
   push: (path: string) => void;
   openInfoModal: (resource: FAQResource) => void;
+  openTestConnectionModal: () => void;
 }
 
 const CallBase: React.FC<Props> = React.memo(
-  ({ call, authInfo, push, initials, openInfoModal }) => {
+  ({
+    call,
+    authInfo,
+    push,
+    initials,
+    openInfoModal,
+    openTestConnectionModal,
+  }) => {
     const { t } = useTranslation("call");
 
     const [isAuthed, setIsAuthed] = useState(false);
@@ -308,6 +316,7 @@ const CallBase: React.FC<Props> = React.memo(
               title={getMessage()}
               navigateBack={() => push("/")}
               openInfoModal={openInfoModal}
+              openTestConnectionModal={openTestConnectionModal}
             />
           )}
           {showOverlay && (

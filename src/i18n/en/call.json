@@ -41,5 +41,8 @@
     "disabledWebcam": "turned off your webcam",
     "mutedMic": "muted your microphone",
     "unmutedMic": "unmuted your microphone"
+  },
+  "testConnection": {
+    "title": "Check Your Audio & Video"
   }
 }

@@ -53,6 +53,11 @@ const CallBase: React.FC<PropsFromRedux> = React.memo(
             openModal({ activeType: "RESOURCE_MODAL", entity: resource })
           )
         }
+        openTestConnectionModal={() =>
+          dispatch(
+            openModal({ activeType: "TEST_CONNECTION_MODAL", entity: null })
+          )
+        }
       />
     );
   }

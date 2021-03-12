@@ -1,15 +1,14 @@
 import React from "react";
-import { closeModal } from "src/redux/modules/modalsSlice";
-import { useAppDispatch, useAppSelector } from "src/redux";
 import { Typography, Modal } from "antd";
+import { ResourceModalData } from "src/types/UI";
 
-const InformationalModal: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const data = useAppSelector((state) => state.modals.data);
+interface Props {
+  data: ResourceModalData;
+  closeModal: () => void;
+}
 
-  if (data.activeType !== "RESOURCE_MODAL") return <div />;
+const InformationalModal: React.FC<Props> = ({ data, closeModal }) => {
   const resource = data.entity;
-
   return (
     <Modal
       title={resource.title}
@@ -18,8 +17,8 @@ const InformationalModal: React.FC = () => {
       cancelButtonProps={{
         style: { display: data.entity.hideCancel ? "none" : "inline" },
       }}
-      onOk={() => dispatch(closeModal())}
-      onCancel={() => dispatch(closeModal())}
+      onOk={closeModal}
+      onCancel={closeModal}
       className="rounded-sm w-full"
     >
       <Typography.Text>{resource.body}</Typography.Text>
