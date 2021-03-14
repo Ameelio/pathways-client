@@ -1,11 +1,8 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import RoomClient from "src/pages/Call/RoomClient";
-import * as mediasoupClient from "mediasoup-client";
-import io from "socket.io-client";
 import { Typography, Layout, Avatar } from "antd";
-import { Call, CallParticipant } from "src/types/Call";
+import { Call, CallParticipant, ControlledStream } from "src/types/Call";
 import { AudioMutedOutlined } from "@ant-design/icons";
-import { useUserMedia } from "./useUserMedia";
 import {
   genFullName,
   getInitials,
@@ -17,10 +14,12 @@ import "src/i18n/config";
 import Chat from "src/components/Call/Chat";
 import VideoOverlay from "src/components/Call/VideoOverlay";
 import VideoMePlaceholder from "src/components/Call/VideoMePlaceholder";
-import { AuthInfo } from "src/types/Session";
 import { WaitingRoomCard } from "./WaitingRoomCard";
 import { FAQResource } from "src/types/UI";
 import { Timer } from "./Timer";
+import Video from "./Video";
+import Audio from "./Audio";
+import { User } from "src/types/User";
 
 declare global {
   interface Window {
@@ -28,18 +27,14 @@ declare global {
   }
 }
 
-const CAPTURE_OPTIONS = {
-  audio: false,
-  video: {
-    width: { min: 640, ideal: 1920 },
-    height: { min: 400, ideal: 1080 },
-  },
-};
-
 interface Props {
   call: Call | undefined;
-  authInfo: AuthInfo;
-  initials: string;
+  user: User;
+  remoteAudios: Record<number, MediaStream>;
+  remoteVideos: Record<number, MediaStream>;
+  roomClient: RoomClient;
+  localVideo?: ControlledStream;
+  localAudio?: ControlledStream;
   push: (path: string) => void;
   openInfoModal: (resource: FAQResource) => void;
   openTestConnectionModal: () => void;
@@ -48,21 +43,21 @@ interface Props {
 const CallBase: React.FC<Props> = React.memo(
   ({
     call,
-    authInfo,
+    user,
+    roomClient,
+    localVideo,
+    localAudio,
+    remoteAudios,
+    remoteVideos,
     push,
-    initials,
     openInfoModal,
     openTestConnectionModal,
   }) => {
     const { t } = useTranslation("call");
 
-    const [isAuthed, setIsAuthed] = useState(false);
-    const [rc, setRc] = useState<RoomClient>();
-    const [socket, setSocket] = useState<SocketIOClient.Socket>();
     const [showOverlay, setShowOverlay] = useState(true);
-    const [participantHasJoined, setParticipantHasJoined] = useState(false);
+    const [participantHasJoined, setParticipantsHasJoined] = useState(false);
     const [chatCollapsed, setChatCollapsed] = useState(true);
-    const mediaStream = useUserMedia(CAPTURE_OPTIONS);
     const [audioOn, setAudioOn] = useState(true);
     const [videoOn, setVideoOn] = useState(true);
     const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
@@ -70,95 +65,18 @@ const CallBase: React.FC<Props> = React.memo(
     const [peerVideoOn, setPeerVideoOn] = useState(true);
     const [timerOn, setTimerOn] = useState(false);
 
-    const meRef = useRef<HTMLVideoElement>(null);
-    if (meRef.current && !meRef.current.srcObject && mediaStream) {
-      meRef.current.srcObject = mediaStream;
-    }
-
+    useEffect(() => console.log("mounting"), []);
     useEffect(() => {
-      if (!socket) {
-        const s = io.connect(
-          `${process.env.REACT_APP_MEDIASOUP_HOSTNAME}` || "localhost:8000"
-          // {
-          //   transports: ["websocket"],
-          // }
-        );
-        setSocket(s);
-      }
-      return () => {
-        socket?.close();
-      };
-    }, [setSocket, socket]);
-
-    const joinRoom = useCallback(async () => {
-      if (!call) return;
-      const rc = new RoomClient(mediasoupClient, socket, call.id);
-      await rc.init();
-
-      setRc(rc);
-    }, [call, socket]);
-
-    // Asynchronously load the room
-    useEffect(() => {
-      if (!isAuthed && socket && call) {
-        (async () => {
-          console.log(socket);
-          if (!socket.connected) {
-            console.log("Not connected, so waiting until connected.");
-            window.Debug = socket;
-            await new Promise((resolve) => socket.on("connect", resolve));
-            console.log("OK");
-          }
-
-          await new Promise((resolve) => {
-            // TODO fetch actual credentials from redux
-            socket.emit(
-              "authenticate",
-              {
-                type: authInfo.type,
-                id: authInfo.id,
-                token: authInfo.token,
-              },
-              resolve
-            );
-          });
-          await joinRoom();
-          setIsAuthed(true);
-        })();
-      }
-    }, [call, authInfo, socket, joinRoom, isAuthed]);
-
-    useEffect(() => {
-      if (rc && isAuthed) {
-        (async () => {
-          // Enumerate media devices
-          const devices = await navigator.mediaDevices.enumerateDevices();
-
-          // Get a video input (should be the only one) to send
-          const videoInput = Array.from(devices).filter(
-            (device) => device.kind === "videoinput"
-          )[0];
-
-          // Produce video with it
-          await rc.produce("videoType", videoInput);
-
-          // Get a audio input (should be the only one) to send
-
-          // Don't produce audio for now
-          const audioInput = Array.from(devices).filter(
-            (device) => device.kind === "audioinput"
-          )[0];
-
-          // Produce video with it
-          await rc.produce("audioType", audioInput);
-        })();
-      }
-    }, [isAuthed, rc]);
+      Object.keys(remoteVideos).length > 0 ||
+      Object.keys(remoteAudios).length > 0
+        ? setParticipantsHasJoined(true)
+        : setParticipantsHasJoined(false);
+    }, [remoteVideos, remoteAudios]);
 
     // TODO fix this
     useEffect(() => {
-      if (rc && isAuthed) {
-        rc.socket.on(
+      if (roomClient) {
+        roomClient.socket.on(
           "producerUpdate",
           async ({
             from,
@@ -177,7 +95,7 @@ const CallBase: React.FC<Props> = React.memo(
           }
         );
       }
-    }, [isAuthed, rc, t]);
+    }, [roomClient, t]);
 
     useEffect(() => {
       if (!chatCollapsed) setHasUnreadMessages(false);
@@ -205,43 +123,6 @@ const CallBase: React.FC<Props> = React.memo(
         );
     }, [peerAudioOn, call, participantHasJoined, t]);
 
-    const measuredRef = useCallback(
-      (node) => {
-        if (node !== null && rc && isAuthed) {
-          (async () => {
-            rc.on(
-              "consume",
-              async (
-                kind: string,
-                stream: MediaStream,
-                user: CallParticipant
-              ) => {
-                if (node && user.type === "user") {
-                  if (kind === "video") {
-                    const video = document.createElement("video");
-                    video.style.width = "100%";
-                    video.style.height = "100%";
-                    video.srcObject = stream;
-                    video.autoplay = true;
-                    node.appendChild(video);
-                  } else if (kind === "audio") {
-                    const audio = document.createElement("audio");
-                    audio.srcObject = stream;
-                    audio.autoplay = true;
-                    node.appendChild(audio);
-                  }
-
-                  setParticipantHasJoined(true);
-                } else if (node && user.type === "inmate") {
-                }
-              }
-            );
-          })();
-        }
-      },
-      [rc, isAuthed]
-    );
-
     useEffect(() => {
       if (participantHasJoined && call)
         openNotificationWithIcon(
@@ -254,7 +135,7 @@ const CallBase: React.FC<Props> = React.memo(
     if (!call) return <div />;
 
     const getMessage = (): string => {
-      if (!isAuthed) {
+      if (!roomClient) {
         return t("waitingRoom.initialization");
       } else if (!participantHasJoined) {
         return `${t("waitingRoom.waitingForPrefix")} ${
@@ -273,14 +154,28 @@ const CallBase: React.FC<Props> = React.memo(
       })();
     };
 
+    // TODO once we support calls with multiple people at once, we can expand on this implementation
+    const keys = Object.keys(remoteVideos).map((key) => parseInt(key));
+
+    // console.log('child');
+    // console.log(roomClient);
     return (
       <Layout>
         <div
           className="ant-layout-content w-screen h-screen flex bg-gray-800"
-          ref={measuredRef}
           onMouseMove={() => onMouseMove()}
           onMouseOver={() => onMouseMove()}
         >
+          {keys.map((key: number) => (
+            <div>
+              <Video
+                srcObject={remoteVideos[key]}
+                className="w-full h-full"
+                autoPlay={true}
+              />
+              <Audio srcObject={remoteAudios[key]} autoPlay={true} />
+            </div>
+          ))}
           {timerOn && (
             <Timer
               endTime={call.end}
@@ -301,14 +196,14 @@ const CallBase: React.FC<Props> = React.memo(
               </Typography.Text>
             </div>
           )}
-          {videoOn ? (
-            <video
+          {localVideo?.stream && videoOn ? (
+            <Video
+              srcObject={localVideo.stream}
               className="w-2/12 absolute top-4 left-4 flex"
               autoPlay={true}
-              ref={meRef}
             />
           ) : (
-            <VideoMePlaceholder initials={initials} />
+            <VideoMePlaceholder initials={getInitials(genFullName(user))} />
           )}
           {!participantHasJoined && (
             <WaitingRoomCard
@@ -323,7 +218,10 @@ const CallBase: React.FC<Props> = React.memo(
             <VideoOverlay
               audioOn={audioOn}
               toggleAudio={() => {
-                audioOn ? rc?.pauseAudio() : rc?.resumeAudio();
+                if (!roomClient || !localAudio) return;
+                localAudio.paused
+                  ? roomClient.resumeAudio()
+                  : roomClient.pauseAudio();
                 showToast(
                   "microphone",
                   `You ${audioOn ? "muted" : "unmuted"} your microphone`,
@@ -333,7 +231,10 @@ const CallBase: React.FC<Props> = React.memo(
               }}
               videoOn={videoOn}
               toggleVideo={() => {
-                videoOn ? rc?.pauseWebcam() : rc?.resumeWebcam();
+                if (!roomClient || !localVideo) return;
+                localVideo.paused
+                  ? roomClient.resumeVideo()
+                  : roomClient.pauseVideo();
                 showToast(
                   "webcam",
                   `You ${videoOn ? "turned off" : "turned on"} your webcam`,
@@ -348,21 +249,15 @@ const CallBase: React.FC<Props> = React.memo(
               }}
               timerOn={timerOn}
               toggleTimer={() => setTimerOn((timerOn) => !timerOn)}
-              navigate={() => push(`/feedback/${call?.id}`)}
+              terminateCall={() => push(`/feedback/${call?.id}`)}
               call={call}
-              roomClient={rc}
+              roomClient={roomClient}
               hasUnreadMessages={hasUnreadMessages}
             />
           )}
         </div>
         {!chatCollapsed && (
-          <Chat
-            roomClient={rc}
-            isAuthed={isAuthed}
-            authInfo={authInfo}
-            socket={socket}
-            call={call}
-          />
+          <Chat roomClient={roomClient} inmateId={user.id} call={call} />
         )}
       </Layout>
     );

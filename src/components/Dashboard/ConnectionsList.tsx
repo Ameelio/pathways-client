@@ -31,7 +31,9 @@ const ConnectionsList: React.FC<Props> = ({ calls, connections }: Props) => {
     setConnectionItems(
       connections
         .filter((connection) => connection.status === activeContactTab)
-        .map((connection) => <ConnectionItem connection={connection} />)
+        .map((connection) => (
+          <ConnectionItem key={connection.id} connection={connection} />
+        ))
     );
   }, [activeContactTab, connections]);
 

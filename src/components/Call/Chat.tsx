@@ -7,27 +7,15 @@ import { openNotificationWithIcon } from "src/utils/utils";
 import RoomClient from "src/pages/Call/RoomClient";
 import { useTranslation } from "react-i18next";
 
-interface AuthInfo {
-  token: string;
-  id: number;
-  type: "inmate";
-}
-
 interface Props {
   roomClient: RoomClient | undefined;
-  isAuthed: boolean;
-  authInfo: AuthInfo;
-  socket: SocketIOClient.Socket | undefined;
+  // isAuthed: boolean;
+  inmateId: number;
+  // socket: SocketIOClient.Socket | undefined;
   call: Call;
 }
 
-const Chat: React.FC<Props> = ({
-  roomClient,
-  isAuthed,
-  authInfo,
-  socket,
-  call,
-}) => {
+const Chat: React.FC<Props> = ({ roomClient, inmateId, call }) => {
   const { Sider } = Layout;
   const { t } = useTranslation("call");
 
@@ -37,8 +25,7 @@ const Chat: React.FC<Props> = ({
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
 
   useEffect(() => {
-    if (roomClient && isAuthed) {
-      console.log("listening to text message");
+    if (roomClient) {
       roomClient.socket.on(
         "textMessage",
         async ({
@@ -65,14 +52,14 @@ const Chat: React.FC<Props> = ({
         }
       );
     }
-  }, [isAuthed, roomClient, t]);
+  }, [roomClient, t]);
 
   useEffect(() => {
     if (!chatCollapsed) setHasUnreadMessages(false);
   }, [hasUnreadMessages, chatCollapsed]);
 
   const onSendMessage = async () => {
-    if (!socket || !call) return;
+    if (!roomClient) return;
     setDraftMessage("");
     //TODO add property sent and change image visibility depending on whether it actually went through
     setMessages([
@@ -81,17 +68,17 @@ const Chat: React.FC<Props> = ({
         content: draftMessage,
         from: {
           type: "inmate",
-          id: authInfo.id,
+          id: inmateId,
         },
         timestamp: new Date().toLocaleDateString(),
       },
     ]);
     const { participants } = await new Promise((resolve, reject) => {
-      socket.emit("info", { callId: call.id }, resolve);
+      roomClient.socket.emit("info", { callId: call.id }, resolve);
     });
     await new Promise((resolve) => {
       // TODO fetch actual credentials from redux
-      socket.emit(
+      roomClient.socket.emit(
         "textMessage",
         {
           callId: call.id,

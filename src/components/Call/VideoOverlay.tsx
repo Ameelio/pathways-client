@@ -10,7 +10,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import RoomClient from "src/pages/Call/RoomClient";
 import { Call } from "src/types/Call";
-import { showToast } from "src/utils/utils";
 import IconButton from "../Common/Buttons/IconButton";
 
 interface Props {
@@ -22,7 +21,7 @@ interface Props {
   toggleChat: () => void;
   timerOn: boolean;
   toggleTimer: () => void;
-  navigate: (path: string) => void;
+  terminateCall: () => void;
   call: Call;
   roomClient: RoomClient | undefined;
   hasUnreadMessages: boolean;
@@ -35,7 +34,7 @@ const VideoOverlay: React.FC<Props> = ({
   toggleVideo,
   chatCollapsed,
   toggleChat,
-  navigate,
+  terminateCall,
   timerOn,
   toggleTimer,
   call,
@@ -62,17 +61,7 @@ const VideoOverlay: React.FC<Props> = ({
             }
             danger={!audioOn}
             type={audioOn ? "default" : "primary"}
-            onClick={() => {
-              audioOn ? roomClient?.pauseAudio() : roomClient?.resumeAudio();
-              showToast(
-                "microphone",
-                `${t("you.You")} ${
-                  audioOn ? t("you.mutedMic") : t("you.unmutedMic")
-                }`,
-                "info"
-              );
-              toggleAudio();
-            }}
+            onClick={toggleAudio}
             label={`${t("videoOverlay.mic")}${" "}${
               audioOn ? t("videoOverlay.on") : t("videoOverlay.off")
             }`}
@@ -89,17 +78,7 @@ const VideoOverlay: React.FC<Props> = ({
             }
             size="large"
             type={videoOn ? "default" : "primary"}
-            onClick={() => {
-              videoOn ? roomClient?.pauseWebcam() : roomClient?.resumeWebcam();
-              showToast(
-                "webcam",
-                `${t("you.You")} ${
-                  videoOn ? t("you.disabledWebcam") : t("you.enabledWebcam")
-                }`,
-                "info"
-              );
-              toggleVideo();
-            }}
+            onClick={toggleVideo}
             label={`${t("videoOverlay.video")} ${
               videoOn ? t("videoOverlay.on") : t("videoOverlay.off")
             }`}
@@ -136,7 +115,7 @@ const VideoOverlay: React.FC<Props> = ({
         <Button
           danger
           size="large"
-          onClick={() => navigate(`/feedback/${call?.id}`)}
+          onClick={() => terminateCall()}
           className="align-self-end"
         >
           {t("videoOverlay.leaveCall")}
