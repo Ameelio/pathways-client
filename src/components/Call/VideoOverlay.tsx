@@ -5,14 +5,13 @@ import {
   MessageOutlined,
   VideoCameraOutlined,
 } from "@ant-design/icons";
-import { Badge, Button, Col, Row, Space } from "antd";
+import { Badge, Button, Col, Row, Space, Spin } from "antd";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import RoomClient from "src/pages/Call/RoomClient";
-import { Call } from "src/types/Call";
 import IconButton from "../Common/Buttons/IconButton";
 
 interface Props {
+  loading: boolean;
   audioOn: boolean;
   toggleAudio: () => void;
   videoOn: boolean;
@@ -22,12 +21,11 @@ interface Props {
   timerOn: boolean;
   toggleTimer: () => void;
   terminateCall: () => void;
-  call: Call;
-  roomClient: RoomClient | undefined;
   hasUnreadMessages: boolean;
 }
 
 const VideoOverlay: React.FC<Props> = ({
+  loading,
   audioOn,
   toggleAudio,
   videoOn,
@@ -37,18 +35,11 @@ const VideoOverlay: React.FC<Props> = ({
   terminateCall,
   timerOn,
   toggleTimer,
-  call,
-  roomClient,
   hasUnreadMessages,
 }) => {
   const { t } = useTranslation("call");
-  return (
-    <Row
-      className="absolute bottom-0 bg-white w-full p-4"
-      // justify="center"
-      align="middle"
-      // size="large"
-    >
+  return !loading ? (
+    <Row className="absolute bottom-0 bg-white w-full p-4" align="middle">
       <Col span={8} offset={8}>
         <Space size="large">
           <IconButton
@@ -120,6 +111,12 @@ const VideoOverlay: React.FC<Props> = ({
         >
           {t("videoOverlay.leaveCall")}
         </Button>
+      </Col>
+    </Row>
+  ) : (
+    <Row className="absolute bottom-0 bg-white w-full p-4 flex" align="middle">
+      <Col className="m-auto">
+        <Spin />
       </Col>
     </Row>
   );

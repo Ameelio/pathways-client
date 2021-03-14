@@ -4,7 +4,6 @@ import { connect, ConnectedProps, shallowEqual } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { selectAllCallInfo } from "src/redux/selectors";
 import { push } from "connected-react-router";
-import { genFullName, getInitials } from "src/utils/utils";
 import "src/i18n/config";
 import {
   enterFullScreen,
@@ -28,8 +27,6 @@ const mapStateToProps = (
   ownProps: RouteComponentProps<TParams>
 ) => ({
   call: selectAllCallInfo(state, parseInt(ownProps.match.params.id)),
-  authInfo: state.session.authInfo,
-  initials: getInitials(genFullName(state.session.user)),
 });
 
 const connector = connect(mapStateToProps);
@@ -68,15 +65,12 @@ const CallBase: React.FC<PropsFromRedux & RouteComponentProps<TParams>> = ({
   }, [stableDispatch]);
 
   useEffect(() => {
-    console.log(call);
     if (!call || hasInit) return;
-    console.log("init");
     stableDispatch(initializeVisit({ callId: call.id, setRc }));
   }, [call, stableDispatch, hasInit]);
 
   useEffect(() => {
     if (!rc || hasInit) return;
-    console.log("setup");
     stableDispatch(initializeRemotes({ rc, setRemoteAudios, setRemoteVideos }));
     stableDispatch(
       initializeProducers({ rc, setLocalAudio, setLocalVideo, setRc })
@@ -84,7 +78,6 @@ const CallBase: React.FC<PropsFromRedux & RouteComponentProps<TParams>> = ({
     setHasInit(true);
   }, [hasInit, stableDispatch, rc]);
 
-  useEffect(() => console.log("parent", rc), [rc]);
   if (!call) return <div />;
 
   if (!rc || !hasInit) return <div />;

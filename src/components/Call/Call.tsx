@@ -58,14 +58,11 @@ const CallBase: React.FC<Props> = React.memo(
     const [showOverlay, setShowOverlay] = useState(true);
     const [participantHasJoined, setParticipantsHasJoined] = useState(false);
     const [chatCollapsed, setChatCollapsed] = useState(true);
-    const [audioOn, setAudioOn] = useState(true);
-    const [videoOn, setVideoOn] = useState(true);
     const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
     const [peerAudioOn, setPeerAudioOn] = useState(true);
     const [peerVideoOn, setPeerVideoOn] = useState(true);
     const [timerOn, setTimerOn] = useState(false);
 
-    useEffect(() => console.log("mounting"), []);
     useEffect(() => {
       Object.keys(remoteVideos).length > 0 ||
       Object.keys(remoteAudios).length > 0
@@ -89,7 +86,8 @@ const CallBase: React.FC<Props> = React.memo(
               type: "audio" | "video";
             };
           }) => {
-            from.type === "user" && contents.type === "audio"
+            if (from.type !== "user") return;
+            contents.type === "audio"
               ? setPeerAudioOn(contents.active)
               : setPeerVideoOn(contents.active);
           }
@@ -157,8 +155,6 @@ const CallBase: React.FC<Props> = React.memo(
     // TODO once we support calls with multiple people at once, we can expand on this implementation
     const keys = Object.keys(remoteVideos).map((key) => parseInt(key));
 
-    // console.log('child');
-    // console.log(roomClient);
     return (
       <Layout>
         <div
@@ -196,7 +192,7 @@ const CallBase: React.FC<Props> = React.memo(
               </Typography.Text>
             </div>
           )}
-          {localVideo?.stream && videoOn ? (
+          {localVideo && localVideo.stream && !localVideo.paused ? (
             <Video
               srcObject={localVideo.stream}
               className="w-2/12 absolute top-4 left-4 flex"
@@ -216,31 +212,34 @@ const CallBase: React.FC<Props> = React.memo(
           )}
           {showOverlay && (
             <VideoOverlay
-              audioOn={audioOn}
+              loading={!(localAudio && localVideo)}
+              audioOn={!!!localAudio?.paused}
               toggleAudio={() => {
                 if (!roomClient || !localAudio) return;
+                showToast(
+                  "microphone",
+                  `You ${
+                    localAudio.paused ? "unmuted" : "muted"
+                  } your microphone`,
+                  "info"
+                );
                 localAudio.paused
                   ? roomClient.resumeAudio()
                   : roomClient.pauseAudio();
-                showToast(
-                  "microphone",
-                  `You ${audioOn ? "muted" : "unmuted"} your microphone`,
-                  "info"
-                );
-                setAudioOn((audioOn) => !audioOn);
               }}
-              videoOn={videoOn}
+              videoOn={!!!localVideo?.paused}
               toggleVideo={() => {
                 if (!roomClient || !localVideo) return;
+                showToast(
+                  "webcam",
+                  `You ${
+                    localVideo.paused ? "turned on" : "turned off"
+                  } your webcam`,
+                  "info"
+                );
                 localVideo.paused
                   ? roomClient.resumeVideo()
                   : roomClient.pauseVideo();
-                showToast(
-                  "webcam",
-                  `You ${videoOn ? "turned off" : "turned on"} your webcam`,
-                  "info"
-                );
-                setVideoOn((isVideoOn) => !isVideoOn);
               }}
               chatCollapsed={chatCollapsed}
               toggleChat={() => {
@@ -250,8 +249,6 @@ const CallBase: React.FC<Props> = React.memo(
               timerOn={timerOn}
               toggleTimer={() => setTimerOn((timerOn) => !timerOn)}
               terminateCall={() => push(`/feedback/${call?.id}`)}
-              call={call}
-              roomClient={roomClient}
               hasUnreadMessages={hasUnreadMessages}
             />
           )}

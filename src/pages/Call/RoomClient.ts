@@ -257,7 +257,6 @@ class RoomClient {
         });
       }
     });
-    console.log(this.handlers["pauseVideo"]);
     this.handlers["pauseVideo"].forEach((f) => f());
   }
 
@@ -292,7 +291,6 @@ class RoomClient {
         });
       }
     });
-    console.log(this.handlers["pauseAudio"]);
     this.handlers["pauseAudio"].forEach((f) => f());
   }
 
@@ -314,7 +312,6 @@ class RoomClient {
   }
 
   async destroy() {
-    console.log("destroying");
     this.socket.off("connect");
     this.socket.off("consume");
     this.socket.off("textMessage");
