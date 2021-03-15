@@ -1,13 +1,13 @@
-import React from "react";
+import React, { HTMLAttributes } from "react";
 import "./VolumeContainer.scss";
 
-interface Props {
+type PropsType = HTMLAttributes<HTMLDivElement> & {
   audioVolume: number;
-}
+};
 
-export const VolumeContainer = ({ audioVolume }: Props) => {
+export const VolumeContainer = ({ audioVolume, ...props }: PropsType) => {
   return (
-    <div className="volume-container">
+    <div {...props}>
       <div className={`bar.level${audioVolume}`} />
     </div>
   );

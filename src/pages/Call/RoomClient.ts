@@ -1,6 +1,7 @@
 import * as mediasoupClient from "mediasoup-client";
 import { Transport } from "mediasoup-client/lib/types";
 import { MediaType } from "src/types/Call";
+import { getMedia } from "src/utils";
 /*
   Copyright 2020 Ameelio.org.
   Published under the GPL v3.
@@ -52,18 +53,18 @@ const config = {
   },
 };
 
-function getMediaConstraints(
-  type: MediaType,
-  deviceId?: number
-): MediaStreamConstraints {
-  if (type === "audio") {
-    return { audio: true };
-  } else {
-    return {
-      video: true,
-    };
-  }
-}
+// function getMediaConstraints(
+//   type: MediaType,
+//   deviceId?: number
+// ): MediaStreamConstraints {
+//   if (type === "audio") {
+//     return { audio: true };
+//   } else {
+//     return {
+//       video: true,
+//     };
+//   }
+// }
 
 export async function stopStream(stream: MediaStream) {
   const tracks = stream.getTracks();
@@ -195,8 +196,7 @@ class RoomClient {
     deviceId?: number
   ): Promise<MediaStream | null> {
     if (!this.producerTransport) return null;
-    const mediaConstraints = getMediaConstraints(type, deviceId);
-    const stream = await navigator.mediaDevices.getUserMedia(mediaConstraints);
+    const stream = await getMedia(type, deviceId);
 
     const track = (type === "audio"
       ? stream.getAudioTracks()
