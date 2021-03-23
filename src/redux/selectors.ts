@@ -3,6 +3,7 @@ import { callAdapter } from "./modules/call";
 import { connectionAdapter } from "./modules/connection";
 import { BaseCall, Call } from "src/types/Call";
 import { notEmpty } from "src/utils/utils";
+
 // get selectors from entity adapter
 export const {
   selectAll: selectAllCalls,

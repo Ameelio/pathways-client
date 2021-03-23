@@ -5,7 +5,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { sessionReducer } from "./modules/session";
 import { callSlice } from "./modules/call";
 import { connectionSlice } from "./modules/connection";
-import { modalsSlice } from "src/components/Modals/modalsSlice";
+import { modalsSlice } from "src/redux/modules/modalsSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { commonSlice } from "src/components/Common/commonSlice";
 

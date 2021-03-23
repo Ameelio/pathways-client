@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "src/redux";
 import { Call } from "src/types/Call";
 import { genFullName } from "src/utils/utils";
-import { openCancelCallModal } from "../Modals/modalsSlice";
+import { openModal } from "src/redux/modules/modalsSlice";
 
 interface Props {
   selectedCall: Call | null;
@@ -87,7 +87,14 @@ const CallDetails: React.FC<Props> = ({ selectedCall, onClose }) => {
         <Row>
           <Button
             className="rounded-sm"
-            onClick={() => dispatch(openCancelCallModal(selectedCall))}
+            onClick={() =>
+              dispatch(
+                openModal({
+                  activeType: "CANCEL_CALL_MODAL",
+                  entity: selectedCall,
+                })
+              )
+            }
           >
             {t("call.cancel")}
           </Button>

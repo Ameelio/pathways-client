@@ -29,3 +29,10 @@ export interface CallMessage {
   from: CallParticipant;
   timestamp: string;
 }
+
+export interface ControlledStream {
+  stream: MediaStream;
+  paused: boolean;
+}
+
+export type MediaType = "video" | "audio";

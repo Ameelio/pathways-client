@@ -113,12 +113,13 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
               rules={[{ required: true, message: "Language is required." }]}
             >
               <Radio.Group
-                defaultValue={Object.keys(LANGUAGES)[0]}
                 className="w-100"
                 onChange={(e) => i18n.changeLanguage(e.target.value)}
               >
                 {Object.entries(LANGUAGES).map(([key, value]) => (
-                  <Radio.Button value={key}>{value}</Radio.Button>
+                  <Radio.Button key={key} value={key}>
+                    {value}
+                  </Radio.Button>
                 ))}
               </Radio.Group>
             </Form.Item>

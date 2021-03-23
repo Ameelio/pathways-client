@@ -7,12 +7,14 @@ import ConnectionsList from "./ConnectionsList";
 import DashboardHeader from "./DashboardHeader";
 import CallDetails from "./CallDetails";
 import PageLayout from "src/components/Common/PageLayout";
+import { FAQResource } from "src/types/UI";
 
 interface Props {
   calls: Call[];
   connections: Connection[];
+  openInfoModal: (resource: FAQResource) => void;
 }
-const Dashboard: React.FC<Props> = ({ calls, connections }) => {
+const Dashboard: React.FC<Props> = ({ calls, connections, openInfoModal }) => {
   const [selectedCall, setSelectedCall] = useState<null | Call>(null);
   return (
     <PageLayout>
@@ -27,6 +29,7 @@ const Dashboard: React.FC<Props> = ({ calls, connections }) => {
             <CallsList
               calls={calls}
               selectCall={(call: Call) => setSelectedCall(call)}
+              openInfoModal={openInfoModal}
             />
           </Col>
           <Col span={8}>

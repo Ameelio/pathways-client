@@ -1,4 +1,4 @@
-import { Col, Row, Space, Typography } from "antd";
+import { Col, Space, Typography } from "antd";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Quote } from "src/types/Common";

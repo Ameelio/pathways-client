@@ -2,22 +2,30 @@ import { Card, Typography } from "antd";
 import { push } from "connected-react-router";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useAppDispatch } from "src/redux";
 import { Call } from "src/types/Call";
+import { FAQResource } from "src/types/UI";
 import CallItem from "./CallItem";
 
 interface Props {
   calls: Call[];
   selectCall: (call: Call) => void;
+  openInfoModal: (resource: FAQResource) => void;
 }
 
-const CallsList: React.FC<Props> = ({ calls, selectCall }: Props) => {
+const CallsList: React.FC<Props> = ({
+  calls,
+  selectCall,
+  openInfoModal,
+}: Props) => {
   const { t } = useTranslation("dashboard");
+  const dispatch = useAppDispatch();
 
   return (
     <Card
       title={t("call.title")}
       extra={
-        <Typography.Link onClick={() => push("/")}>
+        <Typography.Link onClick={() => dispatch(push("/"))}>
           {t("call.seeAll")}
         </Typography.Link>
       }
@@ -36,7 +44,8 @@ const CallsList: React.FC<Props> = ({ calls, selectCall }: Props) => {
         <CallItem
           call={call}
           selectCall={selectCall}
-          navigate={push}
+          navigate={(path) => dispatch(push(path))}
+          openPrivacyNotice={openInfoModal}
           key={`callItem-${call.id}`}
         />
       ))}

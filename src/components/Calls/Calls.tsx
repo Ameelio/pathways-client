@@ -1,16 +1,16 @@
 import { Avatar, Button, Col, Row, Space, Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
-import { BaseCall } from "src/types/Call";
+import { Call } from "src/types/Call";
 import { User } from "src/types/User";
 import PageLayout from "src/components/Common/PageLayout";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { genFullName } from "src/utils/utils";
 import { useAppDispatch } from "src/redux";
-import { openCancelCallModal } from "../Modals/modalsSlice";
+import { openModal } from "src/redux/modules/modalsSlice";
 
 interface Props {
-  calls: BaseCall[];
+  calls: Call[];
   user: User;
 }
 
@@ -65,7 +65,11 @@ const Calls: React.FC<Props> = ({ calls, user }) => {
           cancel: (
             <Button
               type="link"
-              onClick={() => dispatch(openCancelCallModal(call))}
+              onClick={() =>
+                dispatch(
+                  openModal({ activeType: "CANCEL_CALL_MODAL", entity: call })
+                )
+              }
             >
               {t("cancel")}
             </Button>
@@ -73,7 +77,7 @@ const Calls: React.FC<Props> = ({ calls, user }) => {
         };
       })
     );
-  }, [calls, user]);
+  }, [calls, user, dispatch, t]);
 
   return (
     <PageLayout>

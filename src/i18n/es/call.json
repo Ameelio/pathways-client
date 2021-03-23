@@ -11,13 +11,38 @@
     "videoOff": "turned off their video"
   },
   "waitingRoom": {
+    "questionOfDay": "Question of the day:",
     "initialization": "Initializing video call...",
     "waitingForPrefix": "Waiting for",
     "waitingForSuffix": "to join the call",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "whenWillCallConnect": "When will my call connect?",
+    "checkConnection": "Check Connection",
+    "leaveWaitingRoom": "Leave Waiting Room"
   },
   "chat": {
     "title": "Chat",
-    "placeholder": "Type here..."
+    "placeholder": "Type here...",
+    "monitorWarning": "Note: All messages are monitored for security purposes."
+  },
+  "videoOverlay": {
+    "on": "On",
+    "off": "off",
+    "chat": "Chat",
+    "video": "Video",
+    "mic": "Mic",
+    "showTime": "Show Time",
+    "hideTime": "Hide Time",
+    "leaveCall": "Leave Call"
+  },
+  "you": {
+    "You": "You",
+    "enabledWebcam": "turned on your webcam",
+    "disabledWebcam": "turned off your webcam",
+    "mutedMic": "muted your microphone",
+    "unmutedMic": "unmuted your microphone"
+  },
+  "testConnection": {
+    "title": "Check Your Audio & Video"
   }
 }

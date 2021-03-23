@@ -2,19 +2,23 @@ import { Avatar, Button, Card, Row, Space, Typography } from "antd";
 import { differenceInMinutes, format, isToday, isTomorrow } from "date-fns";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router";
 import { Call } from "src/types/Call";
+import { FAQResource } from "src/types/UI";
 import { genFullName } from "src/utils/utils";
 
 interface Props {
   call: Call;
   selectCall: (call: Call) => void;
   navigate: (path: string) => void;
+  openPrivacyNotice: (resource: FAQResource) => void;
 }
-const CallItem: React.FC<Props> = ({ call, selectCall, navigate }: Props) => {
+const CallItem: React.FC<Props> = ({
+  call,
+  selectCall,
+  navigate,
+  openPrivacyNotice,
+}: Props) => {
   const { t } = useTranslation("dashboard");
-
-  const history = useHistory();
 
   const duration = differenceInMinutes(
     new Date(call.end),
@@ -52,7 +56,14 @@ const CallItem: React.FC<Props> = ({ call, selectCall, navigate }: Props) => {
               size="large"
               type="primary"
               className="rounded-sm"
-              onClick={() => navigate(`call/${call.id}`)}
+              onClick={() => {
+                navigate(`call/${call.id}`);
+                openPrivacyNotice({
+                  title: t("privacyNotice.title"),
+                  body: t("privacyNotice.body"),
+                  okBtnText: t("privacyNotice.okText"),
+                });
+              }}
             >
               {t("call.join")}
             </Button>

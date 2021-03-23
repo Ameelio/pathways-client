@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.scss";
-import { RootState, useAppSelector } from "src/redux";
+import { useAppSelector } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
 import { ConnectedRouter, push } from "connected-react-router";
 import { Layout } from "antd";
@@ -8,12 +8,12 @@ import { Redirect, Route, Switch } from "react-router";
 import { History } from "history";
 import ProtectedRoute, {
   ProtectedRouteProps,
-} from "./components/hocs/ProtectedRoute";
+} from "./components/Hocs/ProtectedRoute";
 import LoginPage from "src/pages/Login";
 import { ROUTES } from "./utils/constants";
 import { useEffect } from "react";
 import { fetchConnections } from "./redux/modules/connection";
-import Sidebar from "./components/menu/Sidebar";
+import Sidebar from "./components/Menu/Sidebar";
 import { useTranslation } from "react-i18next";
 import Modals from "./components/Modals/Modals";
 
