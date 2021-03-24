@@ -1,6 +1,7 @@
 import { Store } from "src/redux";
+import { FacilitiesAPIResponse } from "./interfaces/apiResponses";
 
-export const API_URL = `${process.env.REACT_APP_BASE_URL}api/`;
+export const API_URL = `${process.env.REACT_APP_CONNECT_API_URL}`;
 
 export interface ApiResponse {
   date: number;
@@ -39,7 +40,7 @@ export async function fetchAuthenticated(
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${state.session.authInfo.token}`,
+      // Authorization: `Bearer ${state.session.authInfo.token}`,
       "X-Ameelio-User-Type": "inmate",
       "X-Ameelio-Inmate-Id": `${state.session.authInfo.id}`,
     },
@@ -47,6 +48,26 @@ export async function fetchAuthenticated(
 
   const response = await fetchTimeout(
     `${API_URL}/inmate/${state.session.authInfo.id}/${fetchUrl}`,
+    requestOptions,
+    timeout
+  );
+
+  const body = await response.json();
+
+  return body;
+}
+
+export async function fetchFacilities(
+  timeout = 1500
+): Promise<FacilitiesAPIResponse> {
+  const requestOptions = {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await fetchTimeout(
+    `${API_URL}facilities`,
     requestOptions,
     timeout
   );

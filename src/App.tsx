@@ -33,7 +33,7 @@ function App({
   const session = useAppSelector((state) => state.session);
 
   const defaultProtectedRouteProps: ProtectedRouteProps = {
-    isAuthenticated: session.authInfo.token !== "", // TODO: improve this later
+    isAuthenticated: session.isLoggedIn, // TODO: improve this later
     authenticationPath: "/login",
   };
 

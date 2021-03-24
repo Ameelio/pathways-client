@@ -2,16 +2,13 @@ export interface BasePersona {
   id: number;
   firstName: string;
   lastName: string;
-  location: string;
   dateOfBirth: string;
   profileImgPath?: string;
 }
 
 export interface User extends BasePersona {
-  inmateNumber: string;
+  inmateIdentification: string;
   quota: number;
-  sentence: string;
-  sentenceLength: string;
   location: string;
   race: string;
 }
