@@ -43,6 +43,7 @@ export async function loginWithCredentials(cred: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         facilityId: cred.facilityId,
         inmateIdentification: cred.inmateNumber,

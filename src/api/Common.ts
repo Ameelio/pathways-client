@@ -44,10 +44,11 @@ export async function fetchAuthenticated(
       "X-Ameelio-User-Type": "inmate",
       "X-Ameelio-Inmate-Id": `${state.session.authInfo.id}`,
     },
+    credentials: "include",
   };
 
   const response = await fetchTimeout(
-    `${API_URL}/inmate/${state.session.authInfo.id}/${fetchUrl}`,
+    `${API_URL}inmates/${state.session.authInfo.id}/${fetchUrl}`,
     requestOptions,
     timeout
   );
