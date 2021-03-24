@@ -35,22 +35,19 @@ export async function loginWithCredentials(cred: {
   facilityId: number;
   language: Language;
 }): Promise<void> {
-  const response = await fetchTimeout(
-    new URL("/auth/member/login", API_URL).toString(),
-    {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        facilityId: cred.facilityId,
-        inmateIdentification: cred.inmateNumber,
-        pin: cred.pin,
-      }),
-    }
-  );
+  const response = await fetchTimeout(`${API_URL}auth/member/login/`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      facilityId: cred.facilityId,
+      inmateIdentification: cred.inmateNumber,
+      pin: cred.pin,
+    }),
+  });
   const body = await response.json();
   await initializeSession(body.data, cred.language);
 }

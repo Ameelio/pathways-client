@@ -40,9 +40,6 @@ export async function fetchAuthenticated(
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      // Authorization: `Bearer ${state.session.authInfo.token}`,
-      "X-Ameelio-User-Type": "inmate",
-      "X-Ameelio-Inmate-Id": `${state.session.authInfo.id}`,
     },
     credentials: "include",
   };
