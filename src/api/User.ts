@@ -24,9 +24,6 @@ async function initializeSession(data: any, language: Language) {
       language,
     })
   );
-
-  // TO
-  // localStorage.setItem(TOKEN_KEY, token);
 }
 
 export async function loginWithCredentials(cred: {

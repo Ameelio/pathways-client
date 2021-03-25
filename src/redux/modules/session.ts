@@ -3,7 +3,6 @@ import { User } from "src/types/User";
 import { Language } from "src/types/Session";
 
 interface AuthInfo {
-  // token: string;
   id: number;
   type: "inmate";
 }

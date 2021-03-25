@@ -50,6 +50,10 @@ export async function fetchAuthenticated(
     timeout
   );
 
+  if (response.status !== 200) {
+    throw response;
+  }
+
   const body = await response.json();
 
   return body;
