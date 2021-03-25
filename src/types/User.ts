@@ -2,8 +2,8 @@ export interface BasePersona {
   id: number;
   firstName: string;
   lastName: string;
-  dateOfBirth: string;
-  profileImgPath?: string;
+  // dateOfBirth: string;
+  profileImagePath?: string;
 }
 
 export interface User extends BasePersona {
@@ -14,8 +14,5 @@ export interface User extends BasePersona {
 }
 
 export interface Contact extends BasePersona {
-  relationship: string;
-  details: string;
   email: string;
-  dob: string;
 }

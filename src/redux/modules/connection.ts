@@ -11,7 +11,7 @@ export const fetchConnections = createAsyncThunk(
   "connections/fetchAll",
   async () => {
     const body = await fetchAuthenticated(`connections`);
-    if (body.status !== 200) {
+    if (!body.data) {
       throw body;
     }
 
