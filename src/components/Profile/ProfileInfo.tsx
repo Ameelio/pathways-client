@@ -21,12 +21,14 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
   const [totalMinutes, setTotalMinutes] = useState(0);
 
   useEffect(() => {
-    const total = calls
-      .map((call) =>
-        differenceInMinutes(new Date(call.end), new Date(call.start))
-      )
-      .reduce((a, b) => a + b);
-    setTotalMinutes(total);
+    if (calls.length) {
+      const total = calls
+        .map((call) =>
+          differenceInMinutes(new Date(call.end), new Date(call.start))
+        )
+        .reduce((a, b) => a + b);
+      setTotalMinutes(total);
+    }
   }, [calls]);
 
   return (
