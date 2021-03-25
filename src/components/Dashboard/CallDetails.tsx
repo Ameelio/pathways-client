@@ -70,7 +70,7 @@ const CallDetails: React.FC<Props> = ({ selectedCall, onClose }) => {
               <TeamOutlined className="text-2xl" />
             </Col>
             <Col>
-              <Avatar src={selectedCall.connection.user.profileImgPath} />
+              <Avatar src={selectedCall.connection.user.profileImagePath} />
             </Col>
             <Col style={{ fontSize: 14 }}>
               <Typography.Text type="secondary">

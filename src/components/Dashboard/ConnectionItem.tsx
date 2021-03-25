@@ -32,7 +32,11 @@ const ConnectionItem: React.FC<Props> = ({ connection }) => {
   return (
     <Col key={connection.id} className="d-flex flex-column align-items-center">
       <Space direction="vertical">
-        <Avatar shape="square" size={80} src={connection.user.profileImgPath} />
+        <Avatar
+          shape="square"
+          size={80}
+          src={connection.user.profileImagePath}
+        />
         <div>
           <div>
             <Typography.Text>{genFullName(connection.user)}</Typography.Text>

@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { RootState } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
 import {
@@ -11,6 +11,7 @@ import {
   Row,
   Radio,
   Col,
+  Select,
 } from "antd";
 import { Redirect } from "react-router";
 import { loginWithCredentials } from "src/api/User";
@@ -23,6 +24,7 @@ import { useTranslation } from "react-i18next";
 import { LANGUAGES, QUOTES } from "src/utils/constants";
 import { BORDER_RADIUS } from "src/styles/Layout";
 import { Quote } from "src/types/Common";
+import { fetchFacilities } from "src/api/Common";
 
 const { Content } = Layout;
 
@@ -47,8 +49,22 @@ const FORM_TAIL_LAYOUT = {
 
 function LoginContainer({ session }: PropsFromRedux): ReactElement {
   const { t, i18n } = useTranslation("login");
+  const { Option } = Select;
 
   const [dailyQuote] = useState(getRandomItem(QUOTES) as Quote);
+  const [facilityOptions, setFacilityOptions] = useState<JSX.Element[]>([]);
+
+  useEffect(() => {
+    const getFacilityOptions = async () => {
+      const response = await fetchFacilities();
+      const facilities = response.data;
+      const facilityOptions = facilities.map((facility) => (
+        <Option value={facility.id}>{facility.name}</Option>
+      ));
+      setFacilityOptions(facilityOptions);
+    };
+    getFacilityOptions();
+  }, [Option]);
 
   if (session.isLoggedIn) {
     return <Redirect to="/" />;
@@ -59,6 +75,7 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
       await loginWithCredentials({
         inmateNumber: values.inmateNumber,
         pin: values.pin,
+        facilityId: values.facilityId,
         language: values.language,
       });
     } catch (err) {
@@ -144,6 +161,15 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
                 prefix={<LockOutlined />}
                 placeholder={t("placeholder.pinCode")}
               />
+            </Form.Item>
+            <Form.Item
+              name="facilityId"
+              label="Facility"
+              rules={[
+                { required: true, message: "Facility must be selected." },
+              ]}
+            >
+              <Select>{facilityOptions}</Select>
             </Form.Item>
 
             <Form.Item {...FORM_TAIL_LAYOUT} style={{ borderRadius: 4 }}>

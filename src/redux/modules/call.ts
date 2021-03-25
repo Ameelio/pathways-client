@@ -47,7 +47,7 @@ export const initializeVisit = createAsyncThunk<
       {
         type: "inmate",
         id: session.user.id,
-        token: session.authInfo.token,
+        // token: session.authInfo.token,
       },
       resolve
     );

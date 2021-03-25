@@ -15,10 +15,10 @@ const ConnectionsList: React.FC<Props> = ({ calls, connections }: Props) => {
   const [connectionItems, setConnectionItems] = useState<JSX.Element[] | null>(
     null
   );
-  const [activeContactTab, setActiveContactTab] = useState("approved");
+  const [activeContactTab, setActiveContactTab] = useState("active");
   const tabList = [
     {
-      key: "approved",
+      key: "active",
       tab: t("connection.active"),
     },
     {
