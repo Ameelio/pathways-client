@@ -12,13 +12,15 @@ interface Props {
 }
 
 const ConnectionItem: React.FC<Props> = ({ connection }) => {
+  console.log("hey connection");
+  console.log(connection);
   const { t } = useTranslation("dashboard");
   const endedCalls = useAppSelector(selectEndedCalls);
 
   // TODO: Remove this messy function and pass the days past in the api endpoint
   // TODO: CHANGEEE
   const getDaysPastNum = (connectionId: number) => {
-    return 4;
+    return undefined;
     // if (!endedCalls || !endedCalls.length) return null;
     // const filteredEndedCalls = endedCalls.filter(
     //   (call) => call.connectionId === connectionId
