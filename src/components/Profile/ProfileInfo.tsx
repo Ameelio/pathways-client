@@ -37,7 +37,7 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
         <PageHeader className="p-6 border border-solid border-opacity-1 border-gray-200">
           <Space className="flex justify-between">
             <Space>
-              <Avatar src={user.profileImgPath} size={AVATAR_LARGE} />
+              <Avatar src={user.profileImagePath} size={AVATAR_LARGE} />
               <Space direction="vertical">
                 <Typography.Title level={4}>
                   <Typography.Text strong>{genFullName(user)}</Typography.Text>

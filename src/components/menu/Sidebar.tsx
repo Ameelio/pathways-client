@@ -28,7 +28,7 @@ export default function Sidebar({ user, navigate }: Props): ReactElement {
           onClick={() => navigate(`/profile/${user.id}`)}
         >
           <Space>
-            <Avatar src={user.profileImgPath} size="large" />
+            <Avatar src={user.profileImagePath} size="large" />
             <Typography.Text>{genFullName(user)}</Typography.Text>
           </Space>
         </Row>

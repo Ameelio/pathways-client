@@ -10,7 +10,7 @@ async function initializeSession(data: any, language: Language) {
     firstName: data.firstName,
     lastName: data.lastName,
     dateOfBirth: data.dateOfBirth,
-    profileImgPath: data.profileImagePath,
+    profileImagePath: data.profileImagePath,
     inmateIdentification: data.inmateIdentification,
     quota: data.quota,
     location: data.location,

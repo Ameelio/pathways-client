@@ -58,7 +58,7 @@ const Calls: React.FC<Props> = ({ calls, user }) => {
           )}`,
           participants: (
             <Space>
-              <Avatar src={user.profileImgPath} size="small" />
+              <Avatar src={user.profileImagePath} size="small" />
               <Typography.Text>{genFullName(user)}</Typography.Text>
             </Space>
           ),

@@ -44,7 +44,7 @@ const CallItem: React.FC<Props> = ({
             {format(new Date(call.start), "h:mm aaa")} • {`${duration} minutes`}
           </Typography.Text>
           <Space style={{ paddingTop: 18 }}>
-            <Avatar src={call.connection.user.profileImgPath} />
+            <Avatar src={call.connection.user.profileImagePath} />
             <Typography.Text type="secondary">
               {genFullName(call.connection.user)}
             </Typography.Text>
