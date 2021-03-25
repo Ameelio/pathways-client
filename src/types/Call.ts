@@ -1,4 +1,5 @@
 import { Connection } from "./Connection";
+import { User } from "./User";
 
 export interface Kiosk {
   id: number;
@@ -6,16 +7,17 @@ export interface Kiosk {
 
 export interface BaseCall {
   id: number;
-  start: number;
-  end: number;
+  scheduledStart: Date;
+  scheduledEnd: Date;
   approved: boolean;
   status: "ended" | "scheduled" | "terminated" | "rescheduled" | "live";
   connectionId: number;
+  userParticipants: User[];
   kioskId: number;
 }
 
 export interface Call extends BaseCall {
-  connection: Connection;
+  // connection: Connection;
   kiosk?: Kiosk;
 }
 

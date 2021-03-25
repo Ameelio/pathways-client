@@ -29,8 +29,8 @@ const CallDetails: React.FC<Props> = ({ selectedCall, onClose }) => {
   const duration =
     selectedCall &&
     differenceInMinutes(
-      new Date(selectedCall.end),
-      new Date(selectedCall.start)
+      new Date(selectedCall.scheduledEnd),
+      new Date(selectedCall.scheduledStart)
     );
 
   return selectedCall ? (
@@ -52,13 +52,19 @@ const CallDetails: React.FC<Props> = ({ selectedCall, onClose }) => {
             <Col className="text-sm">
               <div>
                 <Typography.Text>
-                  {format(new Date(selectedCall.start), "EEEE, MMMM d")}
+                  {format(
+                    new Date(selectedCall.scheduledStart),
+                    "EEEE, MMMM d"
+                  )}
                 </Typography.Text>
               </div>
               <div>
                 <Typography.Text type="secondary">
-                  {format(new Date(selectedCall.start), "h:mm aaa OOO")} •{" "}
-                  {`${duration}mins`}
+                  {format(
+                    new Date(selectedCall.scheduledStart),
+                    "h:mm aaa OOO"
+                  )}{" "}
+                  • {`${duration}mins`}
                 </Typography.Text>
               </div>
             </Col>
@@ -70,11 +76,11 @@ const CallDetails: React.FC<Props> = ({ selectedCall, onClose }) => {
               <TeamOutlined className="text-2xl" />
             </Col>
             <Col>
-              <Avatar src={selectedCall.connection.user.profileImagePath} />
+              <Avatar src={selectedCall.userParticipants[0].profileImagePath} />
             </Col>
             <Col style={{ fontSize: 14 }}>
               <Typography.Text type="secondary">
-                {genFullName(selectedCall.connection.user)}
+                {genFullName(selectedCall.userParticipants[0])}
               </Typography.Text>
             </Col>
           </Space>

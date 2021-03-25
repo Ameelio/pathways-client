@@ -1,6 +1,6 @@
 import { Avatar, Button, Col, Row, Space, Table, Typography } from "antd";
 import React, { useEffect, useState } from "react";
-import { Call } from "src/types/Call";
+import { BaseCall, Call } from "src/types/Call";
 import { User } from "src/types/User";
 import PageLayout from "src/components/Common/PageLayout";
 import { useTranslation } from "react-i18next";
@@ -10,7 +10,7 @@ import { useAppDispatch } from "src/redux";
 import { openModal } from "src/redux/modules/modalsSlice";
 
 interface Props {
-  calls: Call[];
+  calls: BaseCall[];
   user: User;
 }
 
@@ -41,6 +41,8 @@ const tableColumns = [
 ];
 
 const Calls: React.FC<Props> = ({ calls, user }) => {
+  console.log("hey from calls");
+  console.log(calls);
   const dispatch = useAppDispatch();
   const [tableData, setTableData] = useState<TableData[] | undefined>(
     undefined
@@ -51,11 +53,11 @@ const Calls: React.FC<Props> = ({ calls, user }) => {
     setTableData(
       calls.map((call) => {
         return {
-          date: format(new Date(call.start), "eeee, LLLL d"),
-          time: `${format(new Date(call.start), "h:mm bbb")} - ${format(
-            new Date(call.start),
+          date: format(new Date(call.scheduledStart), "eeee, LLLL d"),
+          time: `${format(
+            new Date(call.scheduledStart),
             "h:mm bbb"
-          )}`,
+          )} - ${format(new Date(call.scheduledStart), "h:mm bbb")}`,
           participants: (
             <Space>
               <Avatar src={user.profileImagePath} size="small" />

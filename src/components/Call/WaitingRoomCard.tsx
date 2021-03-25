@@ -52,8 +52,12 @@ export const WaitingRoomCard = ({
         </Space>
 
         <Typography.Text className="text-white">
-          {format(new Date(call.start), "HH:mm")} •{" "}
-          {differenceInMinutes(new Date(call.end), new Date(call.start))}mins
+          {format(new Date(call.scheduledStart), "HH:mm")} •{" "}
+          {differenceInMinutes(
+            new Date(call.scheduledEnd),
+            new Date(call.scheduledStart)
+          )}
+          mins
         </Typography.Text>
         <Typography.Text className="text-white">
           {t("waitingRoom.questionOfDay")}:{" "}

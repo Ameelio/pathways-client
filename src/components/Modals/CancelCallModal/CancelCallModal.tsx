@@ -14,12 +14,16 @@ interface Props {
 const CancelCallModal: React.FC<Props> = ({ data, closeModal }) => {
   const { t } = useTranslation("modals");
   const call = data.entity;
-  const fullName = genFullName(call.connection.user);
-  const startDate = format(new Date(call.start), "EEEE, MMMM d");
-  const startTime = format(new Date(call.start), "h:mm aaa OOO");
+  const fullName = genFullName(call.userParticipants[0]);
+  const startDate = format(new Date(call.scheduledStart), "EEEE, MMMM d");
+  const startTime = format(new Date(call.scheduledStart), "h:mm aaa OOO");
   const duration =
-    call && differenceInMinutes(new Date(call.end), new Date(call.start));
-  const firstName = call.connection.user.firstName;
+    call &&
+    differenceInMinutes(
+      new Date(call.scheduledEnd),
+      new Date(call.scheduledEnd)
+    );
+  const firstName = call.userParticipants[0].firstName;
 
   return (
     <Modal

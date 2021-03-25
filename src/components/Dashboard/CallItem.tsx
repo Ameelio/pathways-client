@@ -21,11 +21,11 @@ const CallItem: React.FC<Props> = ({
   const { t } = useTranslation("dashboard");
 
   const duration = differenceInMinutes(
-    new Date(call.end),
-    new Date(call.start)
+    new Date(call.scheduledEnd),
+    new Date(call.scheduledStart)
   );
 
-  const started = new Date(call.start) < new Date();
+  const started = new Date(call.scheduledStart) < new Date();
 
   const getDateLabel = (date: Date) => {
     if (isToday(date)) return "Today";
@@ -38,15 +38,16 @@ const CallItem: React.FC<Props> = ({
       <Row justify="space-between" align="bottom">
         <Space direction="vertical">
           <Typography.Title level={5}>
-            {getDateLabel(new Date(call.start))}
+            {getDateLabel(new Date(call.scheduledStart))}
           </Typography.Title>
           <Typography.Text>
-            {format(new Date(call.start), "h:mm aaa")} • {`${duration} minutes`}
+            {format(new Date(call.scheduledStart), "h:mm aaa")} •{" "}
+            {`${duration} minutes`}
           </Typography.Text>
           <Space style={{ paddingTop: 18 }}>
-            <Avatar src={call.connection.user.profileImagePath} />
+            <Avatar src={call.userParticipants[0].profileImagePath} />
             <Typography.Text type="secondary">
-              {genFullName(call.connection.user)}
+              {genFullName(call.userParticipants[0])}
             </Typography.Text>
           </Space>
         </Space>

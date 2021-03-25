@@ -13,7 +13,7 @@ import { showToast } from "src/utils";
 
 export const fetchCalls = createAsyncThunk("calls/fetchAll", async () => {
   const body = await fetchAuthenticated(`calls`);
-  if (body.status !== 200) {
+  if (!body.data) {
     throw body;
   }
 
