@@ -8,4 +8,9 @@ export interface Connection {
   statusDetails: string;
   relationship: string;
   user: Contact;
+  lastCall: {
+    id: number;
+    scheduledStart: Date;
+    scheduledEnd: Date;
+  };
 }

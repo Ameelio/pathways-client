@@ -41,8 +41,6 @@ const tableColumns = [
 ];
 
 const Calls: React.FC<Props> = ({ calls, user }) => {
-  console.log("hey from calls");
-  console.log(calls);
   const dispatch = useAppDispatch();
   const [tableData, setTableData] = useState<TableData[] | undefined>(
     undefined
