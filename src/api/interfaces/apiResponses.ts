@@ -1,4 +1,4 @@
-interface FacilityRO {
+export interface FacilityRO {
   id: number;
   name: string;
 }

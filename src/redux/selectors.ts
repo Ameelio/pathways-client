@@ -26,7 +26,7 @@ const getCallEntities = (
   // const kiosk = selectKioskById(state, call.kioskId);
   // if (!kiosk) return;
 
-  return { ...call };
+  return call;
 };
 
 export const selectAllCallInfo = (state: RootState, callId: number) => {

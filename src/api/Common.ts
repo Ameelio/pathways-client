@@ -56,6 +56,10 @@ export async function fetchAuthenticated(
 
   const body = await response.json();
 
+  if (!body.data) {
+    throw body;
+  }
+
   return body;
 }
 
