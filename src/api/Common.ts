@@ -69,7 +69,7 @@ export async function fetchFacilities(
     },
   };
   const response = await fetchTimeout(
-    `${API_URL}facilities`,
+    `${API_URL}public/facilities`,
     requestOptions,
     timeout
   );

@@ -4,5 +4,7 @@ interface FacilityRO {
 }
 
 export interface FacilitiesAPIResponse {
-  data: FacilityRO[];
+  data: {
+    results: FacilityRO[];
+  };
 }

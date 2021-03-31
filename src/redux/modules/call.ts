@@ -17,6 +17,9 @@ export const fetchCalls = createAsyncThunk("calls/fetchAll", async () => {
     throw body;
   }
 
+  console.log("hey calls");
+  console.log(body);
+
   const calls = ((body.data as Record<string, unknown>)
     .calls as BaseCall[]).map((call) => camelcaseKeys(call));
 

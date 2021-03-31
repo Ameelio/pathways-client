@@ -57,7 +57,7 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
   useEffect(() => {
     const getFacilityOptions = async () => {
       const response = await fetchFacilities();
-      const facilities = response.data;
+      const facilities = response.data.results;
       const facilityOptions = facilities.map((facility) => (
         <Option value={facility.id}>{facility.name}</Option>
       ));

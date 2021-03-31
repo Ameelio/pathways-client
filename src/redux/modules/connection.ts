@@ -11,6 +11,8 @@ export const fetchConnections = createAsyncThunk(
   "connections/fetchAll",
   async () => {
     const body = await fetchAuthenticated(`connections`);
+    console.log("hey");
+    console.log(body);
     if (!body.data) {
       throw body;
     }
