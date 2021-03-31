@@ -22,6 +22,6 @@
     "active": "Active",
     "pending": "Pending",
     "title": "Contacts",
-    "lastCall": "Last call: {{daysPastNum}} days"
+    "lastCall": "Last call: {{daysPastNum}} days ago"
   }
 }

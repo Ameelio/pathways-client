@@ -14,8 +14,8 @@ const ConnectionItem: React.FC<Props> = ({ connection }) => {
 
   const getDaysPastNum = () => {
     return differenceInDays(
-      new Date(connection.lastCall.scheduledEnd),
-      new Date()
+      new Date(),
+      new Date(connection.lastCall.scheduledEnd)
     );
   };
 
