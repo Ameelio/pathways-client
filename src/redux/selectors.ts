@@ -1,6 +1,7 @@
 import { RootState } from ".";
 import { callAdapter } from "./modules/call";
 import { connectionAdapter } from "./modules/connection";
+import { contactsAdapter } from "./modules/contactsSlice";
 import { BaseCall, Call } from "src/types/Call";
 import { notEmpty } from "src/utils/utils";
 
@@ -11,15 +12,15 @@ export const {
 } = callAdapter.getSelectors<RootState>((state) => state.calls);
 
 export const {
-  selectAll: selectAllConnections,
-  selectById: selectConnectionById,
-} = connectionAdapter.getSelectors<RootState>((state) => state.connections);
+  selectAll: selectAllContacts,
+  selectById: selectContactById,
+} = contactsAdapter.getSelectors<RootState>((state) => state.contacts);
 
 const getCallEntities = (
   state: RootState,
   call: BaseCall
 ): Call | undefined => {
-  const connection = selectConnectionById(state, call.connectionId);
+  const connection = selectContactById(state, call.connectionId);
   if (!connection) return;
 
   // TODO add kiosk info soon

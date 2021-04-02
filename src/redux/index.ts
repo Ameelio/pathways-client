@@ -8,6 +8,7 @@ import { connectionSlice } from "./modules/connection";
 import { modalsSlice } from "src/redux/modules/modalsSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { commonSlice } from "src/components/Common/commonSlice";
+import { contactsSlice } from "./modules/contactsSlice";
 
 export const history = createBrowserHistory();
 
@@ -16,6 +17,7 @@ export const createRootReducer = (history: History) =>
     common: commonSlice.reducer,
     session: sessionReducer,
     calls: callSlice.reducer,
+    contacts: contactsSlice.reducer,
     modals: modalsSlice.reducer,
     connections: connectionSlice.reducer,
     router: connectRouter(history),

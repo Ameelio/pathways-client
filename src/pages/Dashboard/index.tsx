@@ -2,11 +2,7 @@ import React, { useEffect } from "react";
 import { RootState, useAppDispatch } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
 import { fetchCalls } from "src/redux/modules/call";
-import {
-  selectAllCalls,
-  selectAllConnections,
-  selectUpcomingCalls,
-} from "src/redux/selectors";
+import { selectAllCalls, selectAllContacts } from "src/redux/selectors";
 import { push } from "connected-react-router";
 import "src/i18n/config";
 import Dashboard from "src/components/Dashboard";
@@ -15,7 +11,7 @@ import { openModal } from "src/redux/modules/modalsSlice";
 
 const mapStateToProps = (state: RootState) => ({
   calls: selectAllCalls(state),
-  connections: selectAllConnections(state),
+  connections: selectAllContacts(state),
   firstName: state.session.user.firstName,
 });
 
@@ -38,7 +34,7 @@ const DashboardPage: React.FC<PropsFromRedux> = ({
   return (
     <Dashboard
       calls={calls}
-      connections={connections}
+      contacts={connections}
       openInfoModal={(resource: FAQResource) =>
         dispatch(openModal({ activeType: "RESOURCE_MODAL", entity: resource }))
       }
