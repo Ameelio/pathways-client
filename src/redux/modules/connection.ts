@@ -11,10 +11,6 @@ export const fetchConnections = createAsyncThunk(
   "connections/fetchAll",
   async () => {
     const body = await fetchAuthenticated(`connections`);
-    if (!body.data) {
-      throw body;
-    }
-
     const connections = ((body.data as Record<string, unknown>)
       .connections as Connection[]).map((inmate) => camelcaseKeys(inmate));
 

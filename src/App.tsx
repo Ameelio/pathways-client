@@ -12,12 +12,12 @@ import ProtectedRoute, {
 import LoginPage from "src/pages/Login";
 import { ROUTES } from "./utils/constants";
 import { useEffect } from "react";
-import { fetchConnections } from "./redux/modules/connection";
+import { fetchContacts } from "./redux/modules/contactsSlice";
 import Sidebar from "./components/Menu/Sidebar";
 import { useTranslation } from "react-i18next";
 import Modals from "./components/Modals/Modals";
 
-const mapDispatchToProps = { fetchConnections, push };
+const mapDispatchToProps = { fetchContacts, push };
 
 const connector = connect(null, mapDispatchToProps);
 
@@ -25,7 +25,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 function App({
   history,
-  fetchConnections,
+  fetchContacts,
   push,
 }: PropsFromRedux & { history: History }) {
   const { i18n } = useTranslation();
@@ -40,8 +40,8 @@ function App({
   const showSideBar = session.isLoggedIn && !hasSideBar;
 
   useEffect(() => {
-    if (session.isLoggedIn) fetchConnections();
-  }, [session.isLoggedIn, fetchConnections]);
+    if (session.isLoggedIn) fetchContacts();
+  }, [session.isLoggedIn, fetchContacts]);
 
   useEffect(() => {
     i18n.changeLanguage(session.language);

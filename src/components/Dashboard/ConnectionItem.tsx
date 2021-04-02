@@ -2,50 +2,36 @@ import { Avatar, Col, Space, Typography } from "antd";
 import { differenceInDays } from "date-fns";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useAppSelector } from "src/redux";
-import { selectEndedCalls } from "src/redux/selectors";
-import { Connection } from "src/types/Connection";
+import { Contact } from "src/types/User";
 import { genFullName } from "src/utils/utils";
 
 interface Props {
-  connection: Connection;
+  contact: Contact;
 }
 
-const ConnectionItem: React.FC<Props> = ({ connection }) => {
+const ConnectionItem: React.FC<Props> = ({ contact }) => {
   const { t } = useTranslation("dashboard");
-  const endedCalls = useAppSelector(selectEndedCalls);
 
-  // TODO: Remove this messy function and pass the days past in the api endpoint
-  const getDaysPastNum = (connectionId: number) => {
-    if (!endedCalls || !endedCalls.length) return null;
-    const filteredEndedCalls = endedCalls.filter(
-      (call) => call.connectionId === connectionId
+  const getDaysPastNum = () => {
+    return differenceInDays(
+      new Date(),
+      new Date(contact.lastCall.scheduledEnd)
     );
-    if (!filteredEndedCalls || !filteredEndedCalls.length) return null;
-    const sortedEndedCalls = filteredEndedCalls.sort(
-      (callOne, callTwo) => callOne.end - callTwo.end
-    );
-    const lastCall = sortedEndedCalls[sortedEndedCalls.length - 1];
-    return differenceInDays(new Date(lastCall.end), new Date());
   };
 
   return (
-    <Col key={connection.id} className="d-flex flex-column align-items-center">
+    <Col key={contact.id} className="d-flex flex-column align-items-center">
       <Space direction="vertical">
-        <Avatar
-          shape="square"
-          size={80}
-          src={connection.user.profileImagePath}
-        />
+        <Avatar shape="square" size={80} src={contact.profileImagePath} />
         <div>
           <div>
-            <Typography.Text>{genFullName(connection.user)}</Typography.Text>
+            <Typography.Text>{genFullName(contact)}</Typography.Text>
           </div>
-          {connection.status === "approved" && (
+          {contact.status === "active" && (
             <div>
               <Typography.Text type="secondary">
                 {t("connection.lastCall", {
-                  daysPastNum: getDaysPastNum(connection.id),
+                  daysPastNum: getDaysPastNum(),
                 })}
               </Typography.Text>
             </div>

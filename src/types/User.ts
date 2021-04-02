@@ -1,3 +1,5 @@
+import { Connection } from "./Connection";
+
 export interface BasePersona {
   id: number;
   firstName: string;
@@ -15,4 +17,12 @@ export interface User extends BasePersona {
 
 export interface Contact extends BasePersona {
   email: string;
+  status: string;
+  statusDetails: string;
+  relationship: string;
+  lastCall: {
+    id: number;
+    scheduledStart: Date;
+    scheduledEnd: Date;
+  };
 }

@@ -1,8 +1,10 @@
-interface FacilityRO {
+export interface FacilityRO {
   id: number;
   name: string;
 }
 
 export interface FacilitiesAPIResponse {
-  data: FacilityRO[];
+  data: {
+    results: FacilityRO[];
+  };
 }

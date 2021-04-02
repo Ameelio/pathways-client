@@ -50,7 +50,7 @@ export async function fetchAuthenticated(
     timeout
   );
 
-  if (response.status !== 200) {
+  if (response.status !== 200 && response.status !== 201) {
     throw response;
   }
 
@@ -69,7 +69,7 @@ export async function fetchFacilities(
     },
   };
   const response = await fetchTimeout(
-    `${API_URL}facilities`,
+    `${API_URL}public/facilities`,
     requestOptions,
     timeout
   );

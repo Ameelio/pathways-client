@@ -1,5 +1,3 @@
-import { Contact } from "./User";
-
 export interface Connection {
   id: number;
   userId: number;
@@ -7,5 +5,9 @@ export interface Connection {
   status: string;
   statusDetails: string;
   relationship: string;
-  user: Contact;
+  lastCall: {
+    id: number;
+    scheduledStart: Date;
+    scheduledEnd: Date;
+  };
 }

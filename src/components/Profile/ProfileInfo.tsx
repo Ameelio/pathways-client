@@ -24,7 +24,10 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
     if (calls.length) {
       const total = calls
         .map((call) =>
-          differenceInMinutes(new Date(call.end), new Date(call.start))
+          differenceInMinutes(
+            new Date(call.scheduledEnd),
+            new Date(call.scheduledStart)
+          )
         )
         .reduce((a, b) => a + b);
       setTotalMinutes(total);

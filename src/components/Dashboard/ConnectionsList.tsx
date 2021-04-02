@@ -2,17 +2,17 @@ import { Card, Row } from "antd";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Call } from "src/types/Call";
-import { Connection } from "src/types/Connection";
+import { Contact } from "src/types/User";
 import ConnectionItem from "./ConnectionItem";
 
 interface Props {
   calls: Call[];
-  connections: Connection[];
+  contacts: Contact[];
 }
 
-const ConnectionsList: React.FC<Props> = ({ calls, connections }: Props) => {
+const ConnectionsList: React.FC<Props> = ({ calls, contacts }: Props) => {
   const { t } = useTranslation("dashboard");
-  const [connectionItems, setConnectionItems] = useState<JSX.Element[] | null>(
+  const [filteredContacts, setFilteredContacts] = useState<Contact[] | null>(
     null
   );
   const [activeContactTab, setActiveContactTab] = useState("active");
@@ -28,14 +28,14 @@ const ConnectionsList: React.FC<Props> = ({ calls, connections }: Props) => {
   ];
 
   useEffect(() => {
-    setConnectionItems(
-      connections
-        .filter((connection) => connection.status === activeContactTab)
-        .map((connection) => (
-          <ConnectionItem key={connection.id} connection={connection} />
-        ))
+    setFilteredContacts(
+      contacts.filter((contact) => contact.status === activeContactTab)
     );
-  }, [activeContactTab, connections]);
+  }, [activeContactTab, contacts]);
+
+  const connectionItems = filteredContacts?.map((contact) => (
+    <ConnectionItem key={contact.id} contact={contact} />
+  ));
 
   return (
     <Card

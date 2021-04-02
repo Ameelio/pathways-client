@@ -4,7 +4,7 @@ import Countdown from "react-countdown";
 import { mapCountdownTimeToStyle } from "src/utils";
 
 interface Props {
-  endTime: number;
+  endTime: Date;
   style?: React.CSSProperties;
   className?: string;
 }

@@ -13,9 +13,6 @@ import { showToast } from "src/utils";
 
 export const fetchCalls = createAsyncThunk("calls/fetchAll", async () => {
   const body = await fetchAuthenticated(`calls`);
-  if (body.status !== 200) {
-    throw body;
-  }
 
   const calls = ((body.data as Record<string, unknown>)
     .calls as BaseCall[]).map((call) => camelcaseKeys(call));

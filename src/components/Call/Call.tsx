@@ -103,7 +103,7 @@ const CallBase: React.FC<Props> = React.memo(
       if (call && participantHasJoined)
         showToast(
           "peerVideo",
-          `${call.connection.user.firstName} ${
+          `${call.userParticipants[0].firstName} ${
             peerVideoOn ? t("peer.videoOn") : t("peer.videoOff")
           }`,
           "info"
@@ -114,7 +114,7 @@ const CallBase: React.FC<Props> = React.memo(
       if (call && participantHasJoined)
         showToast(
           "peerAudio",
-          `${call.connection.user.firstName} ${
+          `${call.userParticipants[0].firstName} ${
             peerAudioOn ? t("peer.unmuted") : t("peer.muted")
           }`,
           "info"
@@ -124,7 +124,7 @@ const CallBase: React.FC<Props> = React.memo(
     useEffect(() => {
       if (participantHasJoined && call)
         openNotificationWithIcon(
-          `${call.connection.user.firstName} ${t("peer.joinedCallTitle")}.`,
+          `${call.userParticipants[0].firstName} ${t("peer.joinedCallTitle")}.`,
           t("peer.joinedCallBody"),
           "info"
         );
@@ -137,7 +137,7 @@ const CallBase: React.FC<Props> = React.memo(
         return t("waitingRoom.initialization");
       } else if (!participantHasJoined) {
         return `${t("waitingRoom.waitingForPrefix")} ${
-          call.connection.user.firstName
+          call.userParticipants[0].firstName
         } ${t("waitingRoom.waitingForSuffix")}...`;
       }
       return t("waitingRoom.loading");
@@ -174,13 +174,13 @@ const CallBase: React.FC<Props> = React.memo(
           ))}
           {timerOn && (
             <Timer
-              endTime={call.end}
+              endTime={call.scheduledEnd}
               className="absolute right-4 top-4 bg-opacity-80"
             />
           )}
           {!peerVideoOn && (
             <Avatar size={128} className="bg-blue-500	m-auto text-white	">
-              {getInitials(genFullName(call.connection.user)).toUpperCase()}
+              {getInitials(genFullName(call.userParticipants[0])).toUpperCase()}
             </Avatar>
           )}
           {!peerAudioOn && (
@@ -188,7 +188,7 @@ const CallBase: React.FC<Props> = React.memo(
               <AudioMutedOutlined className="text-red-600 text-xs" />
               <Typography.Text className="text-white text-base">
                 {" "}
-                {genFullName(call.connection.user)}
+                {genFullName(call.userParticipants[0])}
               </Typography.Text>
             </div>
           )}

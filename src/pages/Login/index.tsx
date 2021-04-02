@@ -25,6 +25,7 @@ import { LANGUAGES, QUOTES } from "src/utils/constants";
 import { BORDER_RADIUS } from "src/styles/Layout";
 import { Quote } from "src/types/Common";
 import { fetchFacilities } from "src/api/Common";
+import { FacilityRO } from "src/api/interfaces/apiResponses";
 
 const { Content } = Layout;
 
@@ -52,19 +53,15 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
   const { Option } = Select;
 
   const [dailyQuote] = useState(getRandomItem(QUOTES) as Quote);
-  const [facilityOptions, setFacilityOptions] = useState<JSX.Element[]>([]);
+  const [facilities, setFacilities] = useState<FacilityRO[]>([]);
 
   useEffect(() => {
     const getFacilityOptions = async () => {
       const response = await fetchFacilities();
-      const facilities = response.data;
-      const facilityOptions = facilities.map((facility) => (
-        <Option value={facility.id}>{facility.name}</Option>
-      ));
-      setFacilityOptions(facilityOptions);
+      setFacilities(response.data.results);
     };
     getFacilityOptions();
-  }, [Option]);
+  }, []);
 
   if (session.isLoggedIn) {
     return <Redirect to="/" />;
@@ -86,6 +83,12 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
   const onFinishFailed = (_errorInfo: any) => {
     showToast("login_error", "Invalid ID or Pin Code", "error");
   };
+
+  const facilityOptions = facilities.map((facility: FacilityRO) => (
+    <Option key={`option-${facility.id}`} value={facility.id}>
+      {facility.name}
+    </Option>
+  ));
 
   return (
     <Content
