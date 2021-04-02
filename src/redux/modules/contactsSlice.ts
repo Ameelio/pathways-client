@@ -23,19 +23,7 @@ export const contactsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchContacts.fulfilled, (state, action) => {
-      console.log("hi here in contact adapter");
-      console.log(action);
       contactsAdapter.setAll(state, action.payload);
-      //   const connections = action.payload
-      //   const contacts = connections.map(connection => {
-      //       return {
-      //           ...connection.user,
-      //           connection: connection.id
-      //       }
-      //   })
-      //   const calls = action.payload
-      //   const contacts = calls.map(call.user => )
-      // connectionAdapter.setAll(state, action.payload);
     });
   },
 });
