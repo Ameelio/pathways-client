@@ -50,15 +50,11 @@ export async function fetchAuthenticated(
     timeout
   );
 
-  if (response.status !== 200) {
+  if (response.status !== 200 && response.status !== 201) {
     throw response;
   }
 
   const body = await response.json();
-
-  if (!body.data) {
-    throw body;
-  }
 
   return body;
 }

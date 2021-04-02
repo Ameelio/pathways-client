@@ -85,7 +85,9 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
   };
 
   const facilityOptions = facilities.map((facility: FacilityRO) => (
-    <Option value={facility.id}>{facility.name}</Option>
+    <Option key={`option-${facility.id}`} value={facility.id}>
+      {facility.name}
+    </Option>
   ));
 
   return (
