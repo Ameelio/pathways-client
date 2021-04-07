@@ -1,10 +1,40 @@
-import { MediaType } from "src/types/Call";
+import { Dictionary } from "@reduxjs/toolkit";
+import { BaseCall, Call, MediaType } from "src/types/Call";
+import { Contact } from "src/types/User";
+import { notEmpty } from "./utils";
 
 // The timer will switch to a white background for four seconds around each of these key minutes
 const keyMinutes = [10, 5, 2];
 const DEFAULT_BACKGROUND = "bg-gray-900 text-white";
 const WHITE_BACKGROUND = "bg-white text-black";
 const BLUE_BACKGROUND = "bg-blue-500 text-white";
+
+export function loadCallEntitiesById(
+  call: BaseCall,
+  contacts: Dictionary<Contact>
+): Call {
+  const userParticipants = call.userIds
+    .map((id) => contacts[id])
+    .filter(notEmpty);
+  return { ...call, userParticipants: userParticipants };
+}
+
+export function loadCallEntities(
+  call: BaseCall,
+  contacts: Dictionary<Contact>
+): Call {
+  const userParticipants = call.userIds
+    .map((id) => contacts[id])
+    .filter(notEmpty);
+  return { ...call, userParticipants: userParticipants };
+}
+
+export function loadAllCallEntities(
+  calls: BaseCall[],
+  contacts: Dictionary<Contact>
+): Call[] {
+  return calls.map((c) => loadCallEntities(c, contacts));
+}
 
 // This function determines what color the background should be
 // Within 4 seconds of a key minute (i.e. 9:56-10:00) -> White background

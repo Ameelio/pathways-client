@@ -3,59 +3,57 @@ import {
   createEntityAdapter,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
-import camelcaseKeys from "camelcase-keys";
 import { fetchAuthenticated } from "src/api/Common";
 import RoomClient from "src/pages/Call/RoomClient";
-import { BaseCall, CallParticipant, ControlledStream } from "src/types/Call";
+import {
+  BaseCall,
+  CallHandler,
+  CallParticipant,
+  ControlledStream,
+} from "src/types/Call";
 import { ThunkApi } from "../helper";
 import io from "socket.io-client";
 import { showToast } from "src/utils";
+import { AuthInfo } from "src/types/Session";
 
 export const fetchCalls = createAsyncThunk("calls/fetchAll", async () => {
   const body = await fetchAuthenticated(`calls`);
 
-  const calls = ((body.data as Record<string, unknown>)
-    .calls as BaseCall[]).map((call) => camelcaseKeys(call));
+  const calls = (body.data as Record<string, unknown>).results as BaseCall[];
 
   return calls;
 });
 
-export const initializeVisit = createAsyncThunk<
-  {
-    callId: number;
-  },
-  {
-    callId: number;
-    setRc: (rc: RoomClient) => void;
-  },
-  ThunkApi
->("visit/initializeVisit", async ({ callId, setRc }, thunkApi) => {
-  const { session } = thunkApi.getState();
-  const socket = io.connect(
-    `${process.env.REACT_APP_MEDIASOUP_HOSTNAME}` || "localhost:8000"
-  );
-  if (!socket.connected) {
-    await new Promise((resolve) => socket.on("connect", resolve));
-  }
-  await new Promise((resolve) => {
-    if (!session.user) throw Error("No user");
-    socket.emit(
-      "authenticate",
-      {
-        type: "inmate",
-        id: session.user.id,
-        // token: session.authInfo.token,
-      },
-      resolve
-    );
-  });
-  const rc = new RoomClient(socket, callId);
-  await rc.init();
-  setRc(rc);
-  return {
+export const initializeVisit = createAsyncThunk(
+  "visit/initializeVisit",
+  async ({
     callId,
-  };
-});
+    setRc,
+    authInfo,
+    videoHandler,
+  }: {
+    callId: number;
+    authInfo: AuthInfo;
+    setRc: (rc: RoomClient) => void;
+    videoHandler: CallHandler;
+  }) => {
+    const socket = io.connect(
+      `https://localhost:${videoHandler.port}` || "localhost:8000"
+    );
+    if (!socket.connected) {
+      await new Promise((resolve) => socket.on("connect", resolve));
+    }
+    await new Promise((resolve) => {
+      socket.emit("authenticate", authInfo, resolve);
+    });
+    const rc = new RoomClient(socket, callId);
+    await rc.init();
+    setRc(rc);
+    return {
+      callId,
+    };
+  }
+);
 
 export const initializeProducers = createAsyncThunk<
   void,

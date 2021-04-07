@@ -4,7 +4,7 @@ import { Store } from "src/redux";
 import { User } from "src/types/User";
 import { Language } from "src/types/Session";
 
-async function initializeSession(data: any, language: Language) {
+async function initializeSession(token: string, data: any, language: Language) {
   const user: User = {
     id: data.id,
     firstName: data.firstName,
@@ -19,7 +19,7 @@ async function initializeSession(data: any, language: Language) {
   Store.dispatch(
     setSession({
       user,
-      authInfo: { id: data.id, type: "inmate" },
+      authInfo: { id: data.id, type: "inmate", token },
       isLoggedIn: true,
       language,
     })
@@ -46,5 +46,9 @@ export async function loginWithCredentials(cred: {
     }),
   });
   const body = await response.json();
-  await initializeSession(body.data, cred.language);
+  const cookies = response.headers.get("cookie") || "";
+  const re = /(?<=connect.sid=)([^\s;]+)/gm;
+  const found = cookies.match(re);
+  if (!found || found.length !== 1) throw new Error("Cannot find header token");
+  await initializeSession(found[0], body.data, cred.language);
 }

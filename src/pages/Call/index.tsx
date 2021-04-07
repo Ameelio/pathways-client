@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { RootState, useAppDispatch, useAppSelector } from "src/redux";
 import { connect, ConnectedProps, shallowEqual } from "react-redux";
 import { RouteComponentProps } from "react-router";
-import { selectAllCallInfo } from "src/redux/selectors";
 import { push } from "connected-react-router";
 import "src/i18n/config";
 import {
@@ -19,31 +18,16 @@ import {
 } from "src/redux/modules/call";
 import RoomClient from "./RoomClient";
 import { ControlledStream } from "src/types/Call";
+import { useCallById } from "src/hooks/useCalls";
 
 type TParams = { id: string };
 
-const mapStateToProps = (
-  state: RootState,
-  ownProps: RouteComponentProps<TParams>
-) => ({
-  call: selectAllCallInfo(state, parseInt(ownProps.match.params.id)),
-});
-
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-const CallBase: React.FC<PropsFromRedux & RouteComponentProps<TParams>> = ({
-  call,
-  match,
-}) => {
+const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
   const dispatch = useAppDispatch();
   const stableDispatch = useCallback(dispatch, []);
-  const [callId] = useState(parseInt(match.params.id));
 
-  // TODO create a memoized selector
-  // const call = useAppSelector(state => selectAllCallInfo(state, callId), shallowEqual);
-  const user = useAppSelector((state) => state.session.user, shallowEqual);
+  const call = useCallById(parseInt(match.params.id));
+  const { authInfo, user } = useAppSelector((state) => state.session);
 
   const [rc, setRc] = useState<RoomClient>();
   const [localAudio, setLocalAudio] = useState<ControlledStream>();
@@ -65,9 +49,16 @@ const CallBase: React.FC<PropsFromRedux & RouteComponentProps<TParams>> = ({
   }, [stableDispatch]);
 
   useEffect(() => {
-    if (!call || hasInit) return;
-    stableDispatch(initializeVisit({ callId: call.id, setRc }));
-  }, [call, stableDispatch, hasInit]);
+    if (!call || hasInit || !call.videoHandler) return;
+    stableDispatch(
+      initializeVisit({
+        callId: call.id,
+        setRc,
+        authInfo,
+        videoHandler: call.videoHandler,
+      })
+    );
+  }, [call, stableDispatch, hasInit, authInfo]);
 
   useEffect(() => {
     if (!rc || hasInit) return;
@@ -104,4 +95,4 @@ const CallBase: React.FC<PropsFromRedux & RouteComponentProps<TParams>> = ({
   );
 };
 
-export default connector(CallBase);
+export default CallBase;

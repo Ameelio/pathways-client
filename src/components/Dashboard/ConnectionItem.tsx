@@ -13,10 +13,12 @@ const ConnectionItem: React.FC<Props> = ({ contact }) => {
   const { t } = useTranslation("dashboard");
 
   const getDaysPastNum = () => {
-    return differenceInDays(
-      new Date(),
-      new Date(contact.lastCall.scheduledEnd)
-    );
+    // TODO: get the last call
+    // return differenceInDays(
+    //   new Date(),
+    //   new Date(contact.lastCall.scheduledEnd)
+    // );
+    return 1;
   };
 
   return (

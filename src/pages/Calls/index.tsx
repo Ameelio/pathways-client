@@ -1,21 +1,14 @@
 import React from "react";
-import { RootState } from "src/redux";
-import { connect, ConnectedProps } from "react-redux";
-import { selectAllCalls, selectUpcomingCalls } from "src/redux/selectors";
+import { useAppSelector } from "src/redux";
 import "src/i18n/config";
 import Calls from "src/components/Calls";
+import { useCalls } from "src/hooks/useCalls";
 
-const mapStateToProps = (state: RootState) => ({
-  user: state.session.user,
-  calls: selectAllCalls(state),
-});
+const CallsPage: React.FC = () => {
+  const user = useAppSelector((state) => state.session.user);
+  const calls = useCalls();
 
-const connector = connect(mapStateToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-const CallsPage: React.FC<PropsFromRedux> = ({ user, calls }) => {
   return <Calls calls={calls} user={user} />;
 };
 
-export default connector(CallsPage);
+export default CallsPage;

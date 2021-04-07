@@ -163,7 +163,7 @@ const CallBase: React.FC<Props> = React.memo(
           onMouseOver={() => onMouseMove()}
         >
           {keys.map((key: number) => (
-            <div>
+            <div className="w-full h-full">
               <Video
                 srcObject={remoteVideos[key]}
                 className="w-full h-full"
