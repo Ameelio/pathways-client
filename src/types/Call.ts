@@ -25,6 +25,7 @@ export interface BaseCall {
 
 export interface Call extends BaseCall {
   // TODO: load facility kiosks and load kiosk information here
+  // https://github.com/Ameelio/pathways-client/issues/31
   kiosk?: Kiosk;
   userParticipants: Contact[];
 }

@@ -19,7 +19,7 @@ import { AuthInfo } from "src/types/Session";
 export const fetchCalls = createAsyncThunk("calls/fetchAll", async () => {
   const body = await fetchAuthenticated(`calls`);
 
-  const calls = (body.data as Record<string, unknown>).results as BaseCall[];
+  const calls = (body.data as { results: BaseCall[] }).results;
 
   return calls;
 });
