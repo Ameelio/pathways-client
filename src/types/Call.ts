@@ -1,8 +1,14 @@
-import { Connection } from "./Connection";
-import { User } from "./User";
+import { Contact } from "./User";
 
 export interface Kiosk {
   id: number;
+  name: string;
+  description: string;
+}
+
+export interface CallHandler {
+  host: string;
+  port: string;
 }
 
 export interface BaseCall {
@@ -12,13 +18,16 @@ export interface BaseCall {
   approved: boolean;
   status: "ended" | "scheduled" | "terminated" | "rescheduled" | "live";
   connectionId: number;
-  userParticipants: User[];
+  userIds: number[];
   kioskId: number;
+  videoHandler?: CallHandler;
 }
 
 export interface Call extends BaseCall {
-  // connection: Connection;
+  // TODO: load facility kiosks and load kiosk information here
+  // https://github.com/Ameelio/pathways-client/issues/31
   kiosk?: Kiosk;
+  userParticipants: Contact[];
 }
 
 export interface CallParticipant {

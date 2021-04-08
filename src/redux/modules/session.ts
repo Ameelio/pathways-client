@@ -5,6 +5,7 @@ import { Language } from "src/types/Session";
 interface AuthInfo {
   id: number;
   type: "inmate";
+  token: string;
 }
 
 interface SessionState {
@@ -43,7 +44,7 @@ export const setSession = (userState: SessionState): UserActionTypes => {
 
 // Reducer
 const initialState: SessionState = {
-  authInfo: { id: UNAUTHENTICATED_USER_ID, type: "inmate" },
+  authInfo: { id: UNAUTHENTICATED_USER_ID, type: "inmate", token: "" },
   user: {
     id: UNAUTHENTICATED_USER_ID,
     firstName: "",
@@ -69,7 +70,7 @@ export function sessionReducer(
       //   sessionStorage.clear();
       return {
         ...state,
-        authInfo: { id: UNAUTHENTICATED_USER_ID, type: "inmate" },
+        authInfo: { id: UNAUTHENTICATED_USER_ID, type: "inmate", token: "" },
         user: {
           id: UNAUTHENTICATED_USER_ID,
           firstName: "",

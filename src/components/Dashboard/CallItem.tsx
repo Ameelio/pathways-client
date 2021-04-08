@@ -57,6 +57,7 @@ const CallItem: React.FC<Props> = ({
               size="large"
               type="primary"
               className="rounded-sm"
+              disabled={!call.videoHandler}
               onClick={() => {
                 navigate(`call/${call.id}`);
                 openPrivacyNotice({

@@ -41,6 +41,8 @@ const Chat: React.FC<Props> = ({ roomClient, inmateId, call }) => {
           if (from.type === "monitor") {
             openNotificationWithIcon(t("doc.warning"), contents, "warning");
           }
+          console.log("received message", contents);
+          console.log(from);
           setMessages((messages) => [
             ...messages,
             {

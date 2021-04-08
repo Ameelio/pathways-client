@@ -20,9 +20,5 @@ export interface Contact extends BasePersona {
   status: string;
   statusDetails: string;
   relationship: string;
-  lastCall: {
-    id: number;
-    scheduledStart: Date;
-    scheduledEnd: Date;
-  };
+  lastCallId?: number;
 }
