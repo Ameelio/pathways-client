@@ -70,9 +70,6 @@ const Chat: React.FC<Props> = ({ roomClient, inmateId, call }) => {
         timestamp: new Date().toLocaleDateString(),
       },
     ]);
-    const { participants } = await new Promise((resolve, reject) => {
-      roomClient.socket.emit("info", { callId: call.id }, resolve);
-    });
     //  TODO: update status of call message depending on whether promise fulfills or not
     // need to first add status (success, status, pending)
     // https://github.com/Ameelio/pathways-client/issues/32
@@ -80,7 +77,6 @@ const Chat: React.FC<Props> = ({ roomClient, inmateId, call }) => {
       .request("textMessage", {
         callId: call.id,
         contents: draftMessage,
-        recipients: participants,
       })
       .then(
         () => console.log("ssucces"),
