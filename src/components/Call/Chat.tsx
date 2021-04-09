@@ -31,18 +31,14 @@ const Chat: React.FC<Props> = ({ roomClient, inmateId, call }) => {
         async ({
           from,
           contents,
-          meta,
         }: {
           from: CallParticipant;
           contents: string;
-          meta: string;
         }) => {
           setHasUnreadMessages(true);
-          if (from.type === "monitor") {
+          if (from.type === "doc") {
             openNotificationWithIcon(t("doc.warning"), contents, "warning");
           }
-          console.log("received message", contents);
-          console.log(from);
           setMessages((messages) => [
             ...messages,
             {
@@ -63,7 +59,6 @@ const Chat: React.FC<Props> = ({ roomClient, inmateId, call }) => {
   const onSendMessage = async () => {
     if (!roomClient) return;
     setDraftMessage("");
-    //TODO add property sent and change image visibility depending on whether it actually went through
     setMessages([
       ...messages,
       {
@@ -75,21 +70,18 @@ const Chat: React.FC<Props> = ({ roomClient, inmateId, call }) => {
         timestamp: new Date().toLocaleDateString(),
       },
     ]);
-    const { participants } = await new Promise((resolve, reject) => {
-      roomClient.socket.emit("info", { callId: call.id }, resolve);
-    });
-    await new Promise((resolve) => {
-      // TODO fetch actual credentials from redux
-      roomClient.socket.emit(
-        "textMessage",
-        {
-          callId: call.id,
-          contents: draftMessage,
-          recipients: participants,
-        },
-        resolve
+    //  TODO: update status of call message depending on whether promise fulfills or not
+    // need to first add status (success, status, pending)
+    // https://github.com/Ameelio/pathways-client/issues/32
+    roomClient
+      .request("textMessage", {
+        callId: call.id,
+        contents: draftMessage,
+      })
+      .then(
+        () => console.log("ssucces"),
+        (rejection: string) => console.log(rejection)
       );
-    });
   };
 
   return (
