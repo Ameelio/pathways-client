@@ -37,10 +37,9 @@ export const initializeVisit = createAsyncThunk(
     setRc: (rc: RoomClient) => void;
     videoHandler: CallHandler;
   }) => {
-    const socket = io.connect(
-      `https://localhost:${videoHandler.port}` || "localhost:8000",
-      { transports: ["websocket"] }
-    );
+    const socket = io.connect(`https://localhost:${videoHandler.port}`, {
+      transports: ["websocket"],
+    });
     if (!socket.connected) {
       await new Promise((resolve) => socket.on("connect", resolve));
     }
