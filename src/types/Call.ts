@@ -31,7 +31,7 @@ export interface Call extends BaseCall {
 }
 
 export interface CallParticipant {
-  type: "monitor" | "inmate" | "user";
+  type: "doc" | "inmate" | "user";
   id: number;
 }
 

@@ -13,7 +13,7 @@ const MessageDisplay: React.FC<Props> = ({ message }) => {
     switch (type) {
       case "inmate":
         return "You";
-      case "monitor":
+      case "doc":
         return "DOC";
       case "user":
         return "Loved One";

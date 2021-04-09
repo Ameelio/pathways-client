@@ -99,8 +99,10 @@ class RoomClient {
     this.handlers = { consume: [] };
   }
 
-  async request(name: string, data: unknown): Promise<any> {
+  async request(name: string, data: any): Promise<any> {
     return new Promise((resolve, reject) => {
+      if (!this.socket) return reject("No socket connection.");
+
       this.socket.emit(name, data, (response: any) => {
         if (response.error) reject(response.error);
         else resolve(response);
