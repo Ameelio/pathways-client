@@ -249,13 +249,11 @@ class RoomClient {
     Object.values(this.producers)?.forEach((producer) => {
       if (producer.kind === "video") {
         producer.pause();
-        this.socket.emit("producerUpdate", {
+        this.request("producerUpdate", {
           callId: this.callId,
-          contents: {
-            producerId: producer.id,
-            active: false,
-            type: "video",
-          },
+          producerId: producer.id,
+          paused: true,
+          type: "video",
         });
       }
     });
@@ -266,13 +264,11 @@ class RoomClient {
     Object.values(this.producers)?.forEach((producer) => {
       if (producer.kind === "video") {
         producer.resume();
-        this.socket.emit("producerUpdate", {
+        this.request("producerUpdate", {
           callId: this.callId,
-          contents: {
-            producerId: producer.id,
-            active: true,
-            type: "video",
-          },
+          producerId: producer.id,
+          paused: false,
+          type: "video",
         });
       }
     });
@@ -283,13 +279,11 @@ class RoomClient {
     Object.values(this.producers)?.forEach((producer) => {
       if (producer.kind === "audio") {
         producer.pause();
-        this.socket.emit("producerUpdate", {
+        this.request("producerUpdate", {
           callId: this.callId,
-          contents: {
-            producerId: producer.id,
-            active: false,
-            type: "audio",
-          },
+          producerId: producer.id,
+          paused: true,
+          type: "audio",
         });
       }
     });
@@ -300,13 +294,11 @@ class RoomClient {
     Object.values(this.producers)?.forEach((producer) => {
       if (producer.kind === "audio") {
         producer.resume();
-        this.socket.emit("producerUpdate", {
+        this.request("producerUpdate", {
           callId: this.callId,
-          contents: {
-            producerId: producer.id,
-            active: true,
-            type: "audio",
-          },
+          producerId: producer.id,
+          paused: false,
+          type: "audio",
         });
       }
     });
