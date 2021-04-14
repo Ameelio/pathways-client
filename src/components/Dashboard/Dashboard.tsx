@@ -1,7 +1,6 @@
 import { Col, Row, Space } from "antd";
 import React, { useState } from "react";
 import { Call } from "src/types/Call";
-import { Connection } from "src/types/Connection";
 import CallsList from "./CallsList";
 import ConnectionsList from "./ConnectionsList";
 import DashboardHeader from "./DashboardHeader";

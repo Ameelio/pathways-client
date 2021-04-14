@@ -5,6 +5,10 @@ import { useTranslation } from "react-i18next";
 import { Call } from "src/types/Call";
 import { FAQResource } from "src/types/UI";
 import { genFullName } from "src/utils/utils";
+import EnterCallSound from "src/assets/Sounds/EnterCall.wav";
+import useSound from "use-sound";
+import { subMinutes } from "date-fns/esm";
+import { WAITING_ROOM_BUFFER_MIN } from "src/utils/constants";
 
 interface Props {
   call: Call;
@@ -20,12 +24,16 @@ const CallItem: React.FC<Props> = ({
 }: Props) => {
   const { t } = useTranslation("dashboard");
 
+  const [play] = useSound(EnterCallSound);
+
   const duration = differenceInMinutes(
     new Date(call.scheduledEnd),
     new Date(call.scheduledStart)
   );
 
-  const started = new Date(call.scheduledStart) < new Date();
+  const started =
+    subMinutes(new Date(call.scheduledStart), WAITING_ROOM_BUFFER_MIN) <
+    new Date();
 
   const getDateLabel = (date: Date) => {
     if (isToday(date)) return "Today";
@@ -59,6 +67,7 @@ const CallItem: React.FC<Props> = ({
               className="rounded-sm"
               disabled={!call.videoHandler}
               onClick={() => {
+                play();
                 navigate(`call/${call.id}`);
                 openPrivacyNotice({
                   title: t("privacyNotice.title"),

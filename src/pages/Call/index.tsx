@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { RootState, useAppDispatch, useAppSelector } from "src/redux";
-import { connect, ConnectedProps, shallowEqual } from "react-redux";
+import { useAppDispatch, useAppSelector } from "src/redux";
 import { RouteComponentProps } from "react-router";
 import { push } from "connected-react-router";
 import "src/i18n/config";
@@ -50,7 +49,7 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
 
   useEffect(() => {
     if (!call || hasInit || !call.videoHandler) return;
-    stableDispatch(
+    dispatch(
       initializeVisit({
         callId: call.id,
         setRc,
@@ -58,7 +57,7 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
         videoHandler: call.videoHandler,
       })
     );
-  }, [call, stableDispatch, hasInit, authInfo]);
+  }, [call, hasInit, authInfo]);
 
   useEffect(() => {
     if (!rc || hasInit) return;

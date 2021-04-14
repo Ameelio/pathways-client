@@ -6,12 +6,12 @@ import MessageDisplay from "src/components/Call/MessageDisplay";
 import { openNotificationWithIcon } from "src/utils/utils";
 import RoomClient from "src/pages/Call/RoomClient";
 import { useTranslation } from "react-i18next";
+import MessageReceivedSound from "src/assets/Sounds/MessageReceived.mp3";
+import useSound from "use-sound";
 
 interface Props {
   roomClient: RoomClient | undefined;
-  // isAuthed: boolean;
   inmateId: number;
-  // socket: SocketIOClient.Socket | undefined;
   call: Call;
 }
 
@@ -23,6 +23,8 @@ const Chat: React.FC<Props> = ({ roomClient, inmateId, call }) => {
   const [draftMessage, setDraftMessage] = useState("");
   const [messages, setMessages] = useState<CallMessage[]>([]);
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
+
+  const [playMessageReceived] = useSound(MessageReceivedSound);
 
   useEffect(() => {
     if (roomClient) {
@@ -53,8 +55,9 @@ const Chat: React.FC<Props> = ({ roomClient, inmateId, call }) => {
   }, [roomClient, t]);
 
   useEffect(() => {
+    if (chatCollapsed && hasUnreadMessages) playMessageReceived();
     if (!chatCollapsed) setHasUnreadMessages(false);
-  }, [hasUnreadMessages, chatCollapsed]);
+  }, [hasUnreadMessages, chatCollapsed, playMessageReceived]);
 
   const onSendMessage = async () => {
     if (!roomClient) return;

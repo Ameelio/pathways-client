@@ -9,7 +9,7 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     env:
-        REACT_APP_BASE_URL: https://capin-staging.ameelio.org/api/v1/
+        REACT_APP_BASE_URL: https://capin-staging.ameelio.org/
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2.3.1
