@@ -15,6 +15,8 @@ async function initializeSession(token: string, data: any, language: Language) {
     quota: data.quota,
     location: data.location,
     race: data.race,
+    needsApproval: data.needsApproval,
+    needsMonitor: data.needsMonitor,
   };
   Store.dispatch(
     setSession({

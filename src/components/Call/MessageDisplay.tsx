@@ -1,3 +1,4 @@
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { Space, Typography } from "antd";
 import { format } from "date-fns";
 import React from "react";
@@ -8,7 +9,7 @@ interface Props {
 }
 
 const MessageDisplay: React.FC<Props> = ({ message }) => {
-  const { type } = message.from;
+  const type = message.senderType;
   const getDisplayName = () => {
     switch (type) {
       case "inmate":
@@ -28,10 +29,16 @@ const MessageDisplay: React.FC<Props> = ({ message }) => {
       <Space>
         <Typography.Text strong>{getDisplayName()}</Typography.Text>
         <Typography.Text type="secondary">
-          {format(new Date(message.timestamp), "HH:mm")}
+          {format(new Date(message.createdAt), "HH:mm")}
         </Typography.Text>
       </Space>
-      <Typography.Text>{message.content}</Typography.Text>
+      <Typography.Text>{message.contents}</Typography.Text>
+      {message.status === "error" && (
+        <Space direction="horizontal">
+          <ExclamationCircleOutlined className="text-red-600 text-xs" />
+          <Typography.Text>Message failed to send</Typography.Text>
+        </Space>
+      )}
     </Space>
   );
 };

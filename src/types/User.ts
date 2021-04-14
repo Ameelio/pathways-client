@@ -13,6 +13,8 @@ export interface User extends BasePersona {
   quota: number;
   location: string;
   race: string;
+  needsApproval: boolean;
+  needsMonitor: boolean;
 }
 
 export interface Contact extends BasePersona {

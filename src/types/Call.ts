@@ -36,9 +36,12 @@ export interface CallParticipant {
 }
 
 export interface CallMessage {
-  content: string;
-  from: CallParticipant;
-  timestamp: string;
+  callId: number;
+  senderId: number;
+  senderType: "inmate" | "user" | "doc";
+  contents: string;
+  createdAt: string; // ISO string
+  status: "success" | "error" | "sending";
 }
 
 export interface ControlledStream {
