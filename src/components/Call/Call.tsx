@@ -20,6 +20,9 @@ import { Timer } from "./Timer";
 import Video from "./Video";
 import Audio from "./Audio";
 import { User } from "src/types/User";
+import LeaveCallSound from "src/assets/Sounds/LeaveCall.wav";
+import JoinedCallSound from "src/assets/Sounds/EnterCall.wav";
+import useSound from "use-sound";
 
 declare global {
   interface Window {
@@ -62,6 +65,9 @@ const CallBase: React.FC<Props> = React.memo(
     const [peerAudioOn, setPeerAudioOn] = useState(true);
     const [peerVideoOn, setPeerVideoOn] = useState(true);
     const [timerOn, setTimerOn] = useState(false);
+
+    const [playJoinCall] = useSound(JoinedCallSound);
+    const [playLeaveCall] = useSound(LeaveCallSound);
 
     useEffect(() => {
       Object.keys(remoteVideos).length > 0 ||
@@ -122,13 +128,15 @@ const CallBase: React.FC<Props> = React.memo(
     }, [peerAudioOn, call, participantHasJoined, t]);
 
     useEffect(() => {
-      if (participantHasJoined && call)
+      if (participantHasJoined && call) {
+        playJoinCall();
         openNotificationWithIcon(
           `${call.userParticipants[0].firstName} ${t("peer.joinedCallTitle")}.`,
           t("peer.joinedCallBody"),
           "info"
         );
-    }, [participantHasJoined, call, t]);
+      }
+    }, [participantHasJoined, call, playJoinCall, t]);
 
     if (!call) return <div />;
 
@@ -248,7 +256,10 @@ const CallBase: React.FC<Props> = React.memo(
               }}
               timerOn={timerOn}
               toggleTimer={() => setTimerOn((timerOn) => !timerOn)}
-              terminateCall={() => push(`/feedback/${call?.id}`)}
+              terminateCall={() => {
+                playLeaveCall();
+                push(`/feedback/${call?.id}`);
+              }}
               hasUnreadMessages={hasUnreadMessages}
             />
           )}

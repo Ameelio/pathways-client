@@ -1,5 +1,4 @@
 import { Avatar, Col, Space, Typography } from "antd";
-import { differenceInDays } from "date-fns";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Contact } from "src/types/User";

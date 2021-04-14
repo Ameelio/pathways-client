@@ -1,7 +1,5 @@
-import { Dictionary } from "@reduxjs/toolkit";
 import { useState, useEffect } from "react";
-import { BaseCall, Call } from "src/types/Call";
-import { Contact } from "src/types/User";
+import { Call } from "src/types/Call";
 import { loadAllCallEntities, loadCallEntities } from "src/utils";
 import {
   selectAllCalls,
