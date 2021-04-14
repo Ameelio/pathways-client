@@ -67,7 +67,6 @@ export async function fetchFacilities(
       Accept: "application/json",
       "Content-Type": "application/json",
     },
-    credentials: "include",
   };
   const response = await fetchTimeout(
     `${API_URL}public/facilities`,
