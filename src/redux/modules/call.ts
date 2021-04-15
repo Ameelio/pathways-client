@@ -156,6 +156,7 @@ export const initializeRemotes = createAsyncThunk<
     rc.on(
       "consume",
       async (kind: string, stream: MediaStream, user: CallParticipant) => {
+        console.log("got consume of ", kind, " from user", user);
         if (user.type !== "user") return;
         if (kind === "audio") {
           setRemoteAudios((existing) => {

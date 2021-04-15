@@ -85,6 +85,15 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
           openModal({ activeType: "TEST_CONNECTION_MODAL", entity: null })
         )
       }
+      leaveCall={() => {
+        dispatch(push("/"));
+        dispatch(
+          openModal({
+            activeType: "CALL_RATING_MODAL",
+            entity: call,
+          })
+        );
+      }}
       roomClient={rc}
       localAudio={localAudio}
       localVideo={localVideo}

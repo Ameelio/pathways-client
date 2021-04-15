@@ -4,13 +4,15 @@ import {
   InactiveModalData,
   ResourceModalData,
   TestConnectionModalData,
+  CallRatingModalData,
 } from "src/types/UI";
 
 type ModalEntity =
   | CancelCallModalData
   | ResourceModalData
   | TestConnectionModalData
-  | InactiveModalData;
+  | InactiveModalData
+  | CallRatingModalData;
 
 // type ModalsSliceState =  {activeType: ModalType | null, entity: Call |{ title: string; body: string } | null };
 type ModalsSliceState = { data: ModalEntity };
