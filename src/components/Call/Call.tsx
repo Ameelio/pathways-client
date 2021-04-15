@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import RoomClient from "src/pages/Call/RoomClient";
 import { Typography, Layout, Avatar } from "antd";
 import { Call, CallParticipant, ControlledStream } from "src/types/Call";
-import { AudioMutedOutlined } from "@ant-design/icons";
+import { AlipayCircleOutlined, AudioMutedOutlined } from "@ant-design/icons";
 import {
   genFullName,
   getInitials,
@@ -38,6 +38,7 @@ interface Props {
   roomClient: RoomClient;
   localVideo?: ControlledStream;
   localAudio?: ControlledStream;
+  leaveCall: () => void;
   push: (path: string) => void;
   openInfoModal: (resource: FAQResource) => void;
   openTestConnectionModal: () => void;
@@ -52,6 +53,7 @@ const CallBase: React.FC<Props> = React.memo(
     localAudio,
     remoteAudios,
     remoteVideos,
+    leaveCall,
     push,
     openInfoModal,
     openTestConnectionModal,
@@ -143,7 +145,7 @@ const CallBase: React.FC<Props> = React.memo(
         roomClient.socket.on(
           "participantDisconnect",
           async ({ id, type }: CallParticipant) => {
-            if (type === "user") {
+            if (type === "user" && call?.userIds.includes(id)) {
               playLeaveCall();
               setParticipantsHasJoined(false);
               openNotificationWithIcon(
@@ -279,7 +281,7 @@ const CallBase: React.FC<Props> = React.memo(
               toggleTimer={() => setTimerOn((timerOn) => !timerOn)}
               terminateCall={() => {
                 playLeaveCall();
-                push(`/feedback/${call?.id}`);
+                leaveCall();
               }}
               hasUnreadMessages={hasUnreadMessages}
             />

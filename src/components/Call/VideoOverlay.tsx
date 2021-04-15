@@ -97,7 +97,7 @@ const VideoOverlay: React.FC<Props> = ({
             size="large"
             onClick={toggleTimer}
             label={`${
-              timerOn ? t("videoOverlay.showTime") : t("videoOverlay.hideTime")
+              !timerOn ? t("videoOverlay.showTime") : t("videoOverlay.hideTime")
             }`}
           />
         </Space>
