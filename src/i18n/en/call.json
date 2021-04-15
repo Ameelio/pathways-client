@@ -5,6 +5,8 @@
   "peer": {
     "joinedCallTitle": "joined the call",
     "joinedCallBody": "Your call will connect soon.",
+    "leftCallTitle": "left the call",
+    "leftCallBody": "Your call will resume once they rejoin.",
     "muted": "muted their mic",
     "unmuted": "unmuted their mic",
     "videoOn": "turned on their video",

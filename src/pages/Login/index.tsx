@@ -76,7 +76,6 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
         language: values.language,
       });
     } catch (err) {
-      console.log(err);
       showToast("login_error", "Invalid ID or Pin Code", "error");
     }
   };

@@ -44,15 +44,18 @@ const Chat: React.FC<Props> = ({ roomClient, inmateId, call }) => {
           setMessages((messages) => [
             ...messages,
             {
-              content: contents,
-              from,
-              timestamp: new Date().toLocaleDateString(),
+              contents,
+              senderId: from.id,
+              senderType: from.type,
+              createdAt: new Date().toISOString(),
+              callId: call.id,
+              status: "success",
             },
           ]);
         }
       );
     }
-  }, [roomClient, t]);
+  }, [roomClient, t, call.id]);
 
   useEffect(() => {
     if (chatCollapsed && hasUnreadMessages) playMessageReceived();
@@ -62,17 +65,6 @@ const Chat: React.FC<Props> = ({ roomClient, inmateId, call }) => {
   const onSendMessage = async () => {
     if (!roomClient) return;
     setDraftMessage("");
-    setMessages([
-      ...messages,
-      {
-        content: draftMessage,
-        from: {
-          type: "inmate",
-          id: inmateId,
-        },
-        timestamp: new Date().toLocaleDateString(),
-      },
-    ]);
     //  TODO: update status of call message depending on whether promise fulfills or not
     // need to first add status (success, status, pending)
     // https://github.com/Ameelio/pathways-client/issues/32
@@ -82,8 +74,33 @@ const Chat: React.FC<Props> = ({ roomClient, inmateId, call }) => {
         contents: draftMessage,
       })
       .then(
-        () => console.log("ssucces"),
-        (rejection: string) => console.log(rejection)
+        () =>
+          setMessages([
+            ...messages,
+            {
+              contents: draftMessage,
+              senderType: "inmate",
+              senderId: inmateId,
+              createdAt: new Date().toISOString(),
+              status: "success",
+              callId: call.id,
+            },
+          ]),
+        (rejection: string) => {
+          // TODO: log rejection error
+          console.log(rejection);
+          setMessages([
+            ...messages,
+            {
+              contents: draftMessage,
+              senderType: "inmate",
+              senderId: inmateId,
+              createdAt: new Date().toISOString(),
+              status: "error",
+              callId: call.id,
+            },
+          ]);
+        }
       );
   };
 

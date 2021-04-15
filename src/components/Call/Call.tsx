@@ -138,6 +138,27 @@ const CallBase: React.FC<Props> = React.memo(
       }
     }, [participantHasJoined, call, playJoinCall, t]);
 
+    useEffect(() => {
+      if (roomClient) {
+        roomClient.socket.on(
+          "participantDisconnect",
+          async ({ id, type }: CallParticipant) => {
+            if (type === "user") {
+              playLeaveCall();
+              setParticipantsHasJoined(false);
+              openNotificationWithIcon(
+                `${call?.userParticipants[0].firstName} ${t(
+                  "peer.joinedCallTitle"
+                )}.`,
+                t("peer.joinedCallBody"),
+                "info"
+              );
+            }
+          }
+        );
+      }
+    }, [call, roomClient, t, playLeaveCall]);
+
     if (!call) return <div />;
 
     const getMessage = (): string => {

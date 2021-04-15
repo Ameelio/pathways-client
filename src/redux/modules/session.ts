@@ -54,6 +54,8 @@ const initialState: SessionState = {
     inmateIdentification: "",
     quota: 0,
     race: "",
+    needsMonitor: true,
+    needsApproval: true,
   },
   isLoggedIn: false,
   language: "en",
@@ -80,6 +82,8 @@ export function sessionReducer(
           inmateIdentification: "",
           quota: 0,
           race: "",
+          needsApproval: true,
+          needsMonitor: true,
         },
         isLoggedIn: false,
       };
