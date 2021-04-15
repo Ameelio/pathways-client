@@ -1,32 +1,32 @@
 {
   "files": {
     "main.css": "/static/css/main.ba1d70bf.chunk.css",
-    "main.js": "/static/js/main.3ee13539.chunk.js",
-    "main.js.map": "/static/js/main.3ee13539.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.d8f56c7d.js",
-    "runtime-main.js.map": "/static/js/runtime-main.d8f56c7d.js.map",
+    "main.js": "/static/js/main.ae187a27.chunk.js",
+    "main.js.map": "/static/js/main.ae187a27.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.ec5bd1ce.js",
+    "runtime-main.js.map": "/static/js/runtime-main.ec5bd1ce.js.map",
     "static/css/2.ed9f40c0.chunk.css": "/static/css/2.ed9f40c0.chunk.css",
-    "static/js/2.1ebd2b21.chunk.js": "/static/js/2.1ebd2b21.chunk.js",
-    "static/js/2.1ebd2b21.chunk.js.map": "/static/js/2.1ebd2b21.chunk.js.map",
-    "static/js/3.e7859a16.chunk.js": "/static/js/3.e7859a16.chunk.js",
-    "static/js/3.e7859a16.chunk.js.map": "/static/js/3.e7859a16.chunk.js.map",
+    "static/js/2.eff81d61.chunk.js": "/static/js/2.eff81d61.chunk.js",
+    "static/js/2.eff81d61.chunk.js.map": "/static/js/2.eff81d61.chunk.js.map",
+    "static/js/3.068219aa.chunk.js": "/static/js/3.068219aa.chunk.js",
+    "static/js/3.068219aa.chunk.js.map": "/static/js/3.068219aa.chunk.js.map",
     "static/js/4.ff204455.chunk.js": "/static/js/4.ff204455.chunk.js",
     "static/js/4.ff204455.chunk.js.map": "/static/js/4.ff204455.chunk.js.map",
     "index.html": "/index.html",
     "static/css/2.ed9f40c0.chunk.css.map": "/static/css/2.ed9f40c0.chunk.css.map",
     "static/css/main.ba1d70bf.chunk.css.map": "/static/css/main.ba1d70bf.chunk.css.map",
-    "static/js/2.1ebd2b21.chunk.js.LICENSE.txt": "/static/js/2.1ebd2b21.chunk.js.LICENSE.txt",
-    "static/js/3.e7859a16.chunk.js.LICENSE.txt": "/static/js/3.e7859a16.chunk.js.LICENSE.txt",
+    "static/js/2.eff81d61.chunk.js.LICENSE.txt": "/static/js/2.eff81d61.chunk.js.LICENSE.txt",
+    "static/js/3.068219aa.chunk.js.LICENSE.txt": "/static/js/3.068219aa.chunk.js.LICENSE.txt",
     "static/media/EnterCall.082ea360.wav": "/static/media/EnterCall.082ea360.wav",
     "static/media/LeaveCall.3b29d342.wav": "/static/media/LeaveCall.3b29d342.wav",
     "static/media/MessageReceived.d8858c69.mp3": "/static/media/MessageReceived.d8858c69.mp3",
     "static/media/logo.31994bf9.svg": "/static/media/logo.31994bf9.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.d8f56c7d.js",
+    "static/js/runtime-main.ec5bd1ce.js",
     "static/css/2.ed9f40c0.chunk.css",
-    "static/js/2.1ebd2b21.chunk.js",
+    "static/js/2.eff81d61.chunk.js",
     "static/css/main.ba1d70bf.chunk.css",
-    "static/js/main.3ee13539.chunk.js"
+    "static/js/main.ae187a27.chunk.js"
   ]
 }
