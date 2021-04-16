@@ -5,5 +5,14 @@
     "messageOne": "You are about to cancel your call with {{connectionName}} for:",
     "messageTwo": "Please select a cancellation reason to send to {{connectionFirstName}}.",
     "dropdownPlaceholder": "Cancellation reason"
+  },
+  "callRatingModal": {
+    "title": "We hope your call with {{names}} went well!",
+    "howYouFeeling": "How are you feeling after your call?",
+    "terrible": "terrible",
+    "bad": "bad",
+    "normal": "normal",
+    "good": "good",
+    "wonderful": "wonderful"
   }
 }
