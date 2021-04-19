@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import RoomClient from "src/pages/Call/RoomClient";
 import { Typography, Layout, Avatar } from "antd";
 import { Call, CallParticipant, ControlledStream } from "src/types/Call";
-import { AlipayCircleOutlined, AudioMutedOutlined } from "@ant-design/icons";
+import { AudioMutedOutlined } from "@ant-design/icons";
 import {
   genFullName,
   getInitials,
@@ -23,6 +22,9 @@ import { User } from "src/types/User";
 import LeaveCallSound from "src/assets/Sounds/LeaveCall.wav";
 import JoinedCallSound from "src/assets/Sounds/EnterCall.wav";
 import useSound from "use-sound";
+import { useCallMessages } from "src/hooks/useRoom";
+import RoomClient from "src/pages/Call/RoomClient";
+import MessageReceivedSound from "src/assets/Sounds/MessageReceived.mp3";
 
 declare global {
   interface Window {
@@ -31,11 +33,11 @@ declare global {
 }
 
 interface Props {
-  call: Call | undefined;
+  call: Call;
   user: User;
   remoteAudios: Record<number, MediaStream>;
   remoteVideos: Record<number, MediaStream>;
-  roomClient: RoomClient;
+  room: RoomClient;
   localVideo?: ControlledStream;
   localAudio?: ControlledStream;
   leaveCall: () => void;
@@ -48,7 +50,7 @@ const CallBase: React.FC<Props> = React.memo(
   ({
     call,
     user,
-    roomClient,
+    room,
     localVideo,
     localAudio,
     remoteAudios,
@@ -63,13 +65,23 @@ const CallBase: React.FC<Props> = React.memo(
     const [showOverlay, setShowOverlay] = useState(true);
     const [participantHasJoined, setParticipantsHasJoined] = useState(false);
     const [chatCollapsed, setChatCollapsed] = useState(true);
-    const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
     const [peerAudioOn, setPeerAudioOn] = useState(true);
     const [peerVideoOn, setPeerVideoOn] = useState(true);
     const [timerOn, setTimerOn] = useState(false);
 
+    const {
+      messages,
+      addCallMessage,
+      hasUnreadMessages,
+      setHasUnreadMessages,
+    } = useCallMessages(call.id, room, (contents: string) =>
+      openNotificationWithIcon(t("doc.warning"), contents, "warning")
+    );
+
     const [playJoinCall] = useSound(JoinedCallSound);
     const [playLeaveCall] = useSound(LeaveCallSound);
+
+    const [playMessageReceived] = useSound(MessageReceivedSound);
 
     useEffect(() => {
       Object.keys(remoteVideos).length > 0 ||
@@ -80,8 +92,8 @@ const CallBase: React.FC<Props> = React.memo(
 
     // TODO fix this
     useEffect(() => {
-      if (roomClient) {
-        roomClient.socket.on(
+      if (room) {
+        room.socket.on(
           "producerUpdate",
           async ({
             from,
@@ -101,11 +113,18 @@ const CallBase: React.FC<Props> = React.memo(
           }
         );
       }
-    }, [roomClient, t]);
+    }, [room, t]);
 
+    // play a cool sound effect if a new message is received
     useEffect(() => {
       if (!chatCollapsed) setHasUnreadMessages(false);
-    }, [hasUnreadMessages, chatCollapsed]);
+      if (chatCollapsed && hasUnreadMessages) playMessageReceived();
+    }, [
+      hasUnreadMessages,
+      chatCollapsed,
+      setHasUnreadMessages,
+      playMessageReceived,
+    ]);
 
     useEffect(() => {
       if (call && participantHasJoined)
@@ -141,8 +160,8 @@ const CallBase: React.FC<Props> = React.memo(
     }, [participantHasJoined, call, playJoinCall, t]);
 
     useEffect(() => {
-      if (roomClient) {
-        roomClient.socket.on(
+      if (room) {
+        room.socket.on(
           "participantDisconnect",
           async ({ id, type }: CallParticipant) => {
             if (type === "user" && call?.userIds.includes(id)) {
@@ -159,12 +178,12 @@ const CallBase: React.FC<Props> = React.memo(
           }
         );
       }
-    }, [call, roomClient, t, playLeaveCall]);
+    }, [call, room, t, playLeaveCall]);
 
     if (!call) return <div />;
 
     const getMessage = (): string => {
-      if (!roomClient) {
+      if (!room) {
         return t("waitingRoom.initialization");
       } else if (!participantHasJoined) {
         return `${t("waitingRoom.waitingForPrefix")} ${
@@ -246,7 +265,7 @@ const CallBase: React.FC<Props> = React.memo(
               loading={!(localAudio && localVideo)}
               audioOn={!!!localAudio?.paused}
               toggleAudio={() => {
-                if (!roomClient || !localAudio) return;
+                if (!room || !localAudio) return;
                 showToast(
                   "microphone",
                   `You ${
@@ -254,13 +273,11 @@ const CallBase: React.FC<Props> = React.memo(
                   } your microphone`,
                   "info"
                 );
-                localAudio.paused
-                  ? roomClient.resumeAudio()
-                  : roomClient.pauseAudio();
+                localAudio.paused ? room.resumeAudio() : room.pauseAudio();
               }}
               videoOn={!!!localVideo?.paused}
               toggleVideo={() => {
-                if (!roomClient || !localVideo) return;
+                if (!room || !localVideo) return;
                 showToast(
                   "webcam",
                   `You ${
@@ -268,9 +285,7 @@ const CallBase: React.FC<Props> = React.memo(
                   } your webcam`,
                   "info"
                 );
-                localVideo.paused
-                  ? roomClient.resumeVideo()
-                  : roomClient.pauseVideo();
+                localVideo.paused ? room.resumeVideo() : room.pauseVideo();
               }}
               chatCollapsed={chatCollapsed}
               toggleChat={() => {
@@ -287,9 +302,15 @@ const CallBase: React.FC<Props> = React.memo(
             />
           )}
         </div>
-        {!chatCollapsed && (
-          <Chat roomClient={roomClient} inmateId={user.id} call={call} />
-        )}
+        <Chat
+          room={room}
+          inmateId={user.id}
+          call={call}
+          messages={messages}
+          addCallMessage={addCallMessage}
+          chatCollapsed={chatCollapsed}
+          hasUnreadMessages={hasUnreadMessages}
+        />
       </Layout>
     );
   }

@@ -94,7 +94,7 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
           })
         );
       }}
-      roomClient={rc}
+      room={rc}
       localAudio={localAudio}
       localVideo={localVideo}
       remoteAudios={remoteAudios}
