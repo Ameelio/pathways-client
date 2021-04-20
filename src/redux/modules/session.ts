@@ -8,16 +8,20 @@ interface AuthInfo {
   token: string;
 }
 
+type SessionStatus = "inactive" | "active" | "loading";
+
 interface SessionState {
   isLoggedIn: boolean;
   authInfo: AuthInfo;
   user: User;
   language: Language;
+  status: SessionStatus;
 }
 
 // Constants & Shapes
 const SET_SESSION = "user/SET_SESSION";
 const LOGOUT = "user/LOGOUT";
+const SET_SESSION_STATUS = "user/SET_STATUS";
 
 interface SetSessionAction {
   type: typeof SET_SESSION;
@@ -27,7 +31,12 @@ interface LogoutAction {
   type: typeof LOGOUT;
 }
 
-type UserActionTypes = LogoutAction | SetSessionAction;
+interface SetSessionStatusAction {
+  type: typeof SET_SESSION_STATUS;
+  payload: SessionStatus;
+}
+
+type UserActionTypes = LogoutAction | SetSessionAction | SetSessionStatusAction;
 
 export const logout = (): UserActionTypes => {
   return {
@@ -39,6 +48,13 @@ export const setSession = (userState: SessionState): UserActionTypes => {
   return {
     type: SET_SESSION,
     payload: userState,
+  };
+};
+
+export const setSessionStatus = (status: SessionStatus): UserActionTypes => {
+  return {
+    type: SET_SESSION_STATUS,
+    payload: status,
   };
 };
 
@@ -59,6 +75,7 @@ const initialState: SessionState = {
   },
   isLoggedIn: false,
   language: "en",
+  status: "inactive",
 };
 
 export function sessionReducer(
@@ -69,9 +86,7 @@ export function sessionReducer(
     case SET_SESSION:
       return action.payload;
     case LOGOUT:
-      //   sessionStorage.clear();
       return {
-        ...state,
         authInfo: { id: UNAUTHENTICATED_USER_ID, type: "inmate", token: "" },
         user: {
           id: UNAUTHENTICATED_USER_ID,
@@ -86,6 +101,13 @@ export function sessionReducer(
           needsMonitor: true,
         },
         isLoggedIn: false,
+        status: "inactive",
+        language: "en",
+      };
+    case SET_SESSION_STATUS:
+      return {
+        ...state,
+        status: action.payload,
       };
     default:
       return state;

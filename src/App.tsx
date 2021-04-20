@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.scss";
 import { useAppSelector } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
@@ -16,6 +16,7 @@ import { fetchContacts } from "./redux/modules/contactsSlice";
 import Sidebar from "./components/Sidebar";
 import { useTranslation } from "react-i18next";
 import Modals from "./components/Modals/Modals";
+import Loader from "./components/Loader";
 
 const mapDispatchToProps = { fetchContacts, push };
 
@@ -39,8 +40,14 @@ function App({
 
   const showSideBar = session.isLoggedIn && !hasSideBar;
 
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
-    if (session.isLoggedIn) fetchContacts();
+    if (session.isLoggedIn) {
+      setLoading(true);
+      fetchContacts();
+      setLoading(false);
+    }
   }, [session.isLoggedIn, fetchContacts]);
 
   useEffect(() => {
@@ -52,24 +59,25 @@ function App({
       <Modals />
       <Layout style={{ minHeight: "100vh" }}>
         {showSideBar && <Sidebar user={session.user} navigate={push} />}
-        <Layout>
-          <Switch>
-            <Route exact path="/login" component={LoginPage}></Route>
-            {ROUTES.map((route) => (
-              <ProtectedRoute
-                exact
-                {...defaultProtectedRouteProps}
-                path={route.path}
-                component={route.component}
-                key={route.label}
-              ></ProtectedRoute>
-            ))}
-            <Redirect to="/login" />
-          </Switch>
-          {/* <Footer style={{ textAlign: "center" }}>
-            Connect ©2021 Created by Ameelio Inc.
-          </Footer> */}
-        </Layout>
+        {loading || session.status === "loading" ? (
+          <Loader fullPage />
+        ) : (
+          <Layout>
+            <Switch>
+              <Route exact path="/login" component={LoginPage}></Route>
+              {ROUTES.map((route) => (
+                <ProtectedRoute
+                  exact
+                  {...defaultProtectedRouteProps}
+                  path={route.path}
+                  component={route.component}
+                  key={route.label}
+                ></ProtectedRoute>
+              ))}
+              <Redirect to="/login" />
+            </Switch>
+          </Layout>
+        )}
       </Layout>
     </ConnectedRouter>
   );

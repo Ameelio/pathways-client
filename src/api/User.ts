@@ -1,5 +1,5 @@
 import { API_URL, fetchTimeout } from "./Common";
-import { setSession } from "src/redux/modules/session";
+import { setSession, setSessionStatus } from "src/redux/modules/session";
 import { Store } from "src/redux";
 import { User } from "src/types/User";
 import { Language } from "src/types/Session";
@@ -24,6 +24,7 @@ async function initializeSession(token: string, data: any, language: Language) {
       authInfo: { id: data.id, type: "inmate", token },
       isLoggedIn: true,
       language,
+      status: "active",
     })
   );
 }
@@ -34,6 +35,7 @@ export async function loginWithCredentials(cred: {
   facilityId: number;
   language: Language;
 }): Promise<void> {
+  Store.dispatch(setSessionStatus("loading"));
   const response = await fetchTimeout(`${API_URL}auth/member/login/`, {
     method: "POST",
     headers: {
