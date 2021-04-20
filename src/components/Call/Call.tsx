@@ -221,24 +221,6 @@ const CallBase: React.FC<Props> = React.memo(
           onMouseMove={() => onMouseMove()}
           onMouseOver={() => onMouseMove()}
         >
-          {localVideo && localAudio && (
-            <div>
-              <Video
-                srcObject={localVideo.stream}
-                className="w-full h-full"
-                style={{
-                  transition: "opacity, 2s ease-in-out",
-                }}
-                autoPlay={true}
-                isFadingOut={isCallEnding}
-              />{" "}
-              <Audio
-                srcObject={localAudio.stream}
-                autoPlay={true}
-                isFadingOut={isCallEnding}
-              />
-            </div>
-          )}
           {keys.map((key: number) => (
             <div className="w-full h-full">
               <Video
