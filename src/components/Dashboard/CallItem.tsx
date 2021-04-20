@@ -4,7 +4,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Call } from "src/types/Call";
 import { subMinutes } from "date-fns/esm";
-import { WAITING_ROOM_BUFFER_MIN } from "src/utils/constants";
+import { WAITING_ROOM_BUFFER_MIN } from "src/constants";
 import { getParticipantsFullNames } from "src/utils";
 import ContactAvatarGroup from "../Avatar/UserAvatarGroup";
 

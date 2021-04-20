@@ -1,5 +1,5 @@
 import { AudioHTMLAttributes, useEffect, useRef, useState } from "react";
-import { FADING_ANIMATION_DURATION } from "src/utils/constants";
+import { FADING_ANIMATION_DURATION } from "src/constants";
 
 type PropsType = AudioHTMLAttributes<HTMLAudioElement> & {
   srcObject: MediaStream;

@@ -67,7 +67,3 @@ export const QUESTIONS: Icebreaker[] = [
     es: "If you had your own intro theme song, which song would it be and why?",
   },
 ];
-
-export const WAITING_ROOM_BUFFER_MIN = 5;
-
-export const FADING_ANIMATION_DURATION = 5;

@@ -6,50 +6,77 @@ import { Call } from "src/types/Call";
 import { getLottieOptions } from "src/utils/UI";
 import Lottie from "react-lottie";
 import GoodbyeLottie from "src/assets/Lottie/Goodbye.json";
+import TeamWaveLottie from "src/assets/Lottie/TeamWave.json";
+import CyclingLottie from "src/assets/Lottie/GirlCycling.json";
+import ShrugLottie from "src/assets/Lottie/Shrug.json";
+import { getRandomItem } from "src/utils";
 
-export type CallFeedbackType = "forced" | "deliberate" | "unhappy";
+export type CallFeedbackType =
+  | "forced"
+  | "deliberate"
+  | "unhappy"
+  | "terminated";
 
 interface Props {
   call: Call;
   navigate: (path: string) => void;
   rateCall: (rating: number) => void;
   type: CallFeedbackType;
+  logout: () => void;
 }
 
-const CallFeedback: React.FC<Props> = ({ call, navigate, rateCall, type }) => {
-  const { t } = useTranslation("feedback");
+const CallFeedback: React.FC<Props> = ({
+  call,
+  navigate,
+  rateCall,
+  type,
+  logout,
+}) => {
+  const { t } = useTranslation(["feedback", "common"]);
 
   const [rating, setRating] = useState<number>();
 
   const desc = [
-    t("ratings.terrible"),
-    t("ratings.bad"),
-    t("ratings.normal"),
-    t("ratings.good"),
-    t("ratings.wonderful"),
+    t("feedback:ratings.terrible"),
+    t("feedback:ratings.bad"),
+    t("feedback:ratings.normal"),
+    t("feedback:ratings.good"),
+    t("feedback:ratings.wonderful"),
   ];
 
   const renderTitle = () => {
     switch (type) {
       case "deliberate":
-        return t("title.happy");
       case "forced":
-        return t("title.happy");
+        return t("feedback:title.happy");
       case "unhappy":
-        return t("title.unhappy");
+        return t("feedback:title.unhappy");
       default:
-        return t("title.unhappy");
+        return t("feedback:title.unhappy");
+    }
+  };
+
+  const renderBodyText = () => {
+    switch (type) {
+      case "unhappy":
+        return t("feedback:body.unhappy");
+      case "deliberate":
+        return t("feedback:body.happy");
+      case "terminated":
+        return t("feedback:body.terminated");
+      case "forced":
+        return "";
     }
   };
 
   const pickIllustration = () => {
     switch (type) {
       case "deliberate":
-        return GoodbyeLottie;
       case "forced":
-        return GoodbyeLottie;
+        return getRandomItem([TeamWaveLottie, CyclingLottie, GoodbyeLottie]);
       case "unhappy":
-        return GoodbyeLottie;
+      case "terminated":
+        return ShrugLottie;
       default:
         return GoodbyeLottie;
     }
@@ -60,27 +87,40 @@ const CallFeedback: React.FC<Props> = ({ call, navigate, rateCall, type }) => {
       case "deliberate":
       case "forced":
         return (
-          <Button
-            type="primary"
-            size="large"
-            disabled={!!rating}
-            onClick={() => {
-              if (!rating) return;
-              rateCall(rating);
-              navigate(`/`);
-            }}
-          >
-            {t("buttons.return")}
-          </Button>
+          <Space>
+            <Button
+              size="large"
+              disabled={!!rating}
+              onClick={() => {
+                if (!rating) return;
+                logout();
+              }}
+            >
+              {t("common:logout")}
+            </Button>
+
+            <Button
+              type="primary"
+              size="large"
+              disabled={!!rating}
+              onClick={() => {
+                if (!rating) return;
+                rateCall(rating);
+                navigate(`/`);
+              }}
+            >
+              {t("feedback:buttons.return")}
+            </Button>
+          </Space>
         );
       case "unhappy":
         return (
           <Space>
             <Button size="large" onClick={() => navigate(`/call/${call.id}`)}>
-              {t("buttons.rejoin")}
+              {t("feedback:buttons.rejoin")}
             </Button>
             <Button type="primary" size="large" onClick={() => navigate(`/`)}>
-              {t("buttons.return")}
+              {t("feedback:buttons.return")}
             </Button>
           </Space>
         );
@@ -92,7 +132,7 @@ const CallFeedback: React.FC<Props> = ({ call, navigate, rateCall, type }) => {
             onClick={() => navigate(`/`)}
             block
           >
-            {t("buttons.return")}
+            {t("feedback:buttons.return")}
           </Button>
         );
     }
@@ -133,6 +173,7 @@ const CallFeedback: React.FC<Props> = ({ call, navigate, rateCall, type }) => {
           width="50%"
         />
         <Typography.Title level={2}>{renderTitle()}</Typography.Title>
+        <Typography.Text type="secondary">{renderBodyText()}</Typography.Text>
         {renderRatings()}
         {renderButtons()}
       </Space>

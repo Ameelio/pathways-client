@@ -15,6 +15,8 @@ import { CallFeedbackType } from "src/components/CallFeedback/CallFeedback";
 import Error from "src/components/Error";
 import { useTranslation } from "react-i18next";
 import Loader from "src/components/Loader";
+import { logout } from "src/redux/modules/session";
+import { addMinutes } from "date-fns";
 
 // const customIcons = {
 //   1: <FrownOutlined style={{ fontSize: 36 }} />,
@@ -48,6 +50,9 @@ const CallFeedbackPage: React.FC<RouteComponentProps<TParams>> = ({
 
   useEffect(() => {
     if (!call) return;
+
+    if (call.status === "terminated") setExitType("terminated");
+
     const diffMin = differenceInMinutes(
       new Date(call.scheduledEnd),
       new Date()
@@ -74,7 +79,12 @@ const CallFeedbackPage: React.FC<RouteComponentProps<TParams>> = ({
     return <Loader />;
   }
 
-  if (call.status === "rescheduled" || call.status === "pending_approval")
+  if (
+    call.status === "rescheduled" ||
+    call.status === "pending_approval" ||
+    call.status === "cancelled" ||
+    call.status === "no_show"
+  )
     return (
       <Error
         status="error"
@@ -91,11 +101,7 @@ const CallFeedbackPage: React.FC<RouteComponentProps<TParams>> = ({
       />
     );
 
-  if (
-    call.status === "terminated" ||
-    call.status === "ended" ||
-    new Date(call.scheduledEnd) < new Date()
-  )
+  if (addMinutes(new Date(call.scheduledEnd), 15) < new Date())
     return (
       <Error
         status="error"
@@ -118,6 +124,7 @@ const CallFeedbackPage: React.FC<RouteComponentProps<TParams>> = ({
       navigate={(path: string) => dispatch(push(path))}
       rateCall={async (rating: number) => await rateCall(call.id, rating)}
       type={exitType}
+      logout={() => dispatch(logout())}
     />
   );
 };

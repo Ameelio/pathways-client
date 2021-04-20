@@ -28,7 +28,7 @@ import MessageReceivedSound from "src/assets/Sounds/MessageReceived.mp3";
 import { getParticipantsFirstNames } from "src/utils";
 import ContactAvatarGroup from "../Avatar/UserAvatarGroup";
 import { differenceInSeconds } from "date-fns";
-import { FADING_ANIMATION_DURATION } from "src/utils/constants";
+import { FADING_ANIMATION_DURATION } from "src/constants";
 
 declare global {
   interface Window {
