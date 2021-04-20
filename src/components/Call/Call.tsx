@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Typography, Layout, Avatar } from "antd";
+import { Typography, Layout } from "antd";
 import { Call, CallParticipant, ControlledStream } from "src/types/Call";
 import { AudioMutedOutlined } from "@ant-design/icons";
 import {
-  genFullName,
+  getFullName,
   getInitials,
   openNotificationWithIcon,
   showToast,
@@ -25,6 +25,8 @@ import useSound from "use-sound";
 import { useCallMessages } from "src/hooks/useRoom";
 import RoomClient from "src/pages/Call/RoomClient";
 import MessageReceivedSound from "src/assets/Sounds/MessageReceived.mp3";
+import { getParticipantsFirstNames } from "src/utils";
+import ContactAvatarGroup from "../Avatar/UserAvatarGroup";
 
 declare global {
   interface Window {
@@ -130,7 +132,7 @@ const CallBase: React.FC<Props> = React.memo(
       if (call && participantHasJoined)
         showToast(
           "peerVideo",
-          `${call.userParticipants[0].firstName} ${
+          `${getParticipantsFirstNames(call)} ${
             peerVideoOn ? t("peer.videoOn") : t("peer.videoOff")
           }`,
           "info"
@@ -141,7 +143,7 @@ const CallBase: React.FC<Props> = React.memo(
       if (call && participantHasJoined)
         showToast(
           "peerAudio",
-          `${call.userParticipants[0].firstName} ${
+          `${getParticipantsFirstNames(call)} ${
             peerAudioOn ? t("peer.unmuted") : t("peer.muted")
           }`,
           "info"
@@ -152,7 +154,7 @@ const CallBase: React.FC<Props> = React.memo(
       if (participantHasJoined && call) {
         playJoinCall();
         openNotificationWithIcon(
-          `${call.userParticipants[0].firstName} ${t("peer.joinedCallTitle")}.`,
+          `${getParticipantsFirstNames(call)} ${t("peer.joinedCallTitle")}.`,
           t("peer.joinedCallBody"),
           "info"
         );
@@ -186,9 +188,11 @@ const CallBase: React.FC<Props> = React.memo(
       if (!room) {
         return t("waitingRoom.initialization");
       } else if (!participantHasJoined) {
-        return `${t("waitingRoom.waitingForPrefix")} ${
-          call.userParticipants[0].firstName
-        } ${t("waitingRoom.waitingForSuffix")}...`;
+        return `${t(
+          "waitingRoom.waitingForPrefix"
+        )} ${getParticipantsFirstNames(call)} ${t(
+          "waitingRoom.waitingForSuffix"
+        )}...`;
       }
       return t("waitingRoom.loading");
     };
@@ -229,16 +233,14 @@ const CallBase: React.FC<Props> = React.memo(
             />
           )}
           {!peerVideoOn && (
-            <Avatar size={128} className="bg-blue-500	m-auto text-white	">
-              {getInitials(genFullName(call.userParticipants[0])).toUpperCase()}
-            </Avatar>
+            <ContactAvatarGroup size={128} contacts={call.userParticipants} />
           )}
           {!peerAudioOn && (
             <div className="absolute bottom-20 left-4 bg-black bg-opacity-50 py-1 px-2">
               <AudioMutedOutlined className="text-red-600 text-xs" />
               <Typography.Text className="text-white text-base">
                 {" "}
-                {genFullName(call.userParticipants[0])}
+                {getParticipantsFirstNames(call)}
               </Typography.Text>
             </div>
           )}
@@ -249,7 +251,7 @@ const CallBase: React.FC<Props> = React.memo(
               autoPlay={true}
             />
           ) : (
-            <VideoMePlaceholder initials={getInitials(genFullName(user))} />
+            <VideoMePlaceholder initials={getInitials(getFullName(user))} />
           )}
           {!participantHasJoined && (
             <WaitingRoomCard

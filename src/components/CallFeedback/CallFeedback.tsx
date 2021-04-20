@@ -16,7 +16,7 @@ interface Props {
   type: CallFeedbackType;
 }
 
-const CallFeedback = ({ call, navigate, rateCall, type }: Props) => {
+const CallFeedback: React.FC<Props> = ({ call, navigate, rateCall, type }) => {
   const { t } = useTranslation("feedback");
 
   const [rating, setRating] = useState<number>();

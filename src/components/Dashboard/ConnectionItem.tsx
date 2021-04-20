@@ -2,7 +2,7 @@ import { Avatar, Col, Space, Typography } from "antd";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Contact } from "src/types/User";
-import { genFullName } from "src/utils/utils";
+import { getFullName } from "src/utils/utils";
 
 interface Props {
   contact: Contact;
@@ -26,7 +26,7 @@ const ConnectionItem: React.FC<Props> = ({ contact }) => {
         <Avatar shape="square" size={80} src={contact.profileImagePath} />
         <div>
           <div>
-            <Typography.Text>{genFullName(contact)}</Typography.Text>
+            <Typography.Text>{getFullName(contact)}</Typography.Text>
           </div>
           {contact.status === "active" && (
             <div>

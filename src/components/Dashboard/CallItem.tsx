@@ -1,14 +1,14 @@
-import { Avatar, Button, Card, Row, Space, Typography } from "antd";
+import { Button, Card, Row, Space, Typography } from "antd";
 import { differenceInMinutes, format, isToday, isTomorrow } from "date-fns";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Call } from "src/types/Call";
 import { FAQResource } from "src/types/UI";
-import { genFullName } from "src/utils/utils";
 import EnterCallSound from "src/assets/Sounds/EnterCall.wav";
 import useSound from "use-sound";
 import { subMinutes } from "date-fns/esm";
 import { WAITING_ROOM_BUFFER_MIN } from "src/utils/constants";
+import { getParticipantsFullNames } from "src/utils";
 
 interface Props {
   call: Call;
@@ -53,9 +53,8 @@ const CallItem: React.FC<Props> = ({
             {`${duration} minutes`}
           </Typography.Text>
           <Space style={{ paddingTop: 18 }}>
-            <Avatar src={call.userParticipants[0].profileImagePath} />
             <Typography.Text type="secondary">
-              {genFullName(call.userParticipants[0])}
+              {getParticipantsFullNames(call)}
             </Typography.Text>
           </Space>
         </Space>

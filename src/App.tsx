@@ -13,7 +13,7 @@ import LoginPage from "src/pages/Login";
 import { ROUTES } from "./utils/constants";
 import { useEffect } from "react";
 import { fetchContacts } from "./redux/modules/contactsSlice";
-import Sidebar from "./components/Menu/Sidebar";
+import Sidebar from "./components/Sidebar";
 import { useTranslation } from "react-i18next";
 import Modals from "./components/Modals/Modals";
 

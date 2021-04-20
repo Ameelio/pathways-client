@@ -1,12 +1,9 @@
 import { Divider, Input, Layout, PageHeader, Space, Typography } from "antd";
-import React, { useEffect, useState } from "react";
-import { Call, CallMessage, CallParticipant } from "src/types/Call";
+import React, { useState } from "react";
+import { Call, CallMessage } from "src/types/Call";
 import { WRAPPER_PADDING } from "src/utils/constants";
 import MessageDisplay from "src/components/Call/MessageDisplay";
-import { openNotificationWithIcon } from "src/utils/utils";
 import { useTranslation } from "react-i18next";
-import MessageReceivedSound from "src/assets/Sounds/MessageReceived.mp3";
-import useSound from "use-sound";
 import RoomClient from "src/pages/Call/RoomClient";
 
 interface Props {

@@ -1,20 +1,12 @@
 import React from "react";
-import { fetchAuthenticated } from "src/api/Common";
 import { useAppDispatch, useAppSelector } from "src/redux";
 import { closeModal } from "src/redux/modules/modalsSlice";
-import CallRatingModal from "./CallRatingModal";
+import KioskConfirmationModal from "./KioskConfirmationModal";
 import CancelCallModal from "./CancelCallModal";
 import InformationalModal from "./InformationalModal";
 import TestConnectionModal from "./TestConnectionModal";
-
-function rateCall(callId: number, rating: number): void {
-  fetchAuthenticated(`calls/${callId}`, {
-    method: "PATCH",
-    body: JSON.stringify({
-      rating,
-    }),
-  });
-}
+import { push } from "connected-react-router";
+import { logout } from "src/redux/modules/session";
 
 const Modals: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -42,12 +34,17 @@ const Modals: React.FC = () => {
           data={data}
         />
       );
-    case "CALL_RATING_MODAL":
+    case "KIOSK_CONFIRMATION_MODAL":
       return (
-        <CallRatingModal
-          closeModal={() => dispatch(closeModal())}
+        <KioskConfirmationModal
           data={data}
-          rateCall={(rating: number) => rateCall(data.entity.id, rating)}
+          handleConfirm={() => {
+            dispatch(push(`/call/${data.entity.id}`));
+            dispatch(closeModal());
+          }}
+          handleLogout={() => {
+            dispatch(logout());
+          }}
         />
       );
     default:

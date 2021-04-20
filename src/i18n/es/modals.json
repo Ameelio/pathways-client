@@ -6,7 +6,7 @@
     "messageTwo": "Please select a cancellation reason to send to {{connectionFirstName}}.",
     "dropdownPlaceholder": "Cancellation reason"
   },
-  "callRatingModal": {
+  "kioskConfirmationModal": {
     "title": "We hope your call with {{names}} went well!",
     "howYouFeeling": "How are you feeling after your call?",
     "terrible": "terrible",

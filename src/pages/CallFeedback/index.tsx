@@ -1,11 +1,5 @@
-import React, { ReactElement, useEffect, useState } from "react";
-import { Layout, Rate, Button, Space, Typography, Card } from "antd";
-import {
-  HeartOutlined,
-  // FrownOutlined,
-  // SmileOutlined,
-  // MehOutlined,
-} from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { Button } from "antd";
 import {
   enterFullScreen,
   exitFullScreen,

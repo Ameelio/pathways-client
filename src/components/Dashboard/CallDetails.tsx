@@ -1,21 +1,13 @@
 import { CalendarOutlined, TeamOutlined } from "@ant-design/icons";
-import {
-  Avatar,
-  Button,
-  Col,
-  Divider,
-  Drawer,
-  Row,
-  Space,
-  Typography,
-} from "antd";
+import { Button, Col, Divider, Drawer, Row, Space, Typography } from "antd";
 import { differenceInMinutes, format } from "date-fns";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useAppDispatch } from "src/redux";
 import { Call } from "src/types/Call";
-import { genFullName } from "src/utils/utils";
 import { openModal } from "src/redux/modules/modalsSlice";
+import { getParticipantsFullNames } from "src/utils";
+import ContactAvatarGroup from "../Avatar/UserAvatarGroup";
 
 interface Props {
   selectedCall: Call | null;
@@ -76,11 +68,11 @@ const CallDetails: React.FC<Props> = ({ selectedCall, onClose }) => {
               <TeamOutlined className="text-2xl" />
             </Col>
             <Col>
-              <Avatar src={selectedCall.userParticipants[0].profileImagePath} />
+              <ContactAvatarGroup contacts={selectedCall.userParticipants} />
             </Col>
             <Col style={{ fontSize: 14 }}>
               <Typography.Text type="secondary">
-                {genFullName(selectedCall.userParticipants[0])}
+                {getParticipantsFullNames(selectedCall)}
               </Typography.Text>
             </Col>
           </Space>

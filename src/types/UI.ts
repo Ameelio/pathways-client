@@ -5,7 +5,7 @@ export type ModalType =
   | "CANCEL_CALL_MODAL"
   | "RESOURCE_MODAL"
   | "TEST_CONNECTION_MODAL"
-  | "CALL_RATING_MODAL";
+  | "KIOSK_CONFIRMATION_MODAL";
 
 export interface FAQResource {
   title: string;
@@ -38,7 +38,7 @@ export interface TestConnectionModalData extends BaseModal {
   entity: null;
 }
 
-export interface CallRatingModalData extends BaseModal {
-  activeType: "CALL_RATING_MODAL";
+export interface KioskConfirmationModalData extends BaseModal {
+  activeType: "KIOSK_CONFIRMATION_MODAL";
   entity: Call;
 }

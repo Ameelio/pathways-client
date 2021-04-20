@@ -7,7 +7,7 @@ import {
 } from "@ant-design/icons";
 import { User } from "src/types/User";
 import { ReactComponent as Logo } from "src/assets/logo.svg";
-import { genFullName } from "src/utils/utils";
+import { getFullName } from "src/utils/utils";
 
 const { Sider } = Layout;
 interface Props {
@@ -29,7 +29,7 @@ export default function Sidebar({ user, navigate }: Props): ReactElement {
         >
           <Space>
             <Avatar src={user.profileImagePath} size="large" />
-            <Typography.Text>{genFullName(user)}</Typography.Text>
+            <Typography.Text>{getFullName(user)}</Typography.Text>
           </Space>
         </Row>
         <Menu mode="inline" defaultSelectedKeys={["home"]} className="w-full">

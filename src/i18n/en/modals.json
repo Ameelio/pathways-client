@@ -6,13 +6,9 @@
     "messageTwo": "Please select a cancellation reason to send to {{connectionFirstName}}.",
     "dropdownPlaceholder": "Cancellation reason"
   },
-  "callRatingModal": {
-    "title": "We hope your call with {{names}} went well!",
-    "howYouFeeling": "How are you feeling after your call?",
-    "terrible": "terrible",
-    "bad": "bad",
-    "normal": "normal",
-    "good": "good",
-    "wonderful": "wonderful"
+  "kioskConfirmationModal": {
+    "title": "Before connecting, let’s confirm you’re in the right place...",
+    "subtitle": "Your call is assigned to...",
+    "body": "Please confirm that you are using the device listed above. If you’re on the wrong device, you will not be able to connect to your call, and you will have to log out and locate your assigned device."
   }
 }

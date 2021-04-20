@@ -73,3 +73,9 @@ export async function getMedia(type: MediaType, deviceId?: number) {
 export function getParticipantsFirstNames(call: Call) {
   return call.userParticipants.map((user) => user.firstName).join(", ");
 }
+
+export function getParticipantsFullNames(call: Call) {
+  return call.userParticipants
+    .map((user) => `${user.firstName} ${user.lastName}`)
+    .join(", ");
+}
