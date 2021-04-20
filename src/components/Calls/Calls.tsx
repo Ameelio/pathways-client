@@ -42,9 +42,7 @@ const tableColumns = [
 
 const Calls: React.FC<Props> = ({ calls, user }) => {
   const dispatch = useAppDispatch();
-  const [tableData, setTableData] = useState<TableData[] | undefined>(
-    undefined
-  );
+  const [tableData, setTableData] = useState<TableData[]>([]);
   const { t } = useTranslation("calls");
 
   useEffect(() => {

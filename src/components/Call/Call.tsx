@@ -27,6 +27,8 @@ import RoomClient from "src/pages/Call/RoomClient";
 import MessageReceivedSound from "src/assets/Sounds/MessageReceived.mp3";
 import { getParticipantsFirstNames } from "src/utils";
 import ContactAvatarGroup from "../Avatar/UserAvatarGroup";
+import { differenceInSeconds } from "date-fns";
+import { FADING_ANIMATION_DURATION } from "src/utils/constants";
 
 declare global {
   interface Window {
@@ -209,6 +211,9 @@ const CallBase: React.FC<Props> = React.memo(
     // TODO once we support calls with multiple people at once, we can expand on this implementation
     const keys = Object.keys(remoteVideos).map((key) => parseInt(key));
 
+    const isCallEnding =
+      differenceInSeconds(new Date(call.scheduledEnd), new Date()) <=
+      FADING_ANIMATION_DURATION;
     return (
       <Layout>
         <div
@@ -216,14 +221,37 @@ const CallBase: React.FC<Props> = React.memo(
           onMouseMove={() => onMouseMove()}
           onMouseOver={() => onMouseMove()}
         >
+          {localVideo && localAudio && (
+            <div>
+              <Video
+                srcObject={localVideo.stream}
+                className="w-full h-full"
+                style={{
+                  transition: "opacity, 2s ease-in-out",
+                }}
+                autoPlay={true}
+                isFadingOut={isCallEnding}
+              />{" "}
+              <Audio
+                srcObject={localAudio.stream}
+                autoPlay={true}
+                isFadingOut={isCallEnding}
+              />
+            </div>
+          )}
           {keys.map((key: number) => (
             <div className="w-full h-full">
               <Video
                 srcObject={remoteVideos[key]}
-                className="w-full h-full"
+                className="w-full h-full item-fadein"
                 autoPlay={true}
+                isFadingOut={isCallEnding}
               />
-              <Audio srcObject={remoteAudios[key]} autoPlay={true} />
+              <Audio
+                srcObject={remoteAudios[key]}
+                autoPlay={true}
+                isFadingOut={isCallEnding}
+              />
             </div>
           ))}
           {timerOn && (

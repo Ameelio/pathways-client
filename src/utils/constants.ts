@@ -69,3 +69,5 @@ export const QUESTIONS: Icebreaker[] = [
 ];
 
 export const WAITING_ROOM_BUFFER_MIN = 5;
+
+export const FADING_ANIMATION_DURATION = 5;
