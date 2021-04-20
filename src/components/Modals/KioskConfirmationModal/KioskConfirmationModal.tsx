@@ -28,6 +28,8 @@ export default function KioskConfirmationModal({
       onOk={handleConfirm}
       onCancel={handleLogout}
       className="rounded-sm w-full flex flex-col align-center"
+      okText={t("common:confirm")}
+      cancelText={t("common:logout")}
     >
       <Lottie
         options={getLottieOptions(KioskLottie)}
@@ -38,7 +40,7 @@ export default function KioskConfirmationModal({
         <Typography.Text>
           {t("modals:kioskConfirmationModal.subtitle")}
         </Typography.Text>
-        <Typography.Text>{call.kioskName}</Typography.Text>
+        <Typography.Text strong>{call.kioskName}</Typography.Text>
         <Typography.Text>
           {t("modals:kioskConfirmationModal.body")}
         </Typography.Text>

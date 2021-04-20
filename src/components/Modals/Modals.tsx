@@ -7,10 +7,13 @@ import InformationalModal from "./InformationalModal";
 import TestConnectionModal from "./TestConnectionModal";
 import { push } from "connected-react-router";
 import { logout } from "src/redux/modules/session";
+import EnterCallSound from "src/assets/Sounds/EnterCall.wav";
+import useSound from "use-sound";
 
 const Modals: React.FC = () => {
   const dispatch = useAppDispatch();
   const data = useAppSelector((state) => state.modals.data);
+  const [playEnterSound] = useSound(EnterCallSound);
 
   switch (data.activeType) {
     case "CANCEL_CALL_MODAL":
@@ -39,8 +42,9 @@ const Modals: React.FC = () => {
         <KioskConfirmationModal
           data={data}
           handleConfirm={() => {
-            dispatch(push(`/call/${data.entity.id}`));
             dispatch(closeModal());
+            playEnterSound();
+            dispatch(push(`/call/${data.entity.id}`));
           }}
           handleLogout={() => {
             dispatch(logout());

@@ -32,7 +32,7 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
   const call = useCallById(parseInt(match.params.id));
   const { authInfo, user } = useAppSelector((state) => state.session);
 
-  const { t } = useTranslation(["error", "common"]);
+  const { t } = useTranslation(["error", "common", "modals"]);
 
   const [rc, setRc] = useState<RoomClient>();
   const [localAudio, setLocalAudio] = useState<ControlledStream>();
@@ -47,11 +47,24 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
   const [hasInit, setHasInit] = useState(false);
 
   useEffect(() => {
-    stableDispatch(enterFullScreen());
+    dispatch(
+      openModal({
+        activeType: "RESOURCE_MODAL",
+        entity: {
+          title: t("modals:privacyNotice.title"),
+          body: t("modals:privacyNotice.body"),
+          okBtnText: t("modals:privacyNotice.okText"),
+        },
+      })
+    );
+  }, [t, dispatch]);
+
+  useEffect(() => {
+    dispatch(enterFullScreen());
     return () => {
-      stableDispatch(exitFullScreen());
+      dispatch(exitFullScreen());
     };
-  }, [stableDispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (!call || hasInit || !call.videoHandler) return;

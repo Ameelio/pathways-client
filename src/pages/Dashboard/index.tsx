@@ -6,9 +6,9 @@ import { selectAllContacts } from "src/redux/selectors";
 import { push } from "connected-react-router";
 import "src/i18n/config";
 import Dashboard from "src/components/Dashboard";
-import { FAQResource } from "src/types/UI";
 import { openModal } from "src/redux/modules/modalsSlice";
 import { useCalls } from "src/hooks/useCalls";
+import { Call } from "src/types/Call";
 
 const mapDispatchToProps = { fetchCalls, push };
 
@@ -29,9 +29,12 @@ const DashboardPage: React.FC<PropsFromRedux> = ({ fetchCalls }) => {
     <Dashboard
       calls={calls}
       contacts={contacts}
-      openInfoModal={(resource: FAQResource) =>
-        dispatch(openModal({ activeType: "RESOURCE_MODAL", entity: resource }))
-      }
+      joinCall={(call: Call) => {
+        dispatch(
+          openModal({ activeType: "KIOSK_CONFIRMATION_MODAL", entity: call })
+        );
+      }}
+      seeAllCalls={() => dispatch(push("/calls"))}
     />
   );
 };
