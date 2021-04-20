@@ -6,6 +6,7 @@ import { Call } from "src/types/Call";
 import { subMinutes } from "date-fns/esm";
 import { WAITING_ROOM_BUFFER_MIN } from "src/utils/constants";
 import { getParticipantsFullNames } from "src/utils";
+import ContactAvatarGroup from "../Avatar/UserAvatarGroup";
 
 interface Props {
   call: Call;
@@ -41,7 +42,8 @@ const CallItem: React.FC<Props> = ({ call, selectCall, joinCall }: Props) => {
             {format(new Date(call.scheduledStart), "h:mm aaa")} •{" "}
             {`${duration} minutes`}
           </Typography.Text>
-          <Space style={{ paddingTop: 18 }}>
+          <Space className="mt-4">
+            <ContactAvatarGroup contacts={call.userParticipants} />
             <Typography.Text type="secondary">
               {getParticipantsFullNames(call)}
             </Typography.Text>

@@ -28,7 +28,7 @@ const ConnectionItem: React.FC<Props> = ({ contact }) => {
           <div>
             <Typography.Text>{getFullName(contact)}</Typography.Text>
           </div>
-          {contact.status === "active" && (
+          {/* {contact.status === "active" && (
             <div>
               <Typography.Text type="secondary">
                 {t("connection.lastCall", {
@@ -36,7 +36,7 @@ const ConnectionItem: React.FC<Props> = ({ contact }) => {
                 })}
               </Typography.Text>
             </div>
-          )}
+          )} */}
         </div>
       </Space>
     </Col>
