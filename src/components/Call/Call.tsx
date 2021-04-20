@@ -208,7 +208,7 @@ const CallBase: React.FC<Props> = React.memo(
     return (
       <Layout>
         <div
-          className="ant-layout-content w-screen h-screen flex bg-gray-800"
+          className="ant-layout-content flex flex-column bg-gray-800"
           onMouseMove={() => onMouseMove()}
           onMouseOver={() => onMouseMove()}
         >

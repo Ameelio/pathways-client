@@ -1,0 +1,24 @@
+{
+  "title": {
+    "happy": "We hope your call with {{names}} went well!",
+    "unhappy": "You left the meeting"
+  },
+  "qualityRating": {
+    "question": "How was the audio and video?"
+  },
+  "sentimentRating": {
+    "question": "How are you feeling after your call?"
+  },
+  "ratings": {
+    "terrible": "terrible",
+    "bad": "bad",
+    "normal": "normal",
+    "good": "good",
+    "wonderful": "wonderful"
+  },
+  "buttons": {
+    "rejoin": "Rejoin",
+    "return": "Return Home",
+    "report": "Report an issue"
+  }
+}

@@ -18,6 +18,10 @@ import {
 import RoomClient from "./RoomClient";
 import { ControlledStream } from "src/types/Call";
 import { useCallById } from "src/hooks/useCalls";
+import Error from "src/components/Error";
+import { Button } from "antd";
+import { useTranslation } from "react-i18next";
+import Loader from "src/components/Loader";
 
 type TParams = { id: string };
 
@@ -27,6 +31,8 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
 
   const call = useCallById(parseInt(match.params.id));
   const { authInfo, user } = useAppSelector((state) => state.session);
+
+  const { t } = useTranslation(["error", "common"]);
 
   const [rc, setRc] = useState<RoomClient>();
   const [localAudio, setLocalAudio] = useState<ControlledStream>();
@@ -68,9 +74,54 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
     setHasInit(true);
   }, [hasInit, stableDispatch, rc]);
 
-  if (!call) return <div />;
+  useEffect(() => {
+    return () => {
+      rc?.destroy();
+    };
+  }, [rc]);
 
-  if (!rc || !hasInit) return <div />;
+  if (!rc || !hasInit) {
+    return <Loader fullPage tip={`${t("common:loading")}...`} />;
+  }
+
+  if (!call)
+    return (
+      <Error
+        status="error"
+        title={t("error:call.callNull")}
+        extra={[
+          <Button
+            type="primary"
+            size="large"
+            onClick={() => dispatch(push("/"))}
+          >
+            {t("error:call.returnHome")}
+          </Button>,
+        ]}
+      />
+    );
+
+  if (
+    call.status === "terminated" ||
+    call.status === "ended" ||
+    call.status === "no_show" ||
+    new Date(call.scheduledEnd) < new Date()
+  )
+    return (
+      <Error
+        status="error"
+        title={t("error:call.callNull")}
+        extra={[
+          <Button
+            type="primary"
+            size="large"
+            onClick={() => dispatch(push("/"))}
+          >
+            {t("error:call.returnHome")}
+          </Button>,
+        ]}
+      />
+    );
 
   return (
     <Call
@@ -86,13 +137,7 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
         )
       }
       leaveCall={() => {
-        dispatch(push("/"));
-        dispatch(
-          openModal({
-            activeType: "CALL_RATING_MODAL",
-            entity: call,
-          })
-        );
+        dispatch(push(`/feedback/${call.id}`));
       }}
       room={rc}
       localAudio={localAudio}

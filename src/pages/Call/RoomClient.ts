@@ -81,6 +81,7 @@ class RoomClient {
   private consumers: Record<string, mediasoupClient.types.Consumer>;
   private producers: Record<string, mediasoupClient.types.Producer>;
   private handlers: Record<string, ((...args: unknown[]) => void)[]>;
+  private producerTracks: MediaStreamTrack[];
 
   public socket: SocketIOClient.Socket;
 
@@ -95,6 +96,7 @@ class RoomClient {
 
     this.consumers = {};
     this.producers = {};
+    this.producerTracks = [];
 
     this.handlers = { consume: [] };
   }
@@ -203,6 +205,8 @@ class RoomClient {
     const track = (type === "audio"
       ? stream.getAudioTracks()
       : stream.getVideoTracks())[0];
+
+    this.producerTracks.push(track);
 
     const params: any = { track };
 
@@ -315,6 +319,8 @@ class RoomClient {
     if (this.producerTransport) this.producerTransport.close();
     this.consumerTransport = null;
     this.producerTransport = null;
+
+    this.producerTracks.map((track) => track.stop());
 
     Object.values(this.producers).forEach((producer) => {
       producer.close();

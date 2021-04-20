@@ -1,0 +1,7 @@
+{
+  "call": {
+    "callNull": "The call does not exist!",
+    "callNotStarted": "The call room already closed.",
+    "returnHome": "Return Home"
+  }
+}

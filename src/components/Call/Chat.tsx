@@ -72,30 +72,34 @@ const Chat: React.FC<Props> = ({
       width={300}
       collapsible
       collapsed={chatCollapsed}
+      trigger={null}
     >
-      <PageHeader title={t("chat.title")} />
-
-      <div className="flex flex-col h-full" style={WRAPPER_PADDING}>
-        <Space direction="vertical" style={{ overflowY: "scroll" }}>
-          <Typography.Text mark>{t("chat.monitorWarning")}</Typography.Text>
-          {messages.map((message) => (
-            <MessageDisplay message={message} />
-          ))}
-        </Space>
-        <div className="mt-auto mb-8 flex-shrink-0">
-          <Divider />
-          <Input.TextArea
-            value={draftMessage}
-            rows={2}
-            onChange={(e) => setDraftMessage(e.target.value)}
-            onPressEnter={(_e) => onSendMessage()}
-            onSubmit={(_e) => onSendMessage()}
-            placeholder={t("chat.placeholder")}
-            autoFocus
-            bordered={false}
-          />
+      {!chatCollapsed && (
+        <div className="flex flex-col h-full">
+          <PageHeader title={t("chat.title")} />
+          <div className="flex flex-col h-full" style={WRAPPER_PADDING}>
+            <Space direction="vertical" style={{ overflowY: "scroll" }}>
+              <Typography.Text mark>{t("chat.monitorWarning")}</Typography.Text>
+              {messages.map((message) => (
+                <MessageDisplay message={message} />
+              ))}
+            </Space>
+            <div className="mt-auto mb-8 flex-shrink-0">
+              <Divider />
+              <Input.TextArea
+                value={draftMessage}
+                rows={2}
+                onChange={(e) => setDraftMessage(e.target.value)}
+                onPressEnter={(_e) => onSendMessage()}
+                onSubmit={(_e) => onSendMessage()}
+                placeholder={t("chat.placeholder")}
+                autoFocus
+                bordered={false}
+              />
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </Sider>
   );
 };

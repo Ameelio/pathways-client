@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { Layout, Rate, Button, Space, Typography, Card } from "antd";
 import {
   HeartOutlined,
@@ -11,8 +11,17 @@ import {
   exitFullScreen,
 } from "src/components/Common/commonSlice";
 import { useAppDispatch } from "src/redux";
+import { RouteComponentProps } from "react-router";
+import { useCallById } from "src/hooks/useCalls";
+import { push } from "connected-react-router";
+import CallFeedback from "src/components/CallFeedback";
+import { fetchAuthenticated } from "src/api/Common";
+import { differenceInMinutes } from "date-fns/esm";
+import { CallFeedbackType } from "src/components/CallFeedback/CallFeedback";
+import Error from "src/components/Error";
+import { useTranslation } from "react-i18next";
+import Loader from "src/components/Loader";
 
-const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 // const customIcons = {
 //   1: <FrownOutlined style={{ fontSize: 36 }} />,
 //   2: <FrownOutlined style={{ fontSize: 36 }} />,
@@ -21,8 +30,43 @@ const desc = ["terrible", "bad", "normal", "good", "wonderful"];
 //   5: <SmileOutlined style={{ fontSize: 36 }} />,
 // };
 
-function CallFeedbackBase(): ReactElement {
+async function rateCall(callId: number, rating: number): Promise<void> {
+  await fetchAuthenticated(`calls/${callId}`, {
+    method: "PATCH",
+    body: JSON.stringify({
+      rating,
+    }),
+  });
+}
+
+type TParams = { id: string };
+
+const CallFeedbackPage: React.FC<RouteComponentProps<TParams>> = ({
+  match,
+}) => {
   const dispatch = useAppDispatch();
+
+  const { t } = useTranslation("error");
+
+  const call = useCallById(parseInt(match.params.id));
+
+  const [exitType, setExitType] = useState<CallFeedbackType>();
+
+  useEffect(() => {
+    if (!call) return;
+    const diffMin = differenceInMinutes(
+      new Date(call.scheduledEnd),
+      new Date()
+    );
+
+    if (diffMin >= 5) {
+      setExitType("unhappy");
+    } else if (diffMin <= 0) {
+      setExitType("forced");
+    } else {
+      setExitType("deliberate");
+    }
+  }, [call]);
 
   useEffect(() => {
     dispatch(enterFullScreen());
@@ -32,37 +76,56 @@ function CallFeedbackBase(): ReactElement {
     };
   }, [dispatch]);
 
-  return (
-    <Layout.Content
-      style={{
-        backgroundColor: "white",
-        height: "100vh",
-        width: "100vw",
-        display: "flex",
-      }}
-    >
-      <Space
-        direction="vertical"
-        align="center"
-        style={{ margin: "auto" }}
-        size="large"
-      >
-        <Typography.Title level={2}>You left the meeting.</Typography.Title>
-        <Space>
-          <Button size="large">Rejoin</Button>
-          <Button type="primary" size="large">
-            Return home
-          </Button>
-        </Space>
-        <Card title="How was the audio and video?">
-          <Rate
-            character={<HeartOutlined style={{ fontSize: 36 }} />}
-            tooltips={desc}
-          />
-        </Card>
-      </Space>
-    </Layout.Content>
-  );
-}
+  if (!call || !exitType) {
+    return <Loader />;
+  }
 
-export default CallFeedbackBase;
+  if (call.status === "rescheduled" || call.status === "pending_approval")
+    return (
+      <Error
+        status="error"
+        title={t("call.callNull")}
+        extra={[
+          <Button
+            type="primary"
+            size="large"
+            onClick={() => dispatch(push("/"))}
+          >
+            {t("call.returnHome")}
+          </Button>,
+        ]}
+      />
+    );
+
+  if (
+    call.status === "terminated" ||
+    call.status === "ended" ||
+    new Date(call.scheduledEnd) < new Date()
+  )
+    return (
+      <Error
+        status="error"
+        title={t("call.callNull")}
+        extra={[
+          <Button
+            type="primary"
+            size="large"
+            onClick={() => dispatch(push("/"))}
+          >
+            {t("call.returnHome")}
+          </Button>,
+        ]}
+      />
+    );
+
+  return (
+    <CallFeedback
+      call={call}
+      navigate={(path: string) => dispatch(push(path))}
+      rateCall={async (rating: number) => await rateCall(call.id, rating)}
+      type={exitType}
+    />
+  );
+};
+
+export default CallFeedbackPage;
