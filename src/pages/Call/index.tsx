@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "src/redux";
 import { RouteComponentProps } from "react-router";
 import { push } from "connected-react-router";
@@ -27,7 +27,6 @@ type TParams = { id: string };
 
 const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
   const dispatch = useAppDispatch();
-  const stableDispatch = useCallback(dispatch, []);
 
   const call = useCallById(parseInt(match.params.id));
   const { authInfo, user } = useAppSelector((state) => state.session);
@@ -76,16 +75,14 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
         videoHandler: call.videoHandler,
       })
     );
-  }, [call, hasInit, authInfo]);
+  }, [call, hasInit, authInfo, dispatch]);
 
   useEffect(() => {
     if (!rc || hasInit) return;
-    stableDispatch(initializeRemotes({ rc, setRemoteAudios, setRemoteVideos }));
-    stableDispatch(
-      initializeProducers({ rc, setLocalAudio, setLocalVideo, setRc })
-    );
+    dispatch(initializeRemotes({ rc, setRemoteAudios, setRemoteVideos }));
+    dispatch(initializeProducers({ rc, setLocalAudio, setLocalVideo, setRc }));
     setHasInit(true);
-  }, [hasInit, stableDispatch, rc]);
+  }, [hasInit, rc, dispatch]);
 
   useEffect(() => {
     return () => {

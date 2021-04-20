@@ -1,6 +1,6 @@
 import { Avatar, Col, Space, Typography } from "antd";
 import React from "react";
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 import { Contact } from "src/types/User";
 import { getFullName } from "src/utils/utils";
 
@@ -9,16 +9,15 @@ interface Props {
 }
 
 const ConnectionItem: React.FC<Props> = ({ contact }) => {
-  const { t } = useTranslation("dashboard");
+  // const { t } = useTranslation("dashboard");
 
-  const getDaysPastNum = () => {
-    // TODO: get the last call
-    // return differenceInDays(
-    //   new Date(),
-    //   new Date(contact.lastCall.scheduledEnd)
-    // );
-    return 1;
-  };
+  // const getDaysPastNum = () => {
+  //   return differenceInDays(
+  //     new Date(),
+  //     new Date(contact.lastCall.scheduledEnd)
+  //   );
+  //   return 1;
+  // };
 
   return (
     <Col key={contact.id} className="d-flex flex-column align-items-center">

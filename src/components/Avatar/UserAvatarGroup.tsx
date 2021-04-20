@@ -15,6 +15,7 @@ const ContactAvatarGroup: React.FC<Props> = ({ contacts, size }) => {
     <Avatar.Group>
       {contacts.map((contact) => (
         <Avatar
+          key={contact.id}
           size={size}
           className={`${getAvatarBackgroundColor(
             getFullName(contact)
