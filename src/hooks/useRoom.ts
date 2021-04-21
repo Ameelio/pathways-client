@@ -9,7 +9,6 @@ export const useCallMessages = (
 ) => {
   const [messages, setMessages] = useState<CallMessage[]>([]);
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
-  const [init, setInit] = useState(false);
 
   const addCallMessage = (message: CallMessage) => {
     setMessages([...messages, message]);
