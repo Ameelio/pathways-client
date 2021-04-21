@@ -11,6 +11,7 @@ interface Props {
 const ConnectionItem: React.FC<Props> = ({ contact }) => {
   // const { t } = useTranslation("dashboard");
 
+  // TODO: https://github.com/Ameelio/pathways-client/issues/42
   // const getDaysPastNum = () => {
   //   return differenceInDays(
   //     new Date(),
