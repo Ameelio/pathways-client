@@ -9,11 +9,13 @@ export const useCallMessages = (
 ) => {
   const [messages, setMessages] = useState<CallMessage[]>([]);
   const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
+  const [init, setInit] = useState(false);
 
   const addCallMessage = (message: CallMessage) => {
     setMessages([...messages, message]);
   };
 
+  // TODO: wrap alertDocMessage in useCallback
   useEffect(() => {
     room.socket.on(
       "textMessage",
@@ -41,7 +43,7 @@ export const useCallMessages = (
         ]);
       }
     );
-  }, [callId, room, alertDocMessage, setHasUnreadMessages]);
+  }, [callId, room, setHasUnreadMessages]);
 
   return { messages, addCallMessage, hasUnreadMessages, setHasUnreadMessages };
 };

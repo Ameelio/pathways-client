@@ -7,7 +7,7 @@ import { push } from "connected-react-router";
 import "src/i18n/config";
 import Dashboard from "src/components/Dashboard";
 import { openModal } from "src/redux/modules/modalsSlice";
-import { useCalls } from "src/hooks/useCalls";
+import { useCalls, useUpcomingCalls } from "src/hooks/useCalls";
 import { Call } from "src/types/Call";
 
 const mapDispatchToProps = { fetchCalls, push };
@@ -19,7 +19,7 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 const DashboardPage: React.FC<PropsFromRedux> = ({ fetchCalls }) => {
   const dispatch = useAppDispatch();
   const contacts = useAppSelector(selectAllContacts);
-  const calls = useCalls();
+  const calls = useUpcomingCalls();
 
   useEffect(() => {
     (async () => await fetchCalls())();
@@ -27,7 +27,7 @@ const DashboardPage: React.FC<PropsFromRedux> = ({ fetchCalls }) => {
 
   return (
     <Dashboard
-      calls={calls}
+      calls={calls.slice(0, 3)}
       contacts={contacts}
       joinCall={(call: Call) => {
         dispatch(

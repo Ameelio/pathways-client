@@ -20,6 +20,36 @@ export function useCalls() {
   return calls;
 }
 
+export function useUpcomingCalls() {
+  const [calls, setCalls] = useState<Call[]>([]);
+  const baseCalls = useAppSelector(selectAllCalls);
+  const contactEntities = useAppSelector(selectContactEntities);
+
+  useEffect(() => {
+    const filteredCalls = baseCalls
+      .filter(
+        (call) =>
+          call.status === "live" ||
+          call.status === "scheduled" ||
+          call.status === "missing_monitor"
+      )
+      .sort((a, b) => {
+        const key1 = new Date(a.scheduledStart);
+        const key2 = new Date(b.scheduledStart);
+        if (key1 < key2) {
+          return -1;
+        } else if (key1 === key2) {
+          return 0;
+        } else {
+          return 1;
+        }
+      });
+    setCalls(loadAllCallEntities(filteredCalls, contactEntities));
+  }, [baseCalls, contactEntities]);
+
+  return calls;
+}
+
 export function useCallById(id: number) {
   const baseCall = useAppSelector((state) => selectCallById(state, id));
   const contactEntities = useAppSelector(selectContactEntities);
