@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "src/redux";
 import { RouteComponentProps } from "react-router";
 import { push } from "connected-react-router";
@@ -18,15 +18,20 @@ import {
 import RoomClient from "./RoomClient";
 import { ControlledStream } from "src/types/Call";
 import { useCallById } from "src/hooks/useCalls";
+import Error from "src/components/Error";
+import { Button } from "antd";
+import { useTranslation } from "react-i18next";
+import Loader from "src/components/Loader";
 
 type TParams = { id: string };
 
 const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
   const dispatch = useAppDispatch();
-  const stableDispatch = useCallback(dispatch, []);
 
   const call = useCallById(parseInt(match.params.id));
   const { authInfo, user } = useAppSelector((state) => state.session);
+
+  const { t } = useTranslation(["error", "common", "modals"]);
 
   const [rc, setRc] = useState<RoomClient>();
   const [localAudio, setLocalAudio] = useState<ControlledStream>();
@@ -41,11 +46,24 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
   const [hasInit, setHasInit] = useState(false);
 
   useEffect(() => {
-    stableDispatch(enterFullScreen());
+    dispatch(
+      openModal({
+        activeType: "RESOURCE_MODAL",
+        entity: {
+          title: t("modals:privacyNotice.title"),
+          body: t("modals:privacyNotice.body"),
+          okBtnText: t("modals:privacyNotice.okText"),
+        },
+      })
+    );
+  }, [t, dispatch]);
+
+  useEffect(() => {
+    dispatch(enterFullScreen());
     return () => {
-      stableDispatch(exitFullScreen());
+      dispatch(exitFullScreen());
     };
-  }, [stableDispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (!call || hasInit || !call.videoHandler) return;
@@ -57,20 +75,63 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
         videoHandler: call.videoHandler,
       })
     );
-  }, [call, hasInit, authInfo]);
+  }, [call, hasInit, authInfo, dispatch]);
 
   useEffect(() => {
     if (!rc || hasInit) return;
-    stableDispatch(initializeRemotes({ rc, setRemoteAudios, setRemoteVideos }));
-    stableDispatch(
-      initializeProducers({ rc, setLocalAudio, setLocalVideo, setRc })
-    );
+    dispatch(initializeRemotes({ rc, setRemoteAudios, setRemoteVideos }));
+    dispatch(initializeProducers({ rc, setLocalAudio, setLocalVideo, setRc }));
     setHasInit(true);
-  }, [hasInit, stableDispatch, rc]);
+  }, [hasInit, rc, dispatch]);
 
-  if (!call) return <div />;
+  useEffect(() => {
+    return () => {
+      rc?.destroy();
+    };
+  }, [rc]);
 
-  if (!rc || !hasInit) return <div />;
+  if (!rc || !hasInit) {
+    return <Loader fullPage tip={`${t("common:loading")}...`} />;
+  }
+
+  if (!call)
+    return (
+      <Error
+        status="error"
+        title={t("error:call.callNull")}
+        extra={[
+          <Button
+            type="primary"
+            size="large"
+            onClick={() => dispatch(push("/"))}
+          >
+            {t("error:call.returnHome")}
+          </Button>,
+        ]}
+      />
+    );
+
+  if (
+    call.status === "terminated" ||
+    call.status === "ended" ||
+    call.status === "no_show" ||
+    new Date(call.scheduledEnd) < new Date()
+  )
+    return (
+      <Error
+        status="error"
+        title={t("error:call.callNull")}
+        extra={[
+          <Button
+            type="primary"
+            size="large"
+            onClick={() => dispatch(push("/"))}
+          >
+            {t("error:call.returnHome")}
+          </Button>,
+        ]}
+      />
+    );
 
   return (
     <Call
@@ -86,15 +147,9 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
         )
       }
       leaveCall={() => {
-        dispatch(push("/"));
-        dispatch(
-          openModal({
-            activeType: "CALL_RATING_MODAL",
-            entity: call,
-          })
-        );
+        dispatch(push(`/feedback/${call.id}`));
       }}
-      roomClient={rc}
+      room={rc}
       localAudio={localAudio}
       localVideo={localVideo}
       remoteAudios={remoteAudios}

@@ -6,15 +6,20 @@ import ConnectionsList from "./ConnectionsList";
 import DashboardHeader from "./DashboardHeader";
 import CallDetails from "./CallDetails";
 import PageLayout from "src/components/Common/PageLayout";
-import { FAQResource } from "src/types/UI";
 import { Contact } from "src/types/User";
 
 interface Props {
   calls: Call[];
   contacts: Contact[];
-  openInfoModal: (resource: FAQResource) => void;
+  joinCall: (call: Call) => void;
+  seeAllCalls: () => void;
 }
-const Dashboard: React.FC<Props> = ({ calls, contacts, openInfoModal }) => {
+const Dashboard: React.FC<Props> = ({
+  calls,
+  contacts,
+  joinCall,
+  seeAllCalls,
+}) => {
   const [selectedCall, setSelectedCall] = useState<null | Call>(null);
   return (
     <PageLayout>
@@ -29,7 +34,8 @@ const Dashboard: React.FC<Props> = ({ calls, contacts, openInfoModal }) => {
             <CallsList
               calls={calls}
               selectCall={(call: Call) => setSelectedCall(call)}
-              openInfoModal={openInfoModal}
+              joinCall={joinCall}
+              seeAllCalls={seeAllCalls}
             />
           </Col>
           <Col span={8}>

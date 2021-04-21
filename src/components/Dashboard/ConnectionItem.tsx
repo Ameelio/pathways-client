@@ -1,24 +1,24 @@
 import { Avatar, Col, Space, Typography } from "antd";
 import React from "react";
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 import { Contact } from "src/types/User";
-import { genFullName } from "src/utils/utils";
+import { getFullName } from "src/utils/utils";
 
 interface Props {
   contact: Contact;
 }
 
 const ConnectionItem: React.FC<Props> = ({ contact }) => {
-  const { t } = useTranslation("dashboard");
+  // const { t } = useTranslation("dashboard");
 
-  const getDaysPastNum = () => {
-    // TODO: get the last call
-    // return differenceInDays(
-    //   new Date(),
-    //   new Date(contact.lastCall.scheduledEnd)
-    // );
-    return 1;
-  };
+  // TODO: https://github.com/Ameelio/pathways-client/issues/42
+  // const getDaysPastNum = () => {
+  //   return differenceInDays(
+  //     new Date(),
+  //     new Date(contact.lastCall.scheduledEnd)
+  //   );
+  //   return 1;
+  // };
 
   return (
     <Col key={contact.id} className="d-flex flex-column align-items-center">
@@ -26,9 +26,9 @@ const ConnectionItem: React.FC<Props> = ({ contact }) => {
         <Avatar shape="square" size={80} src={contact.profileImagePath} />
         <div>
           <div>
-            <Typography.Text>{genFullName(contact)}</Typography.Text>
+            <Typography.Text>{getFullName(contact)}</Typography.Text>
           </div>
-          {contact.status === "active" && (
+          {/* {contact.status === "active" && (
             <div>
               <Typography.Text type="secondary">
                 {t("connection.lastCall", {
@@ -36,7 +36,7 @@ const ConnectionItem: React.FC<Props> = ({ contact }) => {
                 })}
               </Typography.Text>
             </div>
-          )}
+          )} */}
         </div>
       </Space>
     </Col>

@@ -2,9 +2,9 @@ import { Space, Row, Col, Typography, Select } from "antd";
 import Modal from "antd/lib/modal/Modal";
 import { differenceInMinutes, format } from "date-fns";
 import React from "react";
-import { genFullName } from "src/utils/utils";
 import { useTranslation } from "react-i18next";
 import { CancelCallModalData } from "src/types/UI";
+import { getParticipantsFirstNames, getParticipantsFullNames } from "src/utils";
 
 interface Props {
   data: CancelCallModalData;
@@ -14,7 +14,7 @@ interface Props {
 const CancelCallModal: React.FC<Props> = ({ data, closeModal }) => {
   const { t } = useTranslation("modals");
   const call = data.entity;
-  const fullName = genFullName(call.userParticipants[0]);
+  const fullName = getParticipantsFullNames(call);
   const startDate = format(new Date(call.scheduledStart), "EEEE, MMMM d");
   const startTime = format(new Date(call.scheduledStart), "h:mm aaa OOO");
   const duration =
@@ -23,7 +23,7 @@ const CancelCallModal: React.FC<Props> = ({ data, closeModal }) => {
       new Date(call.scheduledEnd),
       new Date(call.scheduledEnd)
     );
-  const firstName = call.userParticipants[0].firstName;
+  const firstName = getParticipantsFirstNames(call);
 
   return (
     <Modal

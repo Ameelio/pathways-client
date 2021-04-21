@@ -102,7 +102,7 @@ const VideoOverlay: React.FC<Props> = ({
           />
         </Space>
       </Col>
-      <Col span={2} offset={6}>
+      <Col span={2} offset={4}>
         <Button
           danger
           size="large"

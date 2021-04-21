@@ -1,9 +1,4 @@
 {
-  "privacyNotice": {
-    "title": "Privacy Notice",
-    "body": "I understand that by joining this call, I am consenting to the monitoring and recording of it for security purposes. In addition, I understand that if I violate any facility calling policies, my call may be terminated.",
-    "okText": "Agree"
-  },
   "call": {
     "title": "Upcoming Calls",
     "seeAll": "See All",

@@ -12,9 +12,7 @@ interface Props {
 
 const ConnectionsList: React.FC<Props> = ({ calls, contacts }: Props) => {
   const { t } = useTranslation("dashboard");
-  const [filteredContacts, setFilteredContacts] = useState<Contact[] | null>(
-    null
-  );
+  const [filteredContacts, setFilteredContacts] = useState<Contact[]>([]);
   const [activeContactTab, setActiveContactTab] = useState("active");
   const tabList = [
     {
@@ -33,7 +31,7 @@ const ConnectionsList: React.FC<Props> = ({ calls, contacts }: Props) => {
     );
   }, [activeContactTab, contacts]);
 
-  const connectionItems = filteredContacts?.map((contact) => (
+  const connectionItems = filteredContacts.map((contact) => (
     <ConnectionItem key={contact.id} contact={contact} />
   ));
 

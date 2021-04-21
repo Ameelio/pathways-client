@@ -5,7 +5,7 @@ import { User } from "src/types/User";
 import PageLayout from "src/components/Common/PageLayout";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
-import { genFullName } from "src/utils/utils";
+import { getFullName } from "src/utils/utils";
 import { useAppDispatch } from "src/redux";
 import { openModal } from "src/redux/modules/modalsSlice";
 
@@ -42,9 +42,7 @@ const tableColumns = [
 
 const Calls: React.FC<Props> = ({ calls, user }) => {
   const dispatch = useAppDispatch();
-  const [tableData, setTableData] = useState<TableData[] | undefined>(
-    undefined
-  );
+  const [tableData, setTableData] = useState<TableData[]>([]);
   const { t } = useTranslation("calls");
 
   useEffect(() => {
@@ -59,7 +57,7 @@ const Calls: React.FC<Props> = ({ calls, user }) => {
           participants: (
             <Space>
               <Avatar src={user.profileImagePath} size="small" />
-              <Typography.Text>{genFullName(user)}</Typography.Text>
+              <Typography.Text>{getFullName(user)}</Typography.Text>
             </Space>
           ),
           cancel: (

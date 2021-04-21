@@ -5,5 +5,15 @@
     "messageOne": "You are about to cancel your call with {{connectionName}} for:",
     "messageTwo": "Please select a cancellation reason to send to {{connectionFirstName}}.",
     "dropdownPlaceholder": "Cancellation reason"
+  },
+  "kioskConfirmationModal": {
+    "title": "Before connecting, let’s confirm you’re in the right place...",
+    "subtitle": "Your call is assigned to...",
+    "body": "Please confirm that you are using the device listed above. If you’re on the wrong device, you will not be able to connect to your call, and you will have to log out and locate your assigned device."
+  },
+  "privacyNotice": {
+    "title": "Privacy Notice",
+    "body": "I understand that by joining this call, I am consenting to the monitoring and recording of it for security purposes. In addition, I understand that if I violate any facility calling policies, my call may be terminated.",
+    "okText": "Agree"
   }
 }

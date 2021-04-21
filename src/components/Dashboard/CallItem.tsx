@@ -1,30 +1,20 @@
-import { Avatar, Button, Card, Row, Space, Typography } from "antd";
+import { Button, Card, Row, Space, Typography } from "antd";
 import { differenceInMinutes, format, isToday, isTomorrow } from "date-fns";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Call } from "src/types/Call";
-import { FAQResource } from "src/types/UI";
-import { genFullName } from "src/utils/utils";
-import EnterCallSound from "src/assets/Sounds/EnterCall.wav";
-import useSound from "use-sound";
 import { subMinutes } from "date-fns/esm";
-import { WAITING_ROOM_BUFFER_MIN } from "src/utils/constants";
+import { WAITING_ROOM_BUFFER_MIN } from "src/constants";
+import { getParticipantsFullNames } from "src/utils";
+import ContactAvatarGroup from "../Avatar/UserAvatarGroup";
 
 interface Props {
   call: Call;
   selectCall: (call: Call) => void;
-  navigate: (path: string) => void;
-  openPrivacyNotice: (resource: FAQResource) => void;
+  joinCall: (call: Call) => void;
 }
-const CallItem: React.FC<Props> = ({
-  call,
-  selectCall,
-  navigate,
-  openPrivacyNotice,
-}: Props) => {
+const CallItem: React.FC<Props> = ({ call, selectCall, joinCall }: Props) => {
   const { t } = useTranslation("dashboard");
-
-  const [play] = useSound(EnterCallSound);
 
   const duration = differenceInMinutes(
     new Date(call.scheduledEnd),
@@ -52,10 +42,10 @@ const CallItem: React.FC<Props> = ({
             {format(new Date(call.scheduledStart), "h:mm aaa")} •{" "}
             {`${duration} minutes`}
           </Typography.Text>
-          <Space style={{ paddingTop: 18 }}>
-            <Avatar src={call.userParticipants[0].profileImagePath} />
+          <Space className="mt-4">
+            <ContactAvatarGroup contacts={call.userParticipants} />
             <Typography.Text type="secondary">
-              {genFullName(call.userParticipants[0])}
+              {getParticipantsFullNames(call)}
             </Typography.Text>
           </Space>
         </Space>
@@ -67,13 +57,7 @@ const CallItem: React.FC<Props> = ({
               className="rounded-sm"
               disabled={!call.videoHandler}
               onClick={() => {
-                play();
-                navigate(`call/${call.id}`);
-                openPrivacyNotice({
-                  title: t("privacyNotice.title"),
-                  body: t("privacyNotice.body"),
-                  okBtnText: t("privacyNotice.okText"),
-                });
+                joinCall(call);
               }}
             >
               {t("call.join")}

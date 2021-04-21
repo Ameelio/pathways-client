@@ -69,3 +69,13 @@ export async function getMedia(type: MediaType, deviceId?: number) {
   const mediaConstraints = getMediaConstraints(type, deviceId);
   return await navigator.mediaDevices.getUserMedia(mediaConstraints);
 }
+
+export function getParticipantsFirstNames(call: Call) {
+  return call.userParticipants.map((user) => user.firstName).join(", ");
+}
+
+export function getParticipantsFullNames(call: Call) {
+  return call.userParticipants
+    .map((user) => `${user.firstName} ${user.lastName}`)
+    .join(", ");
+}

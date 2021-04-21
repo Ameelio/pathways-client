@@ -4,7 +4,7 @@ import { differenceInMinutes, format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { User } from "src/types/User";
-import { genFullName } from "src/utils/utils";
+import { getFullName } from "src/utils/utils";
 import { BaseCall } from "src/types/Call";
 import { AVATAR_LARGE } from "src/utils/constants";
 import PageLayout from "src/components/Common/PageLayout";
@@ -43,7 +43,7 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
               <Avatar src={user.profileImagePath} size={AVATAR_LARGE} />
               <Space direction="vertical">
                 <Typography.Title level={4}>
-                  <Typography.Text strong>{genFullName(user)}</Typography.Text>
+                  <Typography.Text strong>{getFullName(user)}</Typography.Text>
                 </Typography.Title>
                 <Typography.Title level={5}>
                   <Typography.Text>{user.location}</Typography.Text>
@@ -57,7 +57,7 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
           <Col span={16}>
             <Card title={t("profileInfo.about")}>
               <p>
-                <Typography.Text>{`${t("profileInfo.name")}: ${genFullName(
+                <Typography.Text>{`${t("profileInfo.name")}: ${getFullName(
                   user
                 )}`}</Typography.Text>
               </p>

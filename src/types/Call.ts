@@ -11,22 +11,33 @@ export interface CallHandler {
   port: string;
 }
 
+export type ISOString = string;
+
+type CallStatus =
+  | "ended"
+  | "scheduled"
+  | "terminated"
+  | "rescheduled"
+  | "live"
+  | "pending_approval"
+  | "missing_monitor"
+  | "cancelled"
+  | "no_show";
+
 export interface BaseCall {
   id: number;
-  scheduledStart: Date;
-  scheduledEnd: Date;
+  scheduledStart: ISOString;
+  scheduledEnd: ISOString;
   approved: boolean;
-  status: "ended" | "scheduled" | "terminated" | "rescheduled" | "live";
+  status: CallStatus;
   connectionId: number;
   userIds: number[];
   kioskId: number;
+  kioskName: string;
   videoHandler?: CallHandler;
 }
 
 export interface Call extends BaseCall {
-  // TODO: load facility kiosks and load kiosk information here
-  // https://github.com/Ameelio/pathways-client/issues/31
-  kiosk?: Kiosk;
   userParticipants: Contact[];
 }
 

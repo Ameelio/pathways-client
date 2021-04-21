@@ -1,10 +1,7 @@
 import { Store } from "src/redux";
 import { FacilitiesAPIResponse } from "./interfaces/apiResponses";
 
-export const API_URL =
-  process.env.NODE_ENV === "production"
-    ? process.env.REACT_APP_API_URL
-    : "api/v1/";
+export const API_URL = process.env.REACT_APP_API_URL || "api/v1/";
 
 export interface ApiResponse {
   date: number;

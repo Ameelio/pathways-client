@@ -1,10 +1,11 @@
 import { Typography } from "antd";
 import React from "react";
 import Countdown from "react-countdown";
+import { ISOString } from "src/types/Call";
 import { mapCountdownTimeToStyle } from "src/utils";
 
 interface Props {
-  endTime: Date;
+  endTime: ISOString;
   style?: React.CSSProperties;
   className?: string;
 }

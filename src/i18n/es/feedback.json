@@ -1,0 +1,11 @@
+{
+  "title": "We hope your call with {{names}} went well!",
+  "howYouFeeling": "How are you feeling after your call?",
+  "ratings": {
+    "terrible": "terrible",
+    "bad": "bad",
+    "normal": "normal",
+    "good": "good",
+    "wonderful": "wonderful"
+  }
+}
