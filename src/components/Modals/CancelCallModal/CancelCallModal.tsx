@@ -1,6 +1,6 @@
 import { Space, Row, Col, Typography, Select } from "antd";
 import Modal from "antd/lib/modal/Modal";
-import { differenceInMinutes, format } from "date-fns";
+import { differenceInMinutes, format, getDay } from "date-fns";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CancelCallModalData } from "src/types/UI";
@@ -23,10 +23,17 @@ const CancelCallModal: React.FC<Props> = ({ data, closeModal, cancelCall }) => {
     call &&
     differenceInMinutes(
       new Date(call.scheduledEnd),
-      new Date(call.scheduledEnd)
+      new Date(call.scheduledStart)
     );
   const firstName = getParticipantsFirstNames(call);
-  const CANCEL_REASONS = ["reason 1"];
+  const CANCEL_REASONS = [
+    t("cancelCallModal.reason1"),
+    t("cancelCallModal.reason2", {
+      dayOfWeek: format(new Date(call.scheduledStart), "EEEE"),
+    }),
+    t("cancelCallModal.reason3"),
+    t("cancelCallModal.reason4"),
+  ];
 
   return (
     <Modal

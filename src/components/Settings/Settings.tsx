@@ -1,11 +1,12 @@
 import React from "react";
 import { Language } from "src/types/Session";
 import PageLayout from "src/components/Common/PageLayout";
-import { Card, Col, Collapse, Row, Select, Space, Typography } from "antd";
+import { Col, Collapse, Row, Select, Space, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 import { LANGUAGES } from "src/utils/constants";
 import { openModal } from "../../redux/modules/modalsSlice";
 import { useAppDispatch } from "src/redux";
+import Card from "src/components/Card";
 
 type FAQ = { key: string; question: string; answer: string };
 
@@ -19,7 +20,7 @@ const Settings: React.FC = () => {
   return (
     <PageLayout>
       <Space direction="vertical" size="large" className="w-100 p-6 pt-9">
-        <Row gutter={32}>
+        <Row gutter={36}>
           <Col span={12}>
             <Card title={t("language.title")}>
               <p>
@@ -96,13 +97,17 @@ const Settings: React.FC = () => {
           </Col>
         </Row>
         <Row>
-          <Collapse ghost>
-            {FAQ.map((faq) => (
-              <Collapse.Panel key={faq.key} header={faq.question}>
-                <Typography.Text>{faq.answer}</Typography.Text>
-              </Collapse.Panel>
-            ))}
-          </Collapse>
+          <Col span={24}>
+            <Card title={t("faq.title")}>
+              <Collapse ghost>
+                {FAQ.map((faq) => (
+                  <Collapse.Panel key={faq.key} header={faq.question}>
+                    <Typography.Text>{faq.answer}</Typography.Text>
+                  </Collapse.Panel>
+                ))}
+              </Collapse>
+            </Card>
+          </Col>
         </Row>
       </Space>
     </PageLayout>

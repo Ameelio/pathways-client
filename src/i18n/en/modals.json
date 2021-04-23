@@ -3,8 +3,12 @@
     "title": "Cancel Call?",
     "okText": "Confirm",
     "messageOne": "You are about to cancel your call with {{connectionName}} for:",
-    "messageTwo": "Please select a cancellation reason to send to {{connectionFirstName}}.",
-    "dropdownPlaceholder": "Cancellation reason"
+    "messageTwo": "Please select a cancellation reason to send to {{connectionFirstName}} to help them choose a time that works better for you..",
+    "dropdownPlaceholder": "Cancellation reason",
+    "reason1": "I can't make this time just this once.",
+    "reason2": "I can't make this time on {{dayOfWeek}}.",
+    "reason3": "I can't make this time on weekdays (Mon-Fri).",
+    "reason4": "I can't make this time any day of the week (Sun - Sat)."
   },
   "kioskConfirmationModal": {
     "title": "Before connecting, let’s confirm you’re in the right place...",
