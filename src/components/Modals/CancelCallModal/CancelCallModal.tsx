@@ -1,7 +1,7 @@
 import { Space, Row, Col, Typography, Select } from "antd";
 import Modal from "antd/lib/modal/Modal";
 import { differenceInMinutes, format } from "date-fns";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CancelCallModalData } from "src/types/UI";
 import { getParticipantsFirstNames, getParticipantsFullNames } from "src/utils";
@@ -9,10 +9,12 @@ import { getParticipantsFirstNames, getParticipantsFullNames } from "src/utils";
 interface Props {
   data: CancelCallModalData;
   closeModal: () => void;
+  cancelCall: (id: number, reason: string) => void;
 }
 
-const CancelCallModal: React.FC<Props> = ({ data, closeModal }) => {
+const CancelCallModal: React.FC<Props> = ({ data, closeModal, cancelCall }) => {
   const { t } = useTranslation("modals");
+  const [reason, setReason] = useState("");
   const call = data.entity;
   const fullName = getParticipantsFullNames(call);
   const startDate = format(new Date(call.scheduledStart), "EEEE, MMMM d");
@@ -24,13 +26,17 @@ const CancelCallModal: React.FC<Props> = ({ data, closeModal }) => {
       new Date(call.scheduledEnd)
     );
   const firstName = getParticipantsFirstNames(call);
+  const CANCEL_REASONS = ["reason 1"];
 
   return (
     <Modal
       title={t("cancelCallModal.title")}
       visible={true}
       okText={t("cancelCallModal.okText")}
-      onOk={closeModal}
+      onOk={() => {
+        cancelCall(call.id, reason);
+        closeModal();
+      }}
       onCancel={closeModal}
       className="rounded-sm"
     >
@@ -64,7 +70,14 @@ const CancelCallModal: React.FC<Props> = ({ data, closeModal }) => {
       <Select
         className="w-full"
         placeholder={t("cancelCallModal.dropdownPlaceholder")}
-      ></Select>
+        onChange={(value: string) => setReason(value)}
+      >
+        {CANCEL_REASONS.map((reason) => (
+          <Select.Option key={reason} value={reason}>
+            {reason}
+          </Select.Option>
+        ))}
+      </Select>
     </Modal>
   );
 };

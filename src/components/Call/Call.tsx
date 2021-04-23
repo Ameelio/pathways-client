@@ -101,19 +101,17 @@ const CallBase: React.FC<Props> = React.memo(
           "producerUpdate",
           async ({
             from,
-            contents,
+            producerId,
+            active,
+            type,
           }: {
             from: CallParticipant;
-            contents: {
-              producerId: string;
-              active: boolean;
-              type: "audio" | "video";
-            };
+            producerId: string;
+            active: boolean;
+            type: "audio" | "video";
           }) => {
             if (from.type !== "user") return;
-            contents.type === "audio"
-              ? setPeerAudioOn(contents.active)
-              : setPeerVideoOn(contents.active);
+            type === "audio" ? setPeerAudioOn(active) : setPeerVideoOn(active);
           }
         );
       }

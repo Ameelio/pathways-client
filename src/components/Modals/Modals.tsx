@@ -9,6 +9,7 @@ import { push } from "connected-react-router";
 import { logout } from "src/redux/modules/session";
 import EnterCallSound from "src/assets/Sounds/EnterCall.wav";
 import useSound from "use-sound";
+import { cancelCall } from "src/redux/modules/call";
 
 const Modals: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -21,6 +22,9 @@ const Modals: React.FC = () => {
         <CancelCallModal
           closeModal={() => dispatch(closeModal())}
           data={data}
+          cancelCall={(id: number, reason: string) =>
+            dispatch(cancelCall({ id, reason }))
+          }
         />
       );
     case "RESOURCE_MODAL":

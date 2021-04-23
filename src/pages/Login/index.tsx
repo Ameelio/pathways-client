@@ -1,6 +1,5 @@
-import React, { ReactElement, useEffect, useState } from "react";
-import { RootState } from "src/redux";
-import { connect, ConnectedProps } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { RootState, useAppSelector } from "src/redux";
 import {
   Input,
   Layout,
@@ -16,7 +15,7 @@ import {
 import { Redirect } from "react-router";
 import { loginWithCredentials } from "src/api/User";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { getRandomItem, showToast } from "src/utils/utils";
+import { getRandomItem } from "src/utils/utils";
 import { ReactComponent as Logo } from "src/assets/logo.svg";
 import "./index.css";
 import "src/i18n/config";
@@ -29,16 +28,6 @@ import { FacilityRO } from "src/api/interfaces/apiResponses";
 
 const { Content } = Layout;
 
-const mapStateToProps = (state: RootState) => ({
-  session: state.session,
-});
-
-const mapDispatchToProps = {};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
 const FORM_LAYOUT = {
   labelCol: { flex: "95px" },
   wrapperCol: { flex: 1 },
@@ -48,9 +37,11 @@ const FORM_TAIL_LAYOUT = {
   wrapperCol: { span: 24 },
 };
 
-function LoginContainer({ session }: PropsFromRedux): ReactElement {
+const LoginContainer: React.FC = () => {
   const { t, i18n } = useTranslation("login");
   const { Option } = Select;
+
+  const session = useAppSelector((state: RootState) => state.session);
 
   const [dailyQuote] = useState(getRandomItem(QUOTES) as Quote);
   const [facilities, setFacilities] = useState<FacilityRO[]>([]);
@@ -68,20 +59,12 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
   }
 
   const onFinish = async (values: any) => {
-    try {
-      await loginWithCredentials({
-        inmateNumber: values.inmateNumber,
-        pin: values.pin,
-        facilityId: values.facilityId,
-        language: values.language,
-      });
-    } catch (err) {
-      showToast("login_error", "Invalid ID or Pin Code", "error");
-    }
-  };
-
-  const onFinishFailed = (_errorInfo: any) => {
-    showToast("login_error", "Invalid ID or Pin Code", "error");
+    await loginWithCredentials({
+      inmateNumber: values.inmateNumber,
+      pin: values.pin,
+      facilityId: values.facilityId,
+      language: values.language,
+    });
   };
 
   const facilityOptions = facilities.map((facility: FacilityRO) => (
@@ -122,16 +105,11 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
             name="login"
             className="w-full rounded-lg"
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
             initialValues={{
               language: Object.keys(LANGUAGES)[0],
             }}
           >
-            <Form.Item
-              label="Language"
-              name="language"
-              rules={[{ required: true, message: "Language is required." }]}
-            >
+            <Form.Item label="Language" name="language">
               <Radio.Group
                 className="w-100"
                 onChange={(e) => i18n.changeLanguage(e.target.value)}
@@ -176,7 +154,12 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
             </Form.Item>
 
             <Form.Item {...FORM_TAIL_LAYOUT} style={{ borderRadius: 4 }}>
-              <Button type="primary" htmlType="submit" size="large">
+              <Button
+                type="primary"
+                htmlType="submit"
+                size="large"
+                loading={session.status === "loading"}
+              >
                 {t("buttonText")}
               </Button>
             </Form.Item>
@@ -185,6 +168,6 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
       </div>
     </Content>
   );
-}
+};
 
-export default connector(LoginContainer);
+export default LoginContainer;

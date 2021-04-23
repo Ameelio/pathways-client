@@ -13,7 +13,7 @@ export interface CallHandler {
 
 export type ISOString = string;
 
-type CallStatus =
+export type CallStatus =
   | "ended"
   | "scheduled"
   | "terminated"
@@ -31,6 +31,7 @@ export interface BaseCall {
   approved: boolean;
   status: CallStatus;
   connectionId: number;
+  statusDetails: string;
   userIds: number[];
   kioskId: number;
   kioskName: string;

@@ -7,7 +7,7 @@ import { push } from "connected-react-router";
 import "src/i18n/config";
 import Dashboard from "src/components/Dashboard";
 import { openModal } from "src/redux/modules/modalsSlice";
-import { useCalls, useUpcomingCalls } from "src/hooks/useCalls";
+import { useUpcomingCalls } from "src/hooks/useCalls";
 import { Call } from "src/types/Call";
 
 const mapDispatchToProps = { fetchCalls, push };
@@ -27,7 +27,7 @@ const DashboardPage: React.FC<PropsFromRedux> = ({ fetchCalls }) => {
 
   return (
     <Dashboard
-      calls={calls.slice(0, 3)}
+      calls={calls}
       contacts={contacts}
       joinCall={(call: Call) => {
         dispatch(

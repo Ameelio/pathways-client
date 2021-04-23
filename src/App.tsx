@@ -57,9 +57,9 @@ function App({
   return (
     <ConnectedRouter history={history}>
       <Modals />
-      <Layout style={{ minHeight: "100vh" }}>
+      <Layout className="min-h-screen">
         {showSideBar && <Sidebar user={session.user} navigate={push} />}
-        {loading || session.status === "loading" ? (
+        {loading ? (
           <Loader fullPage />
         ) : (
           <Layout>

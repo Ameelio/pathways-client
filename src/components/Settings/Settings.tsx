@@ -1,14 +1,18 @@
 import React from "react";
 import { Language } from "src/types/Session";
 import PageLayout from "src/components/Common/PageLayout";
-import { Card, Col, Row, Select, Space, Typography } from "antd";
+import { Card, Col, Collapse, Row, Select, Space, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 import { LANGUAGES } from "src/utils/constants";
 import { openModal } from "../../redux/modules/modalsSlice";
 import { useAppDispatch } from "src/redux";
 
+type FAQ = { key: string; question: string; answer: string };
+
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation("settings");
+
+  const FAQ: FAQ[] = [];
   const dispatch = useAppDispatch();
   const { Option } = Select;
 
@@ -90,6 +94,15 @@ const Settings: React.FC = () => {
               </Row>
             </Card>
           </Col>
+        </Row>
+        <Row>
+          <Collapse ghost>
+            {FAQ.map((faq) => (
+              <Collapse.Panel key={faq.key} header={faq.question}>
+                <Typography.Text>{faq.answer}</Typography.Text>
+              </Collapse.Panel>
+            ))}
+          </Collapse>
         </Row>
       </Space>
     </PageLayout>

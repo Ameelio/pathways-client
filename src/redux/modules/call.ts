@@ -10,6 +10,7 @@ import {
   CallHandler,
   CallParticipant,
   ControlledStream,
+  CallStatus,
 } from "src/types/Call";
 import { ThunkApi } from "../helper";
 import io from "socket.io-client";
@@ -23,6 +24,21 @@ export const fetchCalls = createAsyncThunk("calls/fetchAll", async () => {
 
   return calls;
 });
+
+export const cancelCall = createAsyncThunk(
+  "calls/cancelCall",
+  async ({ id, reason }: { id: number; reason: string }) => {
+    await fetchAuthenticated(`calls/${id}`, {
+      method: "DELETE",
+      body: JSON.stringify({ statusDetails: reason }),
+    });
+
+    return {
+      id,
+      changes: { statusDetails: reason, status: "cancelled" as CallStatus },
+    };
+  }
+);
 
 export const initializeVisit = createAsyncThunk(
   "visit/initializeVisit",
@@ -199,6 +215,13 @@ export const callSlice = createSlice({
     );
     builder.addCase(initializeRemotes.rejected, () =>
       showToast("initializeProducers", "Failed to initialize remotes.", "error")
+    );
+    builder.addCase(cancelCall.fulfilled, (state, action) => {
+      callAdapter.updateOne(state, action.payload);
+      showToast("cancelCall", "Successfully cancelled call.", "success");
+    });
+    builder.addCase(cancelCall.rejected, () =>
+      showToast("cancelCall", "Failed to cancel call.", "error")
     );
   },
 });
