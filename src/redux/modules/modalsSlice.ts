@@ -5,6 +5,7 @@ import {
   ResourceModalData,
   TestConnectionModalData,
   KioskConfirmationModalData,
+  BiographyModalData,
 } from "src/types/UI";
 
 type ModalEntity =
@@ -12,7 +13,8 @@ type ModalEntity =
   | ResourceModalData
   | TestConnectionModalData
   | InactiveModalData
-  | KioskConfirmationModalData;
+  | KioskConfirmationModalData
+  | BiographyModalData;
 
 // type ModalsSliceState =  {activeType: ModalType | null, entity: Call |{ title: string; body: string } | null };
 type ModalsSliceState = { data: ModalEntity };

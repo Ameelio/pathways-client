@@ -1,11 +1,13 @@
 import { Call } from "./Call";
+import { Quote } from "./Common";
 
 export type ModalType =
   | "INACTIVE_MODAL"
   | "CANCEL_CALL_MODAL"
   | "RESOURCE_MODAL"
   | "TEST_CONNECTION_MODAL"
-  | "KIOSK_CONFIRMATION_MODAL";
+  | "KIOSK_CONFIRMATION_MODAL"
+  | "BIO_MODAL";
 
 export interface FAQResource {
   title: string;
@@ -41,4 +43,9 @@ export interface TestConnectionModalData extends BaseModal {
 export interface KioskConfirmationModalData extends BaseModal {
   activeType: "KIOSK_CONFIRMATION_MODAL";
   entity: Call;
+}
+
+export interface BiographyModalData extends BaseModal {
+  activeType: "BIO_MODAL";
+  entity: Quote;
 }

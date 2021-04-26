@@ -10,6 +10,7 @@ import { logout } from "src/redux/modules/session";
 import EnterCallSound from "src/assets/Sounds/EnterCall.wav";
 import useSound from "use-sound";
 import { cancelCall } from "src/redux/modules/call";
+import BiographyModal from "./BiographyModal";
 
 const Modals: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -55,6 +56,10 @@ const Modals: React.FC = () => {
             dispatch(logout());
           }}
         />
+      );
+    case "BIO_MODAL":
+      return (
+        <BiographyModal data={data} closeModal={() => dispatch(closeModal())} />
       );
     default:
       return null;

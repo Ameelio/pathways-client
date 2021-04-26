@@ -4,12 +4,21 @@ import React, { useEffect, useState } from "react";
 import { Quote } from "src/types/Common";
 import { BACKGROUNDS, QUOTES } from "src/constants";
 import { getRandomItem } from "src/utils/utils";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import {
+  HeartFilled,
+  HeartOutlined,
+  InfoCircleOutlined,
+} from "@ant-design/icons";
 
-const DashboardHeader: React.FC = () => {
+interface Props {
+  openBio: (quote: Quote) => void;
+}
+
+const DashboardHeader: React.FC<Props> = ({ openBio }) => {
   const [dailyQuote] = useState(getRandomItem(QUOTES) as Quote);
   const [background] = useState(getRandomItem(BACKGROUNDS));
   const [currTime, setCurrTime] = useState(new Date());
+  const [hasLiked, setHasLiked] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -48,7 +57,22 @@ const DashboardHeader: React.FC = () => {
           <Typography.Text style={Styles.quote}>
             {dailyQuote.author}
           </Typography.Text>
-          <InfoCircleOutlined className="text-white font-bold" />
+          <InfoCircleOutlined
+            className="text-white font-bold text-lg"
+            onClick={() => openBio(dailyQuote)}
+          />
+          {/* TODO: add segment log with quote + author as properties */}
+          {hasLiked ? (
+            <HeartFilled
+              className="text-white font-bold text-lg	"
+              onClick={() => setHasLiked((val) => !val)}
+            />
+          ) : (
+            <HeartOutlined
+              className="text-white font-bold text-lg	"
+              onClick={() => setHasLiked((val) => !val)}
+            />
+          )}
         </Space>
       </Col>
     </Space>
