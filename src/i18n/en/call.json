@@ -18,7 +18,6 @@
     "waitingForPrefix": "Waiting for",
     "waitingForSuffix": "to join the call",
     "loading": "Loading...",
-    "whenWillCallConnect": "When will my call connect?",
     "checkConnection": "Check Connection",
     "leaveWaitingRoom": "Leave Waiting Room"
   },

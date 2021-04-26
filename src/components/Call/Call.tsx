@@ -215,7 +215,7 @@ const CallBase: React.FC<Props> = React.memo(
     return (
       <Layout>
         <div
-          className="ant-layout-content flex flex-column bg-gray-800"
+          className="ant-layout-content flex flex-col bg-gray-800"
           onMouseMove={() => onMouseMove()}
           onMouseOver={() => onMouseMove()}
         >
@@ -223,7 +223,7 @@ const CallBase: React.FC<Props> = React.memo(
             <div className="w-full h-full">
               <Video
                 srcObject={remoteVideos[key]}
-                className="w-full h-full item-fadein"
+                className="w-full h-full"
                 autoPlay={true}
                 isFadingOut={isCallEnding}
               />

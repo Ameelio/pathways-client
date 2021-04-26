@@ -29,9 +29,10 @@ export function useUpcomingCalls() {
     const filteredCalls = baseCalls
       .filter(
         (call) =>
-          call.status === "live" ||
-          call.status === "scheduled" ||
-          call.status === "missing_monitor"
+          (call.status === "live" ||
+            call.status === "scheduled" ||
+            call.status === "missing_monitor") &&
+          new Date(call.scheduledEnd) >= new Date()
       )
       .sort((a, b) => {
         const key1 = new Date(a.scheduledStart);

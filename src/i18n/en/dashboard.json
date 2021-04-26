@@ -7,6 +7,7 @@
     "minutes": "minutes",
     "ago": "ago",
     "join": "Join Now",
+    "initializing": "Initializing...",
     "seeDetails": "See Details",
     "cancelDescription": "Can’t make this time? You can cancel this call and select a cancellation reason to send to your contact.",
     "cancel": "Cancel",

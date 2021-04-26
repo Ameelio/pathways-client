@@ -2,11 +2,13 @@ import { Col, Space, Typography } from "antd";
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Quote } from "src/types/Common";
-import { QUOTES } from "src/utils/constants";
+import { BACKGROUNDS, QUOTES } from "src/constants";
 import { getRandomItem } from "src/utils/utils";
+import { InfoCircleOutlined } from "@ant-design/icons";
 
 const DashboardHeader: React.FC = () => {
   const [dailyQuote] = useState(getRandomItem(QUOTES) as Quote);
+  const [background] = useState(getRandomItem(BACKGROUNDS));
   const [currTime, setCurrTime] = useState(new Date());
 
   useEffect(() => {
@@ -22,11 +24,11 @@ const DashboardHeader: React.FC = () => {
       direction="vertical"
       align="center"
       style={{
-        backgroundImage: `url(${dailyQuote.background})`,
+        backgroundImage: `url(${background})`,
       }}
       className="w-full h-52 rounded-md bg-cover bg-center text-center flex-1 justify-end"
     >
-      <Col className="pb-4">
+      <Col className="pb-3">
         <Typography.Title level={1} style={Styles.headerTime}>
           {format(currTime, "HH:mm")}
         </Typography.Title>
@@ -34,10 +36,20 @@ const DashboardHeader: React.FC = () => {
           {format(currTime, "eeee, MMMM d")}
         </Typography.Title>
       </Col>
-      <Col>
-        <Typography.Title level={5} style={Styles.quote}>
-          {`${dailyQuote.quote} - ${dailyQuote.author}`}
+      <Col className="group pb-3">
+        <Typography.Title
+          level={5}
+          style={Styles.quote}
+          className="showHoverTrigger"
+        >
+          {dailyQuote.quote}
         </Typography.Title>
+        <Space className="transition-opacity duration-500 ease-in-out opacity-0 group-hover:opacity-100">
+          <Typography.Text style={Styles.quote}>
+            {dailyQuote.author}
+          </Typography.Text>
+          <InfoCircleOutlined className="text-white font-bold" />
+        </Space>
       </Col>
     </Space>
   );

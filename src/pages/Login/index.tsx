@@ -20,7 +20,8 @@ import { ReactComponent as Logo } from "src/assets/logo.svg";
 import "./index.css";
 import "src/i18n/config";
 import { useTranslation } from "react-i18next";
-import { LANGUAGES, QUOTES } from "src/utils/constants";
+import { LANGUAGES } from "src/utils/constants";
+import { BACKGROUNDS } from "src/constants";
 import { BORDER_RADIUS } from "src/styles/Layout";
 import { Quote } from "src/types/Common";
 import { fetchFacilities } from "src/api/Common";
@@ -43,7 +44,7 @@ const LoginContainer: React.FC = () => {
 
   const session = useAppSelector((state: RootState) => state.session);
 
-  const [dailyQuote] = useState(getRandomItem(QUOTES) as Quote);
+  const [background] = useState(getRandomItem(BACKGROUNDS));
   const [facilities, setFacilities] = useState<FacilityRO[]>([]);
 
   useEffect(() => {
@@ -75,9 +76,9 @@ const LoginContainer: React.FC = () => {
 
   return (
     <Content
-      className="d-flex flex-column banner-background"
+      className="flex flex-col banner-background"
       style={{
-        backgroundImage: `url(${dailyQuote.background})`,
+        backgroundImage: `url(${background})`,
       }}
     >
       <div className="login-form-container m-auto" style={BORDER_RADIUS}>
@@ -111,7 +112,7 @@ const LoginContainer: React.FC = () => {
           >
             <Form.Item label="Language" name="language">
               <Radio.Group
-                className="w-100"
+                className="w-full"
                 onChange={(e) => i18n.changeLanguage(e.target.value)}
               >
                 {Object.entries(LANGUAGES).map(([key, value]) => (

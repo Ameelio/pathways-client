@@ -23,7 +23,7 @@ const Dashboard: React.FC<Props> = ({
   const [selectedCall, setSelectedCall] = useState<null | Call>(null);
   return (
     <PageLayout>
-      <Space direction="vertical" size="large" className="w-100 p-6 pt-9">
+      <Space direction="vertical" size="large" className="w-full p-6 pt-9">
         <Row>
           <Col span={24}>
             <DashboardHeader />

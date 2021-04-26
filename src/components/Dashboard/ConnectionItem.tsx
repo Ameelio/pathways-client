@@ -21,7 +21,7 @@ const ConnectionItem: React.FC<Props> = ({ contact }) => {
   // };
 
   return (
-    <Col key={contact.id} className="d-flex flex-column align-items-center">
+    <Col key={contact.id} className="flex flex-col align-center">
       <Space direction="vertical">
         <Avatar shape="square" size={80} src={contact.profileImagePath} />
         <div>

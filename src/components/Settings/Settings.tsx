@@ -19,7 +19,7 @@ const Settings: React.FC = () => {
 
   return (
     <PageLayout>
-      <Space direction="vertical" size="large" className="w-100 p-6 pt-9">
+      <Space direction="vertical" size="large" className="w-full p-6 pt-9">
         <Row gutter={36}>
           <Col span={12}>
             <Card title={t("language.title")}>

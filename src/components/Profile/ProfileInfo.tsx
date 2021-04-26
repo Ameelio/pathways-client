@@ -36,7 +36,7 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
 
   return (
     <PageLayout>
-      <Space direction="vertical" size="large" className="w-100 p-6 pt-9">
+      <Space direction="vertical" size="large" className="w-full p-6 pt-9">
         <PageHeader className="p-6 border border-solid border-opacity-1 border-gray-200">
           <Space className="flex justify-between">
             <Space>
