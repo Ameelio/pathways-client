@@ -8,12 +8,26 @@ import { openModal } from "../../redux/modules/modalsSlice";
 import { useAppDispatch } from "src/redux";
 import Card from "src/components/Card";
 
-type FAQ = { key: string; question: string; answer: string };
-
+type FAQItem = { question: string; answer: string };
+type FAQ = { en: FAQItem; es: FAQItem; key: string };
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation("settings");
 
-  const FAQ: FAQ[] = [];
+  const FAQ: FAQ[] = [
+    {
+      key: "contacts",
+      en: {
+        question: "How do I add new contacts?",
+        answer:
+          "In this version of Connect, you can receive but not send contact requests. Anyone on your currently approved call list can request you as a contact once they download the Connect app on their smartphone. When someone requests you as a contact, their status will appear as pending until their photo ID is verified by a facility staff member. Once verified, they will be added to your active contact list and able to schedule calls with you.",
+      },
+      es: {
+        question: "How do I add new contacts?",
+        answer:
+          "In this version of Connect, you can receive but not send contact requests. Anyone on your currently approved call list can request you as a contact once they download the Connect app on their smartphone. When someone requests you as a contact, their status will appear as pending until their photo ID is verified by a facility staff member. Once verified, they will be added to your active contact list and able to schedule calls with you.",
+      },
+    },
+  ];
   const dispatch = useAppDispatch();
   const { Option } = Select;
 
@@ -101,8 +115,15 @@ const Settings: React.FC = () => {
             <Card title={t("faq.title")}>
               <Collapse ghost>
                 {FAQ.map((faq) => (
-                  <Collapse.Panel key={faq.key} header={faq.question}>
-                    <Typography.Text>{faq.answer}</Typography.Text>
+                  <Collapse.Panel
+                    key={faq.key}
+                    header={
+                      i18n.language === "es" ? faq.es.question : faq.en.question
+                    }
+                  >
+                    <Typography.Text>
+                      {i18n.language === "es" ? faq.es.answer : faq.en.answer}
+                    </Typography.Text>
                   </Collapse.Panel>
                 ))}
               </Collapse>
