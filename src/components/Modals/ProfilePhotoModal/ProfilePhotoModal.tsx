@@ -25,7 +25,7 @@ const ProfilePhotoModal: React.FC<Props> = ({
       }}
       visible={true}
     >
-      <Row gutter={[16, 16]}>
+      <Row gutter={[16, 16]} className="overflow-y-scroll	max-h-96">
         {photos.map((photo) => (
           <Col span={8}>
             <img
