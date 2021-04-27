@@ -1,6 +1,6 @@
 import { Space, Row, Col, Typography, Select } from "antd";
 import Modal from "antd/lib/modal/Modal";
-import { differenceInMinutes, format, getDay } from "date-fns";
+import { differenceInMinutes, format } from "date-fns";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CancelCallModalData } from "src/types/UI";

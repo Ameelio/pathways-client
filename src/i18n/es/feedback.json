@@ -1,11 +1,29 @@
 {
-  "title": "We hope your call with {{names}} went well!",
-  "howYouFeeling": "How are you feeling after your call?",
+  "title": {
+    "happy": "We hope your call and {{names}} had a good time!",
+    "unhappy": "You left the meeting",
+    "terminated": "Time flies when you’re in good company!"
+  },
+  "body": {
+    "unhappy": "Sorry to see you go! If anything went wrong on our end, please let us know by reporting an issue.",
+    "happy": "You can always rejoin the call up until your scheduled end time. You can rejoin both here and also in the home page."
+  },
+  "qualityRating": {
+    "question": "How was the audio and video?"
+  },
+  "sentimentRating": {
+    "question": "How are you feeling after your call?"
+  },
   "ratings": {
     "terrible": "terrible",
     "bad": "bad",
     "normal": "normal",
     "good": "good",
     "wonderful": "wonderful"
+  },
+  "buttons": {
+    "rejoin": "Rejoin",
+    "return": "Return Home",
+    "report": "Report an issue"
   }
 }

@@ -1,4 +1,4 @@
-import { Card, Image, Modal, Space, Typography } from "antd";
+import { Image, Modal, Space, Typography } from "antd";
 import React from "react";
 import { BiographyModalData } from "src/types/UI";
 

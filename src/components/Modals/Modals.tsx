@@ -11,6 +11,8 @@ import EnterCallSound from "src/assets/Sounds/EnterCall.wav";
 import useSound from "use-sound";
 import { cancelCall } from "src/redux/modules/call";
 import BiographyModal from "./BiographyModal";
+import ProfilePhotoModal from "./ProfilePhotoModal";
+import { updateProfile } from "src/api/User";
 
 const Modals: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -60,6 +62,17 @@ const Modals: React.FC = () => {
     case "BIO_MODAL":
       return (
         <BiographyModal data={data} closeModal={() => dispatch(closeModal())} />
+      );
+    case "PROFILE_PHOTO_MODAL":
+      return (
+        <ProfilePhotoModal
+          data={data}
+          closeModal={() => dispatch(closeModal())}
+          saveProfile={async (imagePath: string) => {
+            await updateProfile(imagePath);
+            dispatch(closeModal());
+          }}
+        />
       );
     default:
       return null;

@@ -1,4 +1,4 @@
-import { Icebreaker, Quote, Route } from "src/types/Common";
+import { Icebreaker, Route } from "src/types/Common";
 import ProfilePage from "src/pages/Profile";
 import CallsPage from "src/pages/Calls";
 import SettingsPage from "src/pages/Settings";

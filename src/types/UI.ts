@@ -7,7 +7,8 @@ export type ModalType =
   | "RESOURCE_MODAL"
   | "TEST_CONNECTION_MODAL"
   | "KIOSK_CONFIRMATION_MODAL"
-  | "BIO_MODAL";
+  | "BIO_MODAL"
+  | "PROFILE_PHOTO_MODAL";
 
 export interface FAQResource {
   title: string;
@@ -48,4 +49,9 @@ export interface KioskConfirmationModalData extends BaseModal {
 export interface BiographyModalData extends BaseModal {
   activeType: "BIO_MODAL";
   entity: Quote;
+}
+
+export interface ProfilePhotoModalData extends BaseModal {
+  activeType: "PROFILE_PHOTO_MODAL";
+  entity: string[];
 }

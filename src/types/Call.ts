@@ -13,16 +13,18 @@ export interface CallHandler {
 
 export type ISOString = string;
 
-export type CallStatus =
+export type InCallStatus = "live" | "missing_monitor" | "ended" | "terminated";
+type GeneralCallStatus =
   | "ended"
   | "scheduled"
   | "terminated"
-  | "rescheduled"
   | "live"
   | "pending_approval"
-  | "missing_monitor"
   | "cancelled"
+  | "rejected"
   | "no_show";
+
+export type CallStatus = InCallStatus | GeneralCallStatus;
 
 export interface BaseCall {
   id: number;

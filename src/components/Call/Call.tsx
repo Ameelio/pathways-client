@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Typography, Layout } from "antd";
-import { Call, CallParticipant, ControlledStream } from "src/types/Call";
+import {
+  Call,
+  CallParticipant,
+  ControlledStream,
+  InCallStatus,
+} from "src/types/Call";
 import { AudioMutedOutlined } from "@ant-design/icons";
 import {
   getFullName,
@@ -48,6 +53,7 @@ interface Props {
   push: (path: string) => void;
   openInfoModal: (resource: FAQResource) => void;
   openTestConnectionModal: () => void;
+  updateCallStatus: (status: InCallStatus) => void;
 }
 
 const CallBase: React.FC<Props> = React.memo(
@@ -63,6 +69,7 @@ const CallBase: React.FC<Props> = React.memo(
     push,
     openInfoModal,
     openTestConnectionModal,
+    updateCallStatus,
   }) => {
     const { t } = useTranslation("call");
 
@@ -72,15 +79,19 @@ const CallBase: React.FC<Props> = React.memo(
     const [peerAudioOn, setPeerAudioOn] = useState(true);
     const [peerVideoOn, setPeerVideoOn] = useState(true);
     const [timerOn, setTimerOn] = useState(false);
+    const [status, setStatus] = useState<InCallStatus>();
 
+    const alertDocMessageMemo = useCallback(
+      (contents: string) =>
+        openNotificationWithIcon(t("doc.warning"), contents, "warning"),
+      [t]
+    );
     const {
       messages,
       addCallMessage,
       hasUnreadMessages,
       setHasUnreadMessages,
-    } = useCallMessages(call.id, room, (contents: string) =>
-      openNotificationWithIcon(t("doc.warning"), contents, "warning")
-    );
+    } = useCallMessages(call.id, room, alertDocMessageMemo);
 
     const [playJoinCall] = useSound(JoinedCallSound);
     const [playLeaveCall] = useSound(LeaveCallSound);
@@ -96,26 +107,30 @@ const CallBase: React.FC<Props> = React.memo(
 
     // TODO fix this
     useEffect(() => {
-      if (room) {
-        room.socket.on(
-          "producerUpdate",
-          async ({
-            from,
-            producerId,
-            active,
-            type,
-          }: {
-            from: CallParticipant;
-            producerId: string;
-            active: boolean;
-            type: "audio" | "video";
-          }) => {
-            if (from.type !== "user") return;
-            type === "audio" ? setPeerAudioOn(active) : setPeerVideoOn(active);
-          }
-        );
-      }
+      room.socket.on(
+        "producerUpdate",
+        async ({
+          from,
+          producerId,
+          active,
+          type,
+        }: {
+          from: CallParticipant;
+          producerId: string;
+          active: boolean;
+          type: "audio" | "video";
+        }) => {
+          if (from.type !== "user") return;
+          type === "audio" ? setPeerAudioOn(active) : setPeerVideoOn(active);
+        }
+      );
     }, [room, t]);
+
+    useEffect(() => {
+      room.socket.on("callStatusUpdate", async (status: InCallStatus) => {
+        setStatus(status);
+      });
+    }, [room]);
 
     // play a cool sound effect if a new message is received
     useEffect(() => {
@@ -162,25 +177,51 @@ const CallBase: React.FC<Props> = React.memo(
     }, [participantHasJoined, call, playJoinCall, t]);
 
     useEffect(() => {
-      if (room) {
-        room.socket.on(
-          "participantDisconnect",
-          async ({ id, type }: CallParticipant) => {
-            if (type === "user" && call?.userIds.includes(id)) {
-              playLeaveCall();
-              setParticipantsHasJoined(false);
-              openNotificationWithIcon(
-                `${call?.userParticipants[0].firstName} ${t(
-                  "peer.joinedCallTitle"
-                )}.`,
-                t("peer.joinedCallBody"),
-                "info"
-              );
-            }
+      room.socket.on(
+        "participantDisconnect",
+        async ({ id, type }: CallParticipant) => {
+          if (type === "user" && call?.userIds.includes(id)) {
+            playLeaveCall();
+            setParticipantsHasJoined(false);
+            openNotificationWithIcon(
+              `${call?.userParticipants[0].firstName} ${t(
+                "peer.joinedCallTitle"
+              )}.`,
+              t("peer.joinedCallBody"),
+              "info"
+            );
           }
-        );
-      }
+        }
+      );
     }, [call, room, t, playLeaveCall]);
+
+    useEffect(() => {
+      if (!status) return;
+      switch (status) {
+        case "missing_monitor":
+          showToast(
+            "callStatus",
+            t("callStatus.missingMonitor"),
+            "loading",
+            10
+          );
+          break;
+        case "live":
+          showToast("callStatus", t("callStatus.live"), "info");
+          break;
+        case "terminated":
+          leaveCall();
+          showToast("callStatus", t("callStatus.terminated"), "info");
+          break;
+        case "ended":
+          leaveCall();
+          showToast("callStatus", t("callStatus.ended"), "info");
+          break;
+        default:
+          break;
+      }
+      updateCallStatus(status);
+    }, [status, updateCallStatus, leaveCall, t]);
 
     if (!call) return <div />;
 

@@ -1,5 +1,9 @@
-import { API_URL, fetchTimeout } from "./Common";
-import { setSession, setSessionStatus } from "src/redux/modules/session";
+import { API_URL, fetchAuthenticated, fetchTimeout } from "./Common";
+import {
+  setProfileImage,
+  setSession,
+  setSessionStatus,
+} from "src/redux/modules/session";
 import { Store } from "src/redux";
 import { User } from "src/types/User";
 import { Language } from "src/types/Session";
@@ -59,5 +63,24 @@ export async function loginWithCredentials(cred: {
   } catch (err) {
     Store.dispatch(setSessionStatus("inactive"));
     showToast("login_error", "Invalid ID or Pin Code", "error");
+  }
+}
+
+export async function updateProfile(profileImagePath: string) {
+  try {
+    await fetchAuthenticated("", {
+      method: "PATCH",
+      body: JSON.stringify({
+        profileImagePath,
+      }),
+    });
+
+    Store.dispatch(setProfileImage(profileImagePath));
+  } catch (err) {
+    showToast(
+      "update_profile_errror",
+      "Failed to update image profile",
+      "error"
+    );
   }
 }

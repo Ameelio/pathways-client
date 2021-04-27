@@ -45,5 +45,11 @@
   },
   "testConnection": {
     "title": "Check Your Audio & Video"
+  },
+  "callStatus": {
+    "missingMonitor": "Your call will resume once the DoC monitor rejoins the room...",
+    "live": "Your call is live!",
+    "terminated": "Your call was terminated by the DoC monitor.",
+    "ended": "Your call has come to an end!"
   }
 }

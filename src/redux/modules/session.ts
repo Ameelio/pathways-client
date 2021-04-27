@@ -22,6 +22,7 @@ interface SessionState {
 const SET_SESSION = "user/SET_SESSION";
 const LOGOUT = "user/LOGOUT";
 const SET_SESSION_STATUS = "user/SET_STATUS";
+const SET_PROFILE_IMAGE = "user/SET_PROFILE_IMAGE";
 
 interface SetSessionAction {
   type: typeof SET_SESSION;
@@ -36,7 +37,16 @@ interface SetSessionStatusAction {
   payload: SessionStatus;
 }
 
-type UserActionTypes = LogoutAction | SetSessionAction | SetSessionStatusAction;
+interface SetProfileImageAction {
+  type: typeof SET_PROFILE_IMAGE;
+  payload: string;
+}
+
+type UserActionTypes =
+  | LogoutAction
+  | SetSessionAction
+  | SetSessionStatusAction
+  | SetProfileImageAction;
 
 export const logout = (): UserActionTypes => {
   return {
@@ -55,6 +65,13 @@ export const setSessionStatus = (status: SessionStatus): UserActionTypes => {
   return {
     type: SET_SESSION_STATUS,
     payload: status,
+  };
+};
+
+export const setProfileImage = (imgPath: string): UserActionTypes => {
+  return {
+    type: SET_PROFILE_IMAGE,
+    payload: imgPath,
   };
 };
 
@@ -108,6 +125,14 @@ export function sessionReducer(
       return {
         ...state,
         status: action.payload,
+      };
+    case SET_PROFILE_IMAGE:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          profileImagePath: action.payload,
+        },
       };
     default:
       return state;

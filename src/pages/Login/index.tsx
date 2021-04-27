@@ -23,7 +23,6 @@ import { useTranslation } from "react-i18next";
 import { LANGUAGES } from "src/utils/constants";
 import { BACKGROUNDS } from "src/constants";
 import { BORDER_RADIUS } from "src/styles/Layout";
-import { Quote } from "src/types/Common";
 import { fetchFacilities } from "src/api/Common";
 import { FacilityRO } from "src/api/interfaces/apiResponses";
 

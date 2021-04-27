@@ -2,6 +2,7 @@ import {
   createSlice,
   createEntityAdapter,
   createAsyncThunk,
+  PayloadAction,
 } from "@reduxjs/toolkit";
 import { fetchAuthenticated } from "src/api/Common";
 import RoomClient from "src/pages/Call/RoomClient";
@@ -11,6 +12,7 @@ import {
   CallParticipant,
   ControlledStream,
   CallStatus,
+  InCallStatus,
 } from "src/types/Call";
 import { ThunkApi } from "../helper";
 import io from "socket.io-client";
@@ -198,7 +200,17 @@ export const callAdapter = createEntityAdapter<BaseCall>();
 export const callSlice = createSlice({
   name: "calls",
   initialState: callAdapter.getInitialState(),
-  reducers: {},
+  reducers: {
+    updateCallStatus: (
+      state,
+      action: PayloadAction<{ id: number; status: InCallStatus }>
+    ) => {
+      callAdapter.updateOne(state, {
+        id: action.payload.id,
+        changes: { status: action.payload.status },
+      });
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCalls.fulfilled, (state, action) =>
       callAdapter.setAll(state, action.payload)
@@ -226,4 +238,4 @@ export const callSlice = createSlice({
   },
 });
 
-export const callActions = callSlice.actions;
+export const { updateCallStatus } = callSlice.actions;
