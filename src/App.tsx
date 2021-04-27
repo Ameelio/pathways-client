@@ -17,6 +17,8 @@ import Sidebar from "./components/Sidebar";
 import { useTranslation } from "react-i18next";
 import Modals from "./components/Modals/Modals";
 import Loader from "./components/Loader";
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 
 const mapDispatchToProps = { fetchContacts, push };
 
@@ -53,6 +55,12 @@ function App({
   useEffect(() => {
     i18n.changeLanguage(session.language);
   }, [session.language, i18n]);
+
+  Sentry.init({
+    dsn: process.env.REACT_APP_SENTRY_DSN,
+    integrations: [new Integrations.BrowserTracing()],
+    tracesSampleRate: 1.0,
+  });
 
   return (
     <ConnectedRouter history={history}>
