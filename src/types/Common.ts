@@ -7,8 +7,8 @@ export interface Route {
 export interface Quote {
   author: string;
   quote: string;
-  description: string;
-  background: string;
+  authorDescription: string;
+  authorImagePath: string;
 }
 
 export interface Icebreaker {

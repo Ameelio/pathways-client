@@ -1,6 +1,5 @@
-import React, { ReactElement, useEffect, useState } from "react";
-import { RootState } from "src/redux";
-import { connect, ConnectedProps } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { RootState, useAppSelector } from "src/redux";
 import {
   Input,
   Layout,
@@ -16,28 +15,18 @@ import {
 import { Redirect } from "react-router";
 import { loginWithCredentials } from "src/api/User";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { getRandomItem, showToast } from "src/utils/utils";
+import { getRandomItem } from "src/utils/utils";
 import { ReactComponent as Logo } from "src/assets/logo.svg";
 import "./index.css";
 import "src/i18n/config";
 import { useTranslation } from "react-i18next";
-import { LANGUAGES, QUOTES } from "src/utils/constants";
+import { LANGUAGES } from "src/utils/constants";
+import { BACKGROUNDS } from "src/constants";
 import { BORDER_RADIUS } from "src/styles/Layout";
-import { Quote } from "src/types/Common";
 import { fetchFacilities } from "src/api/Common";
 import { FacilityRO } from "src/api/interfaces/apiResponses";
 
 const { Content } = Layout;
-
-const mapStateToProps = (state: RootState) => ({
-  session: state.session,
-});
-
-const mapDispatchToProps = {};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
 
 const FORM_LAYOUT = {
   labelCol: { flex: "95px" },
@@ -48,11 +37,13 @@ const FORM_TAIL_LAYOUT = {
   wrapperCol: { span: 24 },
 };
 
-function LoginContainer({ session }: PropsFromRedux): ReactElement {
+const LoginContainer: React.FC = () => {
   const { t, i18n } = useTranslation("login");
   const { Option } = Select;
 
-  const [dailyQuote] = useState(getRandomItem(QUOTES) as Quote);
+  const session = useAppSelector((state: RootState) => state.session);
+
+  const [background] = useState(getRandomItem(BACKGROUNDS));
   const [facilities, setFacilities] = useState<FacilityRO[]>([]);
 
   useEffect(() => {
@@ -68,20 +59,12 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
   }
 
   const onFinish = async (values: any) => {
-    try {
-      await loginWithCredentials({
-        inmateNumber: values.inmateNumber,
-        pin: values.pin,
-        facilityId: values.facilityId,
-        language: values.language,
-      });
-    } catch (err) {
-      showToast("login_error", "Invalid ID or Pin Code", "error");
-    }
-  };
-
-  const onFinishFailed = (_errorInfo: any) => {
-    showToast("login_error", "Invalid ID or Pin Code", "error");
+    await loginWithCredentials({
+      inmateNumber: values.inmateNumber,
+      pin: values.pin,
+      facilityId: values.facilityId,
+      language: values.language,
+    });
   };
 
   const facilityOptions = facilities.map((facility: FacilityRO) => (
@@ -92,9 +75,9 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
 
   return (
     <Content
-      className="d-flex flex-column banner-background"
+      className="flex flex-col banner-background"
       style={{
-        backgroundImage: `url(${dailyQuote.background})`,
+        backgroundImage: `url(${background})`,
       }}
     >
       <div className="login-form-container m-auto" style={BORDER_RADIUS}>
@@ -122,18 +105,14 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
             name="login"
             className="w-full rounded-lg"
             onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
             initialValues={{
               language: Object.keys(LANGUAGES)[0],
+              pin: "abc12345678910",
             }}
           >
-            <Form.Item
-              label="Language"
-              name="language"
-              rules={[{ required: true, message: "Language is required." }]}
-            >
+            <Form.Item label="Language" name="language">
               <Radio.Group
-                className="w-100"
+                className="w-full"
                 onChange={(e) => i18n.changeLanguage(e.target.value)}
               >
                 {Object.entries(LANGUAGES).map(([key, value]) => (
@@ -176,7 +155,12 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
             </Form.Item>
 
             <Form.Item {...FORM_TAIL_LAYOUT} style={{ borderRadius: 4 }}>
-              <Button type="primary" htmlType="submit" size="large">
+              <Button
+                type="primary"
+                htmlType="submit"
+                size="large"
+                loading={session.status === "loading"}
+              >
                 {t("buttonText")}
               </Button>
             </Form.Item>
@@ -185,6 +169,6 @@ function LoginContainer({ session }: PropsFromRedux): ReactElement {
       </div>
     </Content>
   );
-}
+};
 
-export default connector(LoginContainer);
+export default LoginContainer;

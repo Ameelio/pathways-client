@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+
 import { BaseCall } from "src/types/Call";
 import { User } from "src/types/User";
 import ProfileInfo from "./ProfileInfo";
@@ -6,13 +7,12 @@ import ProfileInfo from "./ProfileInfo";
 interface Props {
   calls: BaseCall[];
   user: User;
+  openProfileImageModal: () => void;
 }
 
-const Profile: React.FC<Props> = ({ calls, user }) => {
-  const [isEditing, setIsEditing] = useState(false);
-
-  return isEditing ? null : (
-    <ProfileInfo user={user} calls={calls} onEdit={() => setIsEditing(true)} />
+const Profile: React.FC<Props> = ({ calls, user, openProfileImageModal }) => {
+  return (
+    <ProfileInfo user={user} calls={calls} onEdit={openProfileImageModal} />
   );
 };
 

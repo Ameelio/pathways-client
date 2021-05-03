@@ -51,14 +51,14 @@ const CallFeedbackPage: React.FC<RouteComponentProps<TParams>> = ({
   useEffect(() => {
     if (!call) return;
 
-    if (call.status === "terminated") setExitType("terminated");
-
     const diffMin = differenceInMinutes(
       new Date(call.scheduledEnd),
       new Date()
     );
 
-    if (diffMin >= 5) {
+    if (call.status === "terminated") {
+      setExitType("terminated");
+    } else if (diffMin >= 5) {
       setExitType("unhappy");
     } else if (diffMin <= 0) {
       setExitType("forced");
@@ -80,7 +80,6 @@ const CallFeedbackPage: React.FC<RouteComponentProps<TParams>> = ({
   }
 
   if (
-    call.status === "rescheduled" ||
     call.status === "pending_approval" ||
     call.status === "cancelled" ||
     call.status === "no_show"

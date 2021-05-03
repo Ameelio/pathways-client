@@ -2,6 +2,7 @@ import {
   createSlice,
   createEntityAdapter,
   createAsyncThunk,
+  PayloadAction,
 } from "@reduxjs/toolkit";
 import { fetchAuthenticated } from "src/api/Common";
 import RoomClient from "src/pages/Call/RoomClient";
@@ -10,19 +11,38 @@ import {
   CallHandler,
   CallParticipant,
   ControlledStream,
+  CallStatus,
+  InCallStatus,
 } from "src/types/Call";
 import { ThunkApi } from "../helper";
 import io from "socket.io-client";
 import { showToast } from "src/utils";
 import { AuthInfo } from "src/types/Session";
+import i18n from "src/i18n/config";
 
-export const fetchCalls = createAsyncThunk("calls/fetchAll", async () => {
+const FETCH_CALLS = "calls/fetchAll";
+export const fetchCalls = createAsyncThunk(FETCH_CALLS, async () => {
   const body = await fetchAuthenticated(`calls`);
 
   const calls = (body.data as { results: BaseCall[] }).results;
 
   return calls;
 });
+
+export const cancelCall = createAsyncThunk(
+  "calls/cancelCall",
+  async ({ id, reason }: { id: number; reason: string }) => {
+    await fetchAuthenticated(`calls/${id}`, {
+      method: "DELETE",
+      body: JSON.stringify({ statusDetails: reason }),
+    });
+
+    return {
+      id,
+      changes: { statusDetails: reason, status: "cancelled" as CallStatus },
+    };
+  }
+);
 
 export const initializeVisit = createAsyncThunk(
   "visit/initializeVisit",
@@ -52,6 +72,7 @@ export const initializeVisit = createAsyncThunk(
     await new Promise((resolve) => {
       socket.emit("authenticate", authInfo, resolve);
     });
+    console.log("authenticated");
     const rc = new RoomClient(socket, callId);
     await rc.init();
     setRc(rc);
@@ -182,10 +203,23 @@ export const callAdapter = createEntityAdapter<BaseCall>();
 export const callSlice = createSlice({
   name: "calls",
   initialState: callAdapter.getInitialState(),
-  reducers: {},
+  reducers: {
+    updateCallStatus: (
+      state,
+      action: PayloadAction<{ id: number; status: InCallStatus }>
+    ) => {
+      callAdapter.updateOne(state, {
+        id: action.payload.id,
+        changes: { status: action.payload.status },
+      });
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchCalls.fulfilled, (state, action) =>
       callAdapter.setAll(state, action.payload)
+    );
+    builder.addCase(fetchCalls.rejected, () =>
+      showToast(FETCH_CALLS, i18n.t("api.fetchCalls", { ns: "error" }), "error")
     );
     builder.addCase(initializeVisit.rejected, () =>
       showToast("initializeVisit", "Failed to initialize call.", "error")
@@ -200,7 +234,22 @@ export const callSlice = createSlice({
     builder.addCase(initializeRemotes.rejected, () =>
       showToast("initializeProducers", "Failed to initialize remotes.", "error")
     );
+    builder.addCase(cancelCall.fulfilled, (state, action) => {
+      callAdapter.updateOne(state, action.payload);
+      showToast(
+        "cancelCall",
+        i18n.t("cancelCallModal.toastSuccess", { ns: "modals" }),
+        "success"
+      );
+    });
+    builder.addCase(cancelCall.rejected, () =>
+      showToast(
+        "cancelCall",
+        i18n.t("cancelCallModal.toastFailure", { ns: "modals" }),
+        "error"
+      )
+    );
   },
 });
 
-export const callActions = callSlice.actions;
+export const { updateCallStatus } = callSlice.actions;

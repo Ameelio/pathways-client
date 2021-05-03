@@ -43,7 +43,7 @@ const CallsList: React.FC<Props> = ({
           call={call}
           selectCall={selectCall}
           joinCall={joinCall}
-          key={`callItem-${call.id}`}
+          key={call.id}
         />
       ))}
     </Card>

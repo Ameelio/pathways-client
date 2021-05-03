@@ -10,7 +10,8 @@
     "muted": "muted their mic",
     "unmuted": "unmuted their mic",
     "videoOn": "turned on their video",
-    "videoOff": "turned off their video"
+    "videoOff": "turned off their video",
+    "participantDisconnect": "disconnected from the call"
   },
   "waitingRoom": {
     "questionOfDay": "Question of the day",
@@ -18,9 +19,9 @@
     "waitingForPrefix": "Waiting for",
     "waitingForSuffix": "to join the call",
     "loading": "Loading...",
-    "whenWillCallConnect": "When will my call connect?",
     "checkConnection": "Check Connection",
-    "leaveWaitingRoom": "Leave Waiting Room"
+    "leaveWaitingRoom": "Leave Waiting Room",
+    "whenWillCallConnect": "Whe will my call connect?"
   },
   "chat": {
     "title": "Chat",
@@ -46,5 +47,11 @@
   },
   "testConnection": {
     "title": "Check Your Audio & Video"
+  },
+  "callStatus": {
+    "missingMonitor": "Your call will resume once the DoC monitor rejoins the room...",
+    "live": "Your call is live!",
+    "terminated": "Your call was terminated by the DoC monitor.",
+    "ended": "Your call has come to an end!"
   }
 }

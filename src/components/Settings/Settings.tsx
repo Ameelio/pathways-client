@@ -1,21 +1,24 @@
 import React from "react";
 import { Language } from "src/types/Session";
 import PageLayout from "src/components/Common/PageLayout";
-import { Card, Col, Row, Select, Space, Typography } from "antd";
+import { Col, Collapse, Row, Select, Space, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 import { LANGUAGES } from "src/utils/constants";
 import { openModal } from "../../redux/modules/modalsSlice";
 import { useAppDispatch } from "src/redux";
+import Card from "src/components/Card";
+import { FAQ_LIST } from "src/constants/FAQ";
 
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation("settings");
+
   const dispatch = useAppDispatch();
   const { Option } = Select;
 
   return (
     <PageLayout>
-      <Space direction="vertical" size="large" className="w-100 p-6 pt-9">
-        <Row gutter={32}>
+      <Space direction="vertical" size="large" className="w-full p-6 pt-9">
+        <Row gutter={36}>
           <Col span={12}>
             <Card title={t("language.title")}>
               <p>
@@ -88,6 +91,26 @@ const Settings: React.FC = () => {
                   {t("resources.privacyInfo")}
                 </Typography.Link>
               </Row>
+            </Card>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Card title={t("faq.title")}>
+              <Collapse ghost>
+                {FAQ_LIST.map((faq) => (
+                  <Collapse.Panel
+                    key={faq.key}
+                    header={
+                      i18n.language === "es" ? faq.es.question : faq.en.question
+                    }
+                  >
+                    <Typography.Text>
+                      {i18n.language === "es" ? faq.es.answer : faq.en.answer}
+                    </Typography.Text>
+                  </Collapse.Panel>
+                ))}
+              </Collapse>
             </Card>
           </Col>
         </Row>

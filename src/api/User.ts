@@ -1,8 +1,13 @@
-import { API_URL, fetchTimeout } from "./Common";
-import { setSession, setSessionStatus } from "src/redux/modules/session";
+import { API_URL, fetchAuthenticated, fetchTimeout } from "./Common";
+import {
+  setProfileImage,
+  setSession,
+  setSessionStatus,
+} from "src/redux/modules/session";
 import { Store } from "src/redux";
 import { User } from "src/types/User";
 import { Language } from "src/types/Session";
+import { showToast } from "src/utils";
 
 async function initializeSession(token: string, data: any, language: Language) {
   const user: User = {
@@ -36,25 +41,46 @@ export async function loginWithCredentials(cred: {
   language: Language;
 }): Promise<void> {
   Store.dispatch(setSessionStatus("loading"));
-  const response = await fetchTimeout(`${API_URL}auth/member/login/`, {
-    method: "POST",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    credentials: "include",
-    body: JSON.stringify({
-      facilityId: cred.facilityId,
-      inmateIdentification: cred.inmateNumber,
-      pin: cred.pin,
-    }),
-  });
-  const body = await response.json();
-  const token = response.headers.get("Authorization") || "";
-  // const re = /(?<=connect.sid=)([^\s;]+)/gm;
-  // const found = cookies.match(re);
-  // console.log('found?')
-  // console.log(found)
-  if (!token) throw new Error("Cannot find header token");
-  await initializeSession(token, body.data, cred.language);
+
+  try {
+    const response = await fetchTimeout(`${API_URL}auth/member/login/`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        facilityId: cred.facilityId,
+        inmateIdentification: cred.inmateNumber,
+        pin: cred.pin,
+      }),
+    });
+    const body = await response.json();
+    const token = response.headers.get("Authorization") || "";
+    if (!token) throw new Error("Cannot find header token");
+    await initializeSession(token, body.data, cred.language);
+  } catch (err) {
+    Store.dispatch(setSessionStatus("inactive"));
+    showToast("login_error", "Invalid ID or Pin Code", "error");
+  }
+}
+
+export async function updateProfile(profileImagePath: string) {
+  try {
+    await fetchAuthenticated("", {
+      method: "PATCH",
+      body: JSON.stringify({
+        profileImagePath,
+      }),
+    });
+
+    Store.dispatch(setProfileImage(profileImagePath));
+  } catch (err) {
+    showToast(
+      "update_profile_errror",
+      "Failed to update image profile",
+      "error"
+    );
+  }
 }

@@ -17,6 +17,8 @@ import Sidebar from "./components/Sidebar";
 import { useTranslation } from "react-i18next";
 import Modals from "./components/Modals/Modals";
 import Loader from "./components/Loader";
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
 
 const mapDispatchToProps = { fetchContacts, push };
 
@@ -54,12 +56,19 @@ function App({
     i18n.changeLanguage(session.language);
   }, [session.language, i18n]);
 
+  Sentry.init({
+    dsn: process.env.REACT_APP_SENTRY_DSN,
+    integrations: [new Integrations.BrowserTracing()],
+    tracesSampleRate: 1.0,
+    release: "pathways-client@" + process.env.npm_package_version,
+  });
+
   return (
     <ConnectedRouter history={history}>
       <Modals />
-      <Layout style={{ minHeight: "100vh" }}>
+      <Layout className="min-h-screen">
         {showSideBar && <Sidebar user={session.user} navigate={push} />}
-        {loading || session.status === "loading" ? (
+        {loading ? (
           <Loader fullPage />
         ) : (
           <Layout>

@@ -21,7 +21,7 @@ const CallItem: React.FC<Props> = ({ call, selectCall, joinCall }: Props) => {
     new Date(call.scheduledStart)
   );
 
-  const started =
+  const canJoin =
     subMinutes(new Date(call.scheduledStart), WAITING_ROOM_BUFFER_MIN) <
     new Date();
 
@@ -50,7 +50,7 @@ const CallItem: React.FC<Props> = ({ call, selectCall, joinCall }: Props) => {
           </Space>
         </Space>
         <Space>
-          {started ? (
+          {canJoin ? (
             <Button
               size="large"
               type="primary"
@@ -60,7 +60,7 @@ const CallItem: React.FC<Props> = ({ call, selectCall, joinCall }: Props) => {
                 joinCall(call);
               }}
             >
-              {t("call.join")}
+              {call.videoHandler ? t("call.join") : t("call.initializing")}
             </Button>
           ) : (
             <Button

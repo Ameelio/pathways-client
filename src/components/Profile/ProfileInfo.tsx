@@ -1,4 +1,4 @@
-import { Space, PageHeader, Row, Card, Typography, Col } from "antd";
+import { Space, Row, Card, Typography, Col } from "antd";
 import Avatar from "antd/lib/avatar/avatar";
 import { differenceInMinutes, format } from "date-fns";
 import React, { useEffect, useState } from "react";
@@ -8,7 +8,6 @@ import { getFullName } from "src/utils/utils";
 import { BaseCall } from "src/types/Call";
 import { AVATAR_LARGE } from "src/utils/constants";
 import PageLayout from "src/components/Common/PageLayout";
-import EditButton from "src/components/Common/Buttons/EditButton";
 
 interface Props {
   user: User;
@@ -36,25 +35,20 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
 
   return (
     <PageLayout>
-      <Space direction="vertical" size="large" className="w-100 p-6 pt-9">
-        <PageHeader className="p-6 border border-solid border-opacity-1 border-gray-200">
-          <Space className="flex justify-between">
-            <Space>
-              <Avatar src={user.profileImagePath} size={AVATAR_LARGE} />
-              <Space direction="vertical">
-                <Typography.Title level={4}>
-                  <Typography.Text strong>{getFullName(user)}</Typography.Text>
-                </Typography.Title>
-                <Typography.Title level={5}>
-                  <Typography.Text>{user.location}</Typography.Text>
-                </Typography.Title>
-              </Space>
+      <Space direction="vertical" size="large" className="w-full p-6 pt-9">
+        <Card className="flex justify-between">
+          <Space>
+            <Avatar src={user.profileImagePath} size={AVATAR_LARGE} />
+            <Space direction="vertical">
+              <Typography.Title level={4}>{getFullName(user)}</Typography.Title>
+              <Typography.Link onClick={onEdit}>
+                {t("profileInfo.editProfile")}
+              </Typography.Link>
             </Space>
-            <EditButton>{t("profileInfo.editProfile")}</EditButton>
           </Space>
-        </PageHeader>
+        </Card>
         <Row gutter={32}>
-          <Col span={16}>
+          <Col span={14}>
             <Card title={t("profileInfo.about")}>
               <p>
                 <Typography.Text>{`${t("profileInfo.name")}: ${getFullName(
@@ -74,10 +68,10 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
               </p>
             </Card>
           </Col>
-          <Col span={8}>
+          <Col span={10}>
             <Card title={t("profileInfo.history")}>
-              <Row>
-                <Col span={4}>
+              <Row gutter={16}>
+                <Col>
                   <p>
                     <Typography.Text type="secondary">
                       {t("profileInfo.totalCalls")}
@@ -87,7 +81,7 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
                     <Typography.Text>{calls.length}</Typography.Text>
                   </p>
                 </Col>
-                <Col span={16} offset={2}>
+                <Col>
                   <p>
                     <Typography.Text type="secondary">
                       {t("profileInfo.totalMinutes")}

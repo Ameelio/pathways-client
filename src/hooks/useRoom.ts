@@ -42,7 +42,7 @@ export const useCallMessages = (
         ]);
       }
     );
-  }, [callId, room, setHasUnreadMessages]);
+  }, [callId, room, setHasUnreadMessages, alertDocMessage]);
 
   return { messages, addCallMessage, hasUnreadMessages, setHasUnreadMessages };
 };

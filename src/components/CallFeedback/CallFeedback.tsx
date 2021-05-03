@@ -9,6 +9,7 @@ import GoodbyeLottie from "src/assets/Lottie/Goodbye.json";
 import TeamWaveLottie from "src/assets/Lottie/TeamWave.json";
 import CyclingLottie from "src/assets/Lottie/GirlCycling.json";
 import ShrugLottie from "src/assets/Lottie/Shrug.json";
+import RocketLottie from "src/assets/Lottie/Rocket.json";
 import { getRandomItem } from "src/utils";
 
 export type CallFeedbackType =
@@ -46,6 +47,8 @@ const CallFeedback: React.FC<Props> = ({
 
   const renderTitle = () => {
     switch (type) {
+      case "terminated":
+        return t("feedback:title.happy");
       case "deliberate":
       case "forced":
         return t("feedback:title.happy");
@@ -62,9 +65,8 @@ const CallFeedback: React.FC<Props> = ({
         return t("feedback:body.unhappy");
       case "deliberate":
         return t("feedback:body.happy");
-      case "terminated":
-        return t("feedback:body.terminated");
       case "forced":
+      case "terminated":
         return "";
     }
   };
@@ -75,8 +77,9 @@ const CallFeedback: React.FC<Props> = ({
       case "forced":
         return getRandomItem([TeamWaveLottie, CyclingLottie, GoodbyeLottie]);
       case "unhappy":
-      case "terminated":
         return ShrugLottie;
+      case "terminated":
+        return RocketLottie;
       default:
         return GoodbyeLottie;
     }
@@ -115,13 +118,17 @@ const CallFeedback: React.FC<Props> = ({
         );
       case "unhappy":
         return (
-          <Space>
-            <Button size="large" onClick={() => navigate(`/call/${call.id}`)}>
-              {t("feedback:buttons.rejoin")}
-            </Button>
-            <Button type="primary" size="large" onClick={() => navigate(`/`)}>
-              {t("feedback:buttons.return")}
-            </Button>
+          <Space direction="vertical" size="large" align="center">
+            {/* TODO: add report functionality */}
+            <Button type="link">{t("feedback:buttons.report")}</Button>
+            <Space>
+              <Button size="large" onClick={() => navigate(`/call/${call.id}`)}>
+                {t("feedback:buttons.rejoin")}
+              </Button>
+              <Button type="primary" size="large" onClick={() => navigate(`/`)}>
+                {t("feedback:buttons.return")}
+              </Button>
+            </Space>
           </Space>
         );
       default:

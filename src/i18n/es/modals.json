@@ -3,8 +3,14 @@
     "title": "Cancel Call?",
     "okText": "Confirm",
     "messageOne": "You are about to cancel your call with {{connectionName}} for:",
-    "messageTwo": "Please select a cancellation reason to send to {{connectionFirstName}}.",
-    "dropdownPlaceholder": "Cancellation reason"
+    "messageTwo": "Please select a cancellation reason to send to {{connectionFirstName}} to help them choose a time that works better for you..",
+    "dropdownPlaceholder": "Cancellation reason",
+    "reason1": "I can't make this time just this once.",
+    "reason2": "I can't make this time on {{dayOfWeek}}.",
+    "reason3": "I can't make this time on weekdays (Mon-Fri).",
+    "reason4": "I can't make this time any day of the week (Sun - Sat).",
+    "toastSuccess": "Successfully cancelled call.",
+    "toastFailure": "Failed to cancel call."
   },
   "kioskConfirmationModal": {
     "title": "Before connecting, let’s confirm you’re in the right place...",
@@ -15,5 +21,11 @@
     "title": "Privacy Notice",
     "body": "I understand that by joining this call, I am consenting to the monitoring and recording of it for security purposes. In addition, I understand that if I violate any facility calling policies, my call may be terminated.",
     "okText": "Agree"
+  },
+  "informational": {
+    "whenWillCallConnect": {
+      "title": "When will my call connect?",
+      "body": "Once the facility staff member is stationed and both you and your contact are in the Waiting Room, your call will automatically connect at the scheduled start time. If you choose to check your connection while waiting, don’t worry about losing any of your call time! Your call will automatically connect even if you are in the middle of testing so that you can take advantage of the entire sesson. Note: The facility staff member does not participate in the call itself but has the ability to interrupt or terminate the call based on their discretion."
+    }
   }
 }

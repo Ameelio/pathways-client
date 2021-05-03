@@ -2,7 +2,11 @@
   "title": {
     "happy": "We hope your call and {{names}} had a good time!",
     "unhappy": "You left the meeting",
-    "terminated": "Looks like your call was terminated..."
+    "terminated": "Time flies when you’re in good company!"
+  },
+  "body": {
+    "unhappy": "Sorry to see you go! If anything went wrong on our end, please let us know by reporting an issue.",
+    "happy": "You can always rejoin the call up until your scheduled end time. You can rejoin both here and also in the home page."
   },
   "qualityRating": {
     "question": "How was the audio and video?"
@@ -21,10 +25,5 @@
     "rejoin": "Rejoin",
     "return": "Return Home",
     "report": "Report an issue"
-  },
-  "body": {
-    "unhappy": "Sorry to see you go! If anything went wrong on our end, please let us know by reporting an issue.",
-    "terminated": "The call monitor detected a policy violation and terminated your call. We’re sorry about the inconvenience.",
-    "happy": "You can always rejoin the call up until your scheduled end time. You can rejoin both here and also in the home page."
   }
 }

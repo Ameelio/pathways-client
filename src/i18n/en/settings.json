@@ -9,5 +9,8 @@
     "contactVerification": "How does contact verification work",
     "callInfo": "What can I expect for a call",
     "privacyInfo": "Your privacy on Ameelio Connect video calls"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions"
   }
 }

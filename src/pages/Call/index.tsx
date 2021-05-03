@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "src/redux";
 import { RouteComponentProps } from "react-router";
 import { push } from "connected-react-router";
@@ -14,9 +14,10 @@ import {
   initializeProducers,
   initializeRemotes,
   initializeVisit,
+  updateCallStatus,
 } from "src/redux/modules/call";
 import RoomClient from "./RoomClient";
-import { ControlledStream } from "src/types/Call";
+import { ControlledStream, InCallStatus } from "src/types/Call";
 import { useCallById } from "src/hooks/useCalls";
 import Error from "src/components/Error";
 import { Button } from "antd";
@@ -90,6 +91,19 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
     };
   }, [rc]);
 
+  const updateCallMemo = useCallback(
+    (status: InCallStatus) => {
+      if (!call) return;
+      dispatch(updateCallStatus({ id: call.id, status }));
+    },
+    [dispatch, call]
+  );
+
+  const leaveCallMemo = useCallback(
+    () => dispatch(push(`/feedback/${call?.id || -1}`)),
+    [call, dispatch]
+  );
+
   if (!rc || !hasInit) {
     return <Loader fullPage tip={`${t("common:loading")}...`} />;
   }
@@ -146,9 +160,8 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
           openModal({ activeType: "TEST_CONNECTION_MODAL", entity: null })
         )
       }
-      leaveCall={() => {
-        dispatch(push(`/feedback/${call.id}`));
-      }}
+      leaveCall={leaveCallMemo}
+      updateCallStatus={updateCallMemo}
       room={rc}
       localAudio={localAudio}
       localVideo={localVideo}

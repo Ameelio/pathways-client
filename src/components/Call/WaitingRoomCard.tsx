@@ -6,7 +6,7 @@ import { Call } from "src/types/Call";
 import { Icebreaker } from "src/types/Common";
 import { Language } from "src/types/Session";
 import { FAQResource } from "src/types/UI";
-import { QUESTIONS } from "src/utils/constants";
+import { QUESTIONS } from "src/constants";
 import { getRandomItem } from "src/utils/utils";
 
 interface Props {
@@ -38,7 +38,7 @@ export const WaitingRoomCard = ({
   openInfoModal,
   openTestConnectionModal,
 }: Props) => {
-  const { t, i18n } = useTranslation("call");
+  const { t, i18n } = useTranslation(["call", "modals"]);
   const [icebreaker] = useState(getRandomItem(QUESTIONS) as Icebreaker);
 
   return (
@@ -60,25 +60,25 @@ export const WaitingRoomCard = ({
           mins
         </Typography.Text>
         <Typography.Text className="text-white">
-          {t("waitingRoom.questionOfDay")}:{" "}
+          {t("call:waitingRoom.questionOfDay")}:{" "}
           {getTranslatedDailyQuestion(i18n.language as Language, icebreaker)}
         </Typography.Text>
         <Typography.Link
           onClick={() =>
             openInfoModal({
-              title: t("waitingRoom.whenWillCallConnect"),
-              body: "Soon.",
+              title: t("modals:informational.whenWillCallConnect.title"),
+              body: t("modals:informational.whenWillCallConnect.body"),
             })
           }
         >
-          {t("waitingRoom.whenWillCallConnect")}
+          {t("call:waitingRoom.whenWillCallConnect")}
         </Typography.Link>
         <Space>
           <Button type="primary" onClick={openTestConnectionModal}>
-            {t("waitingRoom.checkConnection")}
+            {t("call:waitingRoom.checkConnection")}
           </Button>
           <Button onClick={navigateBack}>
-            {t("waitingRoom.leaveWaitingRoom")}
+            {t("call:waitingRoom.leaveWaitingRoom")}
           </Button>
         </Space>
       </Space>
