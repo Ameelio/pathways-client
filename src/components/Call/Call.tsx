@@ -184,11 +184,11 @@ const CallBase: React.FC<Props> = React.memo(
           if (type === "user" && call?.userIds.includes(id)) {
             playLeaveCall();
             setParticipantsHasJoined(false);
-            openNotificationWithIcon(
+            showToast(
+              "participantDisconnect",
               `${call?.userParticipants[0].firstName} ${t(
-                "peer.joinedCallTitle"
+                "peer.participantDisconnect"
               )}.`,
-              t("peer.joinedCallBody"),
               "info"
             );
           }

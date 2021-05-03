@@ -8,7 +8,9 @@
     "reason1": "I can't make this time just this once.",
     "reason2": "I can't make this time on {{dayOfWeek}}.",
     "reason3": "I can't make this time on weekdays (Mon-Fri).",
-    "reason4": "I can't make this time any day of the week (Sun - Sat)."
+    "reason4": "I can't make this time any day of the week (Sun - Sat).",
+    "toastSuccess": "Successfully cancelled call.",
+    "toastFailure": "Failed to cancel call."
   },
   "kioskConfirmationModal": {
     "title": "Before connecting, let’s confirm you’re in the right place...",
