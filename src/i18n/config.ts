@@ -11,6 +11,8 @@ import enCommon from "./en/common.json";
 import esLogin from "./es/login.json";
 import esDashboard from "./es/dashboard.json";
 import esCall from "./es/call.json";
+import esCalls from "./es/calls.json";
+
 import enModals from "./en/modals.json";
 import esModals from "./es/modals.json";
 import enSettings from "./en/settings.json";
@@ -20,6 +22,19 @@ import esError from "./es/error.json";
 import esCommon from "./es/common.json";
 
 import { initReactI18next } from "react-i18next";
+
+export const I18nNamespaceList = [
+  "login",
+  "dashboard",
+  "call",
+  "calls",
+  "profile",
+  "settings",
+  "modals",
+  "feedback",
+  "error",
+  "common",
+];
 
 export const resources = {
   en: {
@@ -39,6 +54,7 @@ export const resources = {
     dashboard: esDashboard,
     profile: esProfile,
     call: esCall,
+    calls: esCalls,
     modals: esModals,
     settings: esSettings,
     feedback: esFeedback,
@@ -49,16 +65,8 @@ export const resources = {
 
 i18n.use(initReactI18next).init({
   lng: "en",
-  ns: [
-    "login",
-    "dashboard",
-    "call",
-    "profile",
-    "settings",
-    "modals",
-    "feedback",
-    "error",
-    "common",
-  ],
-  resources,
+  ns: I18nNamespaceList,
+  resources: resources as any,
 });
+
+export default i18n;

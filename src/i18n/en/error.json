@@ -3,5 +3,10 @@
     "callNull": "The call does not exist!",
     "callNotStarted": "The call already ended.",
     "returnHome": "Return Home"
+  },
+  "api": {
+    "fetchConnections": "Failed to load connections",
+    "fetchContacts": "Failed to load contacts",
+    "fetchCalls": "Failed to load calls"
   }
 }

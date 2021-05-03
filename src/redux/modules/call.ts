@@ -18,8 +18,10 @@ import { ThunkApi } from "../helper";
 import io from "socket.io-client";
 import { showToast } from "src/utils";
 import { AuthInfo } from "src/types/Session";
+import i18n from "src/i18n/config";
 
-export const fetchCalls = createAsyncThunk("calls/fetchAll", async () => {
+const FETCH_CALLS = "calls/fetchAll";
+export const fetchCalls = createAsyncThunk(FETCH_CALLS, async () => {
   const body = await fetchAuthenticated(`calls`);
 
   const calls = (body.data as { results: BaseCall[] }).results;
@@ -216,6 +218,9 @@ export const callSlice = createSlice({
     builder.addCase(fetchCalls.fulfilled, (state, action) =>
       callAdapter.setAll(state, action.payload)
     );
+    builder.addCase(fetchCalls.rejected, () =>
+      showToast(FETCH_CALLS, i18n.t("api.fetchCalls", { ns: "error" }), "error")
+    );
     builder.addCase(initializeVisit.rejected, () =>
       showToast("initializeVisit", "Failed to initialize call.", "error")
     );
@@ -231,10 +236,18 @@ export const callSlice = createSlice({
     );
     builder.addCase(cancelCall.fulfilled, (state, action) => {
       callAdapter.updateOne(state, action.payload);
-      showToast("cancelCall", "Successfully cancelled call.", "success");
+      showToast(
+        "cancelCall",
+        i18n.t("cancelCallModal.toastSuccess", { ns: "modals" }),
+        "success"
+      );
     });
     builder.addCase(cancelCall.rejected, () =>
-      showToast("cancelCall", "Failed to cancel call.", "error")
+      showToast(
+        "cancelCall",
+        i18n.t("cancelCallModal.toastFailure", { ns: "modals" }),
+        "error"
+      )
     );
   },
 });

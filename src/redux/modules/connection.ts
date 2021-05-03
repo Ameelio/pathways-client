@@ -6,9 +6,12 @@ import {
 import camelcaseKeys from "camelcase-keys";
 import { Connection } from "src/types/Connection";
 import { fetchAuthenticated } from "src/api/Common";
+import { showToast } from "src/utils";
+import i18n from "src/i18n/config";
 
+const FETCH_CONNECTIONS = "connections/fetchAll";
 export const fetchConnections = createAsyncThunk(
-  "connections/fetchAll",
+  FETCH_CONNECTIONS,
   async () => {
     const body = await fetchAuthenticated(`connections`);
     const connections = ((body.data as Record<string, unknown>)
@@ -28,6 +31,13 @@ export const connectionSlice = createSlice({
     builder.addCase(fetchConnections.fulfilled, (state, action) => {
       connectionAdapter.setAll(state, action.payload);
     });
+    builder.addCase(fetchConnections.rejected, () =>
+      showToast(
+        FETCH_CONNECTIONS,
+        i18n.t("api.fetchConnections", { ns: "error" }),
+        "error"
+      )
+    );
   },
 });
 
