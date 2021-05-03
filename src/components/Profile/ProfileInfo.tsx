@@ -48,7 +48,7 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
           </Space>
         </Card>
         <Row gutter={32}>
-          <Col span={16}>
+          <Col span={14}>
             <Card title={t("profileInfo.about")}>
               <p>
                 <Typography.Text>{`${t("profileInfo.name")}: ${getFullName(
@@ -68,10 +68,10 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
               </p>
             </Card>
           </Col>
-          <Col span={8}>
+          <Col span={10}>
             <Card title={t("profileInfo.history")}>
-              <Row>
-                <Col span={4}>
+              <Row gutter={16}>
+                <Col>
                   <p>
                     <Typography.Text type="secondary">
                       {t("profileInfo.totalCalls")}
@@ -81,7 +81,7 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
                     <Typography.Text>{calls.length}</Typography.Text>
                   </p>
                 </Col>
-                <Col span={16} offset={2}>
+                <Col>
                   <p>
                     <Typography.Text type="secondary">
                       {t("profileInfo.totalMinutes")}

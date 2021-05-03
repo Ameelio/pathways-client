@@ -7,27 +7,11 @@ import { LANGUAGES } from "src/utils/constants";
 import { openModal } from "../../redux/modules/modalsSlice";
 import { useAppDispatch } from "src/redux";
 import Card from "src/components/Card";
+import { FAQ_LIST } from "src/constants/FAQ";
 
-type FAQItem = { question: string; answer: string };
-type FAQ = { en: FAQItem; es: FAQItem; key: string };
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation("settings");
 
-  const FAQ: FAQ[] = [
-    {
-      key: "contacts",
-      en: {
-        question: "How do I add new contacts?",
-        answer:
-          "In this version of Connect, you can receive but not send contact requests. Anyone on your currently approved call list can request you as a contact once they download the Connect app on their smartphone. When someone requests you as a contact, their status will appear as pending until their photo ID is verified by a facility staff member. Once verified, they will be added to your active contact list and able to schedule calls with you.",
-      },
-      es: {
-        question: "How do I add new contacts?",
-        answer:
-          "In this version of Connect, you can receive but not send contact requests. Anyone on your currently approved call list can request you as a contact once they download the Connect app on their smartphone. When someone requests you as a contact, their status will appear as pending until their photo ID is verified by a facility staff member. Once verified, they will be added to your active contact list and able to schedule calls with you.",
-      },
-    },
-  ];
   const dispatch = useAppDispatch();
   const { Option } = Select;
 
@@ -114,7 +98,7 @@ const Settings: React.FC = () => {
           <Col span={24}>
             <Card title={t("faq.title")}>
               <Collapse ghost>
-                {FAQ.map((faq) => (
+                {FAQ_LIST.map((faq) => (
                   <Collapse.Panel
                     key={faq.key}
                     header={

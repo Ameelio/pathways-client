@@ -128,6 +128,7 @@ const CallBase: React.FC<Props> = React.memo(
 
     useEffect(() => {
       room.socket.on("callStatusUpdate", async (status: InCallStatus) => {
+        console.log("received status update", status);
         setStatus(status);
       });
     }, [room]);
@@ -221,7 +222,7 @@ const CallBase: React.FC<Props> = React.memo(
           break;
       }
       updateCallStatus(status);
-    }, [status, updateCallStatus, leaveCall, t]);
+    }, [status, t]);
 
     if (!call) return <div />;
 

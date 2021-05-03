@@ -6,7 +6,7 @@ import { Call } from "src/types/Call";
 import { Icebreaker } from "src/types/Common";
 import { Language } from "src/types/Session";
 import { FAQResource } from "src/types/UI";
-import { QUESTIONS } from "src/utils/constants";
+import { QUESTIONS } from "src/constants";
 import { getRandomItem } from "src/utils/utils";
 
 interface Props {

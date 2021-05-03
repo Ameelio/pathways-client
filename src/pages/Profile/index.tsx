@@ -3,7 +3,7 @@ import { useAppSelector } from "src/redux";
 import { selectAllCalls } from "src/redux/selectors";
 import "src/i18n/config";
 import Profile from "src/components/Profile";
-import { PROFILE_IMG_PATHS } from "src/constants";
+import { BACKGROUNDS } from "src/constants";
 import { useAppDispatch } from "src/redux";
 import { openModal } from "src/redux/modules/modalsSlice";
 
@@ -19,7 +19,7 @@ const ProfilePage: React.FC = () => {
         dispatch(
           openModal({
             activeType: "PROFILE_PHOTO_MODAL",
-            entity: PROFILE_IMG_PATHS,
+            entity: BACKGROUNDS,
           })
         )
       }

@@ -2,6 +2,8 @@ import { UNAUTHENTICATED_USER_ID } from "src/utils/constants";
 import { User } from "src/types/User";
 import { Language } from "src/types/Session";
 
+// TODO: use session slice
+// https://github.com/Ameelio/pathways-client/issues/45
 interface AuthInfo {
   id: number;
   type: "inmate";

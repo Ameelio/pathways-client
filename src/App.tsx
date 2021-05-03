@@ -60,6 +60,7 @@ function App({
     dsn: process.env.REACT_APP_SENTRY_DSN,
     integrations: [new Integrations.BrowserTracing()],
     tracesSampleRate: 1.0,
+    release: "pathways-client@" + process.env.npm_package_version,
   });
 
   return (

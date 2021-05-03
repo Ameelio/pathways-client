@@ -99,6 +99,11 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
     [dispatch, call]
   );
 
+  const leaveCallMemo = useCallback(
+    () => dispatch(push(`/feedback/${call?.id || -1}`)),
+    [call, dispatch]
+  );
+
   if (!rc || !hasInit) {
     return <Loader fullPage tip={`${t("common:loading")}...`} />;
   }
@@ -155,15 +160,13 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
           openModal({ activeType: "TEST_CONNECTION_MODAL", entity: null })
         )
       }
-      leaveCall={() => {
-        dispatch(push(`/feedback/${call.id}`));
-      }}
+      leaveCall={leaveCallMemo}
+      updateCallStatus={updateCallMemo}
       room={rc}
       localAudio={localAudio}
       localVideo={localVideo}
       remoteAudios={remoteAudios}
       remoteVideos={remoteVideos}
-      updateCallStatus={updateCallMemo}
     />
   );
 };

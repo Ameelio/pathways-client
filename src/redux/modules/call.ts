@@ -70,6 +70,7 @@ export const initializeVisit = createAsyncThunk(
     await new Promise((resolve) => {
       socket.emit("authenticate", authInfo, resolve);
     });
+    console.log("authenticated");
     const rc = new RoomClient(socket, callId);
     await rc.init();
     setRc(rc);
