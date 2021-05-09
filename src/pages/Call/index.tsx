@@ -29,7 +29,8 @@ type TParams = { id: string };
 const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
   const dispatch = useAppDispatch();
 
-  const call = useCallById(parseInt(match.params.id));
+  const callId = parseInt(match.params.id);
+  const call = useCallById(callId);
   const { authInfo, user } = useAppSelector((state) => state.session);
 
   const { t } = useTranslation(["error", "common", "modals"]);
@@ -93,15 +94,14 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
 
   const updateCallMemo = useCallback(
     (status: InCallStatus) => {
-      if (!call) return;
-      dispatch(updateCallStatus({ id: call.id, status }));
+      dispatch(updateCallStatus({ id: callId, status }));
     },
-    [dispatch, call]
+    [dispatch, callId]
   );
 
   const leaveCallMemo = useCallback(
-    () => dispatch(push(`/feedback/${call?.id || -1}`)),
-    [call, dispatch]
+    () => dispatch(push(`/feedback/${callId}`)),
+    [callId, dispatch]
   );
 
   if (!rc || !hasInit) {

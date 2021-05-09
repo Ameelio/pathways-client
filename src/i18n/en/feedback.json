@@ -6,7 +6,7 @@
   },
   "body": {
     "unhappy": "Sorry to see you go! If anything went wrong on our end, please let us know by reporting an issue.",
-    "happy": "You can always rejoin the call up until your scheduled end time. You can rejoin both here and also in the home page."
+    "happy": "You can always rejoin the call up until your scheduled end time. You can rejoin both here and also on the home page."
   },
   "qualityRating": {
     "question": "How was the audio and video?"
