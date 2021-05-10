@@ -2,10 +2,10 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { Space, Typography } from "antd";
 import { format } from "date-fns";
 import React from "react";
-import { CallMessage } from "src/types/Call";
+import { BaseMessage } from "src/types/Message";
 
 interface Props {
-  message: CallMessage;
+  message: BaseMessage;
 }
 
 const MessageDisplay: React.FC<Props> = ({ message }) => {

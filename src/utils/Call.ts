@@ -70,8 +70,8 @@ export async function getMedia(type: MediaType, deviceId?: number) {
   return await navigator.mediaDevices.getUserMedia(mediaConstraints);
 }
 
-export function getParticipantsFirstNames(call: Call) {
-  return call.userParticipants.map((user) => user.firstName).join(", ");
+export function getContactsFirstNames(contacts: Contact[]) {
+  return contacts.map((user) => user.firstName).join(", ");
 }
 
 export function getParticipantsFullNames(call: Call) {

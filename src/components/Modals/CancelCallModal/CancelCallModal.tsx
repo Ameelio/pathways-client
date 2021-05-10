@@ -4,7 +4,7 @@ import { differenceInMinutes, format } from "date-fns";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { CancelCallModalData } from "src/types/UI";
-import { getParticipantsFirstNames, getParticipantsFullNames } from "src/utils";
+import { getContactsFirstNames, getParticipantsFullNames } from "src/utils";
 
 interface Props {
   data: CancelCallModalData;
@@ -25,7 +25,7 @@ const CancelCallModal: React.FC<Props> = ({ data, closeModal, cancelCall }) => {
       new Date(call.scheduledEnd),
       new Date(call.scheduledStart)
     );
-  const firstName = getParticipantsFirstNames(call);
+  const firstName = getContactsFirstNames(call.userParticipants);
   const CANCEL_REASONS = [
     t("cancelCallModal.reason1"),
     t("cancelCallModal.reason2", {

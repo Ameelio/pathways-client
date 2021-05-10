@@ -6,7 +6,7 @@ import {
   ControlledStream,
   InCallStatus,
 } from "src/types/Call";
-import { AudioMutedOutlined } from "@ant-design/icons";
+import { AudioMutedOutlined, VideoCameraOutlined } from "@ant-design/icons";
 import {
   getFullName,
   getInitials,
@@ -15,7 +15,7 @@ import {
 } from "src/utils/utils";
 import { useTranslation } from "react-i18next";
 import "src/i18n/config";
-import Chat from "src/components/Call/Chat";
+import Chat from "src/components/Chat";
 import VideoOverlay from "src/components/Call/VideoOverlay";
 import VideoMePlaceholder from "src/components/Call/VideoMePlaceholder";
 import { WaitingRoomCard } from "./WaitingRoomCard";
@@ -30,10 +30,11 @@ import useSound from "use-sound";
 import { useCallMessages } from "src/hooks/useRoom";
 import RoomClient from "src/pages/Call/RoomClient";
 import MessageReceivedSound from "src/assets/Sounds/MessageReceived.mp3";
-import { getParticipantsFirstNames } from "src/utils";
+import { getContactsFirstNames } from "src/utils";
 import ContactAvatarGroup from "../Avatar/UserAvatarGroup";
 import { differenceInSeconds } from "date-fns";
 import { FADING_ANIMATION_DURATION } from "src/constants";
+import { WRAPPER_PADDING } from "src/utils/constants";
 
 declare global {
   interface Window {
@@ -148,7 +149,7 @@ const CallBase: React.FC<Props> = React.memo(
       if (call && participantHasJoined)
         showToast(
           "peerVideo",
-          `${getParticipantsFirstNames(call)} ${
+          `${getContactsFirstNames(call.userParticipants)} ${
             peerVideoOn ? t("peer.videoOn") : t("peer.videoOff")
           }`,
           "info"
@@ -159,7 +160,7 @@ const CallBase: React.FC<Props> = React.memo(
       if (call && participantHasJoined)
         showToast(
           "peerAudio",
-          `${getParticipantsFirstNames(call)} ${
+          `${getContactsFirstNames(call.userParticipants)} ${
             peerAudioOn ? t("peer.unmuted") : t("peer.muted")
           }`,
           "info"
@@ -170,7 +171,9 @@ const CallBase: React.FC<Props> = React.memo(
       if (participantHasJoined && call) {
         playJoinCall();
         openNotificationWithIcon(
-          `${getParticipantsFirstNames(call)} ${t("peer.joinedCallTitle")}.`,
+          `${getContactsFirstNames(call.userParticipants)} ${t(
+            "peer.joinedCallTitle"
+          )}.`,
           t("peer.joinedCallBody"),
           "info"
         );
@@ -230,11 +233,9 @@ const CallBase: React.FC<Props> = React.memo(
       if (!room) {
         return t("waitingRoom.initialization");
       } else if (!participantHasJoined) {
-        return `${t(
-          "waitingRoom.waitingForPrefix"
-        )} ${getParticipantsFirstNames(call)} ${t(
-          "waitingRoom.waitingForSuffix"
-        )}...`;
+        return `${t("waitingRoom.waitingForPrefix")} ${getContactsFirstNames(
+          call.userParticipants
+        )} ${t("waitingRoom.waitingForSuffix")}...`;
       }
       return t("waitingRoom.loading");
     };
@@ -248,8 +249,41 @@ const CallBase: React.FC<Props> = React.memo(
       })();
     };
 
+    const handleSendMessage = (message: string) => {
+      room
+        .request("textMessage", {
+          callId: call.id,
+          contents: message,
+        })
+        .then(
+          () =>
+            addCallMessage({
+              contents: message,
+              senderType: "inmate",
+              senderId: user.id,
+              createdAt: new Date().toISOString(),
+              status: "success",
+              callId: call.id,
+            }),
+          (rejection: string) => {
+            // TODO: log Sentry rejection error
+            // https://github.com/Ameelio/connect-doc-client/issues/60
+            console.log(rejection);
+            addCallMessage({
+              contents: message,
+              senderType: "inmate",
+              senderId: user.id,
+              createdAt: new Date().toISOString(),
+              status: "error",
+              callId: call.id,
+            });
+          }
+        );
+    };
+
     // TODO once we support calls with multiple people at once, we can expand on this implementation
-    const keys = Object.keys(remoteVideos).map((key) => parseInt(key));
+    const videoKeys = Object.keys(remoteVideos).map((key) => parseInt(key));
+    const audioKeys = Object.keys(remoteAudios).map((key) => parseInt(key));
 
     const isCallEnding =
       differenceInSeconds(new Date(call.scheduledEnd), new Date()) <=
@@ -261,7 +295,7 @@ const CallBase: React.FC<Props> = React.memo(
           onMouseMove={() => onMouseMove()}
           onMouseOver={() => onMouseMove()}
         >
-          {keys.map((key: number) => (
+          {videoKeys.map((key: number) => (
             <div className="w-full h-full">
               <Video
                 srcObject={remoteVideos[key]}
@@ -269,12 +303,27 @@ const CallBase: React.FC<Props> = React.memo(
                 autoPlay={true}
                 isFadingOut={isCallEnding}
               />
-              <Audio
-                srcObject={remoteAudios[key]}
-                autoPlay={true}
-                isFadingOut={isCallEnding}
-              />
+              {/* Blurb with metadata */}
+              <div className="absolute bottom-20 left-4 bg-black bg-opacity-50 py-1 px-2 rounded flex salign-center">
+                {peerAudioOn && (
+                  <AudioMutedOutlined className="text-red-600 text-base" />
+                )}
+                {peerVideoOn && (
+                  <VideoCameraOutlined className="text-red-600 text-base ml-1" />
+                )}
+                <Typography.Text className="text-white text-base ml-1">
+                  {" "}
+                  {getContactsFirstNames(call.userParticipants)}
+                </Typography.Text>
+              </div>
             </div>
+          ))}
+          {audioKeys.map((key: number) => (
+            <Audio
+              srcObject={remoteAudios[key]}
+              autoPlay={true}
+              isFadingOut={isCallEnding}
+            />
           ))}
           {timerOn && (
             <Timer
@@ -284,15 +333,6 @@ const CallBase: React.FC<Props> = React.memo(
           )}
           {!peerVideoOn && (
             <ContactAvatarGroup size={128} contacts={call.userParticipants} />
-          )}
-          {!peerAudioOn && (
-            <div className="absolute bottom-20 left-4 bg-black bg-opacity-50 py-1 px-2">
-              <AudioMutedOutlined className="text-red-600 text-xs" />
-              <Typography.Text className="text-white text-base">
-                {" "}
-                {getParticipantsFirstNames(call)}
-              </Typography.Text>
-            </div>
           )}
           {localVideo && localVideo.stream && !localVideo.paused ? (
             <Video
@@ -354,15 +394,27 @@ const CallBase: React.FC<Props> = React.memo(
             />
           )}
         </div>
-        <Chat
-          room={room}
-          inmateId={user.id}
-          call={call}
-          messages={messages}
-          addCallMessage={addCallMessage}
-          chatCollapsed={chatCollapsed}
-          hasUnreadMessages={hasUnreadMessages}
-        />
+        <Layout.Sider
+          theme="light"
+          className="h-screen mh-screen"
+          width={300}
+          collapsible
+          collapsed={chatCollapsed}
+          trigger={null}
+        >
+          {!chatCollapsed && (
+            <div
+              style={WRAPPER_PADDING}
+              className="mt-3 h-screen mh-screen flex flex-col"
+            >
+              <Typography.Title level={3}>{t("chat.title")}</Typography.Title>
+              <Typography.Text className="text-blue-500">
+                {t("chat.monitorWarning")}
+              </Typography.Text>
+              <Chat messages={messages} handleSendMessage={handleSendMessage} />
+            </div>
+          )}
+        </Layout.Sider>
       </Layout>
     );
   }

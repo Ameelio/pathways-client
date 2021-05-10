@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import RoomClient from "src/pages/Call/RoomClient";
-import { CallMessage, CallParticipant } from "src/types/Call";
+import { CallParticipant } from "src/types/Call";
+import { CallMessage } from "src/types/Message";
 
 export const useCallMessages = (
   callId: number,

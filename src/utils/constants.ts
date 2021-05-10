@@ -5,6 +5,7 @@ import SettingsPage from "src/pages/Settings";
 import DashboardPage from "src/pages/Dashboard";
 import CallPage from "src/pages/Call";
 import CallFeedbackPage from "src/pages/CallFeedback";
+import InboxPage from "src/pages/Inbox";
 import { Language } from "src/types/Session";
 
 export const UNAUTHENTICATED_USER_ID = -1;
@@ -17,6 +18,7 @@ export const ROUTES: Route[] = [
   { path: "/profile/:id", component: ProfilePage, label: "Profile" },
   { path: "/call/:id", component: CallPage, label: "Call" },
   { path: "/feedback/:id", component: CallFeedbackPage, label: "Feedback" },
+  { path: "/inbox", component: InboxPage, label: "Inbox" },
   { path: "/", component: DashboardPage, label: "Dash" },
 ];
 

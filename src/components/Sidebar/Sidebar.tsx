@@ -3,6 +3,7 @@ import { Menu, Layout, Space, Row, Avatar, Typography, Divider } from "antd";
 import {
   EllipsisOutlined,
   HomeOutlined,
+  InboxOutlined,
   ScheduleOutlined,
 } from "@ant-design/icons";
 import { User } from "src/types/User";
@@ -46,6 +47,13 @@ export default function Sidebar({ user, navigate }: Props): ReactElement {
             onClick={() => navigate("/calls")}
           >
             Calls
+          </Menu.Item>
+          <Menu.Item
+            key="inbox"
+            icon={<InboxOutlined />}
+            onClick={() => navigate("/inbox")}
+          >
+            Inbox
           </Menu.Item>
           <Divider />
           <Menu.Item
