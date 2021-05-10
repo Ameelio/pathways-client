@@ -113,16 +113,16 @@ const CallBase: React.FC<Props> = React.memo(
         async ({
           from,
           producerId,
-          active,
+          paused,
           type,
         }: {
           from: CallParticipant;
           producerId: string;
-          active: boolean;
+          paused: boolean;
           type: "audio" | "video";
         }) => {
           if (from.type !== "user") return;
-          type === "audio" ? setPeerAudioOn(active) : setPeerVideoOn(active);
+          type === "audio" ? setPeerAudioOn(!paused) : setPeerVideoOn(!paused);
         }
       );
     }, [room, t]);
@@ -281,7 +281,6 @@ const CallBase: React.FC<Props> = React.memo(
         );
     };
 
-    // TODO once we support calls with multiple people at once, we can expand on this implementation
     const videoKeys = Object.keys(remoteVideos).map((key) => parseInt(key));
     const audioKeys = Object.keys(remoteAudios).map((key) => parseInt(key));
 
