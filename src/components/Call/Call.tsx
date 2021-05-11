@@ -327,7 +327,7 @@ const CallBase: React.FC<Props> = React.memo(
           {timerOn && (
             <Timer
               endTime={call.scheduledEnd}
-              className="absolute right-4 top-4 bg-opacity-80"
+              className="absolute left-4 bottom-32 bg-opacity-80"
             />
           )}
           {!peerVideoOn && (
@@ -395,7 +395,7 @@ const CallBase: React.FC<Props> = React.memo(
         </div>
         <Layout.Sider
           theme="light"
-          className="h-screen mh-screen"
+          className="h-screen mh-screen shadow"
           width={300}
           collapsible
           collapsed={chatCollapsed}

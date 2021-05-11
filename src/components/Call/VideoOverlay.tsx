@@ -40,7 +40,18 @@ const VideoOverlay: React.FC<Props> = ({
   const { t } = useTranslation("call");
   return !loading ? (
     <Row className="absolute bottom-0 bg-white w-full p-4" align="middle">
-      <Col span={8} offset={8}>
+      <Col span={2}>
+        <Button
+          danger
+          size="large"
+          onClick={() => terminateCall()}
+          className="align-self-end"
+        >
+          {t("videoOverlay.leaveCall")}
+        </Button>
+      </Col>
+
+      <Col span={8} offset={6}>
         <Space size="large">
           <IconButton
             icon={
@@ -101,16 +112,6 @@ const VideoOverlay: React.FC<Props> = ({
             }`}
           />
         </Space>
-      </Col>
-      <Col span={2} offset={4}>
-        <Button
-          danger
-          size="large"
-          onClick={() => terminateCall()}
-          className="align-self-end"
-        >
-          {t("videoOverlay.leaveCall")}
-        </Button>
       </Col>
     </Row>
   ) : (
