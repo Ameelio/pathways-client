@@ -48,19 +48,6 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
   const [hasInit, setHasInit] = useState(false);
 
   useEffect(() => {
-    dispatch(
-      openModal({
-        activeType: "RESOURCE_MODAL",
-        entity: {
-          title: t("modals:privacyNotice.title"),
-          body: t("modals:privacyNotice.body"),
-          okBtnText: t("modals:privacyNotice.okText"),
-        },
-      })
-    );
-  }, [t, dispatch]);
-
-  useEffect(() => {
     dispatch(enterFullScreen());
     return () => {
       dispatch(exitFullScreen());

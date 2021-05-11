@@ -33,17 +33,30 @@ export default function KioskConfirmationModal({
     >
       <Lottie
         options={getLottieOptions(KioskLottie)}
-        height="50%"
-        width="50%"
+        // height="20%"
+        width="45%"
       />
-      <Space direction="vertical" className="w-full">
-        <Typography.Text>
-          {t("modals:kioskConfirmationModal.subtitle")}
-        </Typography.Text>
-        <Typography.Text strong>{call.kioskName}</Typography.Text>
-        <Typography.Text>
-          {t("modals:kioskConfirmationModal.body")}
-        </Typography.Text>
+      <Space size="large" direction="vertical">
+        <Space direction="vertical" className="w-full">
+          <Typography.Text underline>
+            {t("modals:kioskConfirmationModal.locationHeader")}
+          </Typography.Text>
+          <Typography.Text>
+            {t("modals:kioskConfirmationModal.locationBody")}
+          </Typography.Text>
+          <Typography.Text>
+            {t("modals:kioskConfirmationModal.subtitle")}{" "}
+            <Typography.Text strong>{call.kioskName}</Typography.Text>
+          </Typography.Text>
+        </Space>
+        <Space direction="vertical">
+          <Typography.Text underline>
+            {t("modals:kioskConfirmationModal.privacyHeader")}
+          </Typography.Text>
+          <Typography.Text>
+            {t("modals:kioskConfirmationModal.privacyBody")}
+          </Typography.Text>
+        </Space>
       </Space>
     </Modal>
   );
