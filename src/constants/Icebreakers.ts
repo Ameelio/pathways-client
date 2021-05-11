@@ -10,11 +10,6 @@ export const QUESTIONS: Icebreaker[] = [
     es: "Cuál es el mejor consejo que te han dado?",
   },
   {
-    en: "If you could add anyone to Mount Rushmore, who would it be and why?",
-    es:
-      "Si podrías añadir a cualquier persona al monumento de Mt Rushmore quien seria y porque?",
-  },
-  {
     en:
       "If you had to compete in the Olympics, which sport would you compete in?",
     es:
