@@ -1,8 +1,8 @@
 import { Contact } from "./User";
 
 export interface ChatMessage {
-  chatId: number;
-  senderId: number;
+  chatId: string;
+  senderId: string;
   senderType: "inmate" | "user";
   contents: string;
   createdAt: string; // ISO string
@@ -10,8 +10,8 @@ export interface ChatMessage {
 }
 
 export interface BaseChat {
-  id: number;
-  contactIds: number[];
+  id: string;
+  contactIds: string[];
 }
 
 export interface Chat extends BaseChat {

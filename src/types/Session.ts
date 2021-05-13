@@ -2,6 +2,6 @@ export type Language = "en" | "es";
 
 export interface AuthInfo {
   token: string;
-  id: number;
+  id: string;
   type: "inmate";
 }

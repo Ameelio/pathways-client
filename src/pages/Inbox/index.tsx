@@ -7,24 +7,24 @@ interface Props {}
 
 const FAKE_CHATS = [
   {
-    id: 1,
-    contactIds: [1],
+    id: "1",
+    contactIds: ["1"],
   },
 ];
 
-const FAKE_MESSAGES: Record<number, any> = {
-  1: [
+const FAKE_MESSAGES: Record<string, any> = {
+  "1": [
     {
-      chatId: 1,
-      senderId: 1,
+      chatId: "",
+      senderId: "",
       senderType: "user",
       createdAt: new Date().toISOString(),
       status: "success",
       contents: "Hey! What's up?",
     },
     {
-      chatId: 1,
-      senderId: 2,
+      chatId: "",
+      senderId: "",
       senderType: "inmate",
       createdAt: new Date().toISOString(),
       status: "success",

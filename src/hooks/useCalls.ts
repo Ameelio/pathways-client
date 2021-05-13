@@ -83,7 +83,7 @@ export function usePastCalls() {
   return calls;
 }
 
-export function useCallById(id: number) {
+export function useCallById(id: string) {
   const baseCall = useAppSelector((state) => selectCallById(state, id));
   const contactEntities = useAppSelector(selectContactEntities);
   const [call, setCall] = useState<Call>();

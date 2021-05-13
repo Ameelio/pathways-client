@@ -1,5 +1,5 @@
 export interface FacilityRO {
-  id: number;
+  id: string;
   name: string;
 }
 

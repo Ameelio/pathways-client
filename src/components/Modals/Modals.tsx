@@ -25,7 +25,7 @@ const Modals: React.FC = () => {
         <CancelCallModal
           closeModal={() => dispatch(closeModal())}
           data={data}
-          cancelCall={(id: number, reason: string) =>
+          cancelCall={(id: string, reason: string) =>
             dispatch(cancelCall({ id, reason }))
           }
         />

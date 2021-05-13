@@ -7,7 +7,7 @@ import { Contact } from "src/types/User";
 export const useChats = (
   baseChats: BaseChat[],
   contacts: Contact[],
-  messageDict: Record<number, ChatMessage[]> // number: ID of the chat
+  messageDict: Record<string, ChatMessage[]> // number: ID of the chat
 ) => {
   const [chats, setChats] = useState<Chat[]>([]);
 

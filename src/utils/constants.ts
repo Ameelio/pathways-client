@@ -8,8 +8,6 @@ import CallFeedbackPage from "src/pages/CallFeedback";
 import InboxPage from "src/pages/Inbox";
 import { Language } from "src/types/Session";
 
-export const UNAUTHENTICATED_USER_ID = -1;
-
 export const AVATAR_LARGE = 135;
 
 export const ROUTES: Route[] = [

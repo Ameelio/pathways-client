@@ -9,7 +9,7 @@ import { getContactsFirstNames, getParticipantsFullNames } from "src/utils";
 interface Props {
   data: CancelCallModalData;
   closeModal: () => void;
-  cancelCall: (id: number, reason: string) => void;
+  cancelCall: (id: string, reason: string) => void;
 }
 
 const CancelCallModal: React.FC<Props> = ({ data, closeModal, cancelCall }) => {

@@ -1,7 +1,7 @@
 import { Contact } from "./User";
 
 export interface Kiosk {
-  id: number;
+  id: string;
   name: string;
   description: string;
 }
@@ -27,15 +27,15 @@ type GeneralCallStatus =
 export type CallStatus = InCallStatus | GeneralCallStatus;
 
 export interface BaseCall {
-  id: number;
+  id: string;
   scheduledStart: ISOString;
   scheduledEnd: ISOString;
   approved: boolean;
   status: CallStatus;
-  connectionId: number;
+  connectionId: string;
   statusDetails: string;
-  userIds: number[];
-  kioskId: number;
+  userIds: string[];
+  kioskId: string;
   kioskName: string;
   videoHandler?: CallHandler;
 }
@@ -46,7 +46,7 @@ export interface Call extends BaseCall {
 
 export interface CallParticipant {
   type: "doc" | "inmate" | "user";
-  id: number;
+  id: string;
 }
 
 export interface ControlledStream {

@@ -1,5 +1,5 @@
 export interface BaseMessage {
-  senderId: number;
+  senderId: string;
   senderType: "inmate" | "user" | "doc";
   contents: string;
   createdAt: string; // ISO string
@@ -7,9 +7,9 @@ export interface BaseMessage {
 }
 
 export interface CallMessage extends BaseMessage {
-  callId: number;
+  callId: string;
 }
 
 export interface ChatMesssage extends BaseMessage {
-  chatId: number;
+  chatId: string;
 }

@@ -35,6 +35,7 @@ import ContactAvatarGroup from "../Avatar/UserAvatarGroup";
 import { differenceInSeconds } from "date-fns";
 import { FADING_ANIMATION_DURATION } from "src/constants";
 import { WRAPPER_PADDING } from "src/utils/constants";
+import * as Sentry from "@sentry/react";
 
 declare global {
   interface Window {
@@ -266,9 +267,7 @@ const CallBase: React.FC<Props> = React.memo(
               callId: call.id,
             }),
           (rejection: string) => {
-            // TODO: log Sentry rejection error
-            // https://github.com/Ameelio/connect-doc-client/issues/60
-            console.log(rejection);
+            Sentry.captureException(rejection);
             addCallMessage({
               contents: message,
               senderType: "inmate",

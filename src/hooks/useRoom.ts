@@ -4,7 +4,7 @@ import { CallParticipant } from "src/types/Call";
 import { CallMessage } from "src/types/Message";
 
 export const useCallMessages = (
-  callId: number,
+  callId: string,
   room: RoomClient,
   alertDocMessage: (contents: string) => void
 ) => {
