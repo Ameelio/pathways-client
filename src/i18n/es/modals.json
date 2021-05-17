@@ -1,29 +1,29 @@
 {
   "cancelCallModal": {
-    "title": "Cancel Call?",
-    "okText": "Confirm",
-    "messageOne": "You are about to cancel your call with {{connectionName}} for:",
-    "messageTwo": "Please select a cancellation reason to send to {{connectionFirstName}} to help them choose a time that works better for you..",
-    "dropdownPlaceholder": "Cancellation reason",
-    "reason1": "I can't make this time just this once.",
-    "reason2": "I can't make this time on {{dayOfWeek}}.",
-    "reason3": "I can't make this time on weekdays (Mon-Fri).",
-    "reason4": "I can't make this time any day of the week (Sun - Sat).",
-    "toastSuccess": "Successfully cancelled call.",
-    "toastFailure": "Failed to cancel call."
+    "title": "¿Cancelar llamada?",
+    "okText": "Confirmir",
+    "messageOne": "Está a punto de cancelar su llamada con {{connectionName}} para:",
+    "messageTwo": "Selecciona un motivo de cancelación para enviarlo a {{connectionFirstName}} para ayudarlos a elegir un horario que funcione mejor para ti.",
+    "dropdownPlaceholder": "Razon de cancelación",
+    "reason1": "No puedo hacer esta vez solo por esta vez.",
+    "reason2": "No puedo hacer esta vez en {{dayOfWeek}}.",
+    "reason3": "No puedo hacer este tiempo de lunes a viernes.",
+    "reason4": "No puedo hacer esta hora cualquier día de la semana (dom - sáb).",
+    "toastSuccess": "Llamada cancelada con éxito.",
+    "toastFailure": "No se pudo cancelar la llamada."
   },
   "kioskConfirmationModal": {
-    "title": "Before connecting, let’s confirm a few things...",
-    "locationHeader": "Are you using the correct device?",
-    "subtitle": "Your call is assigned to:",
-    "locationBody": "If you’re on the wrong device, you will not be able to connect to your call, and you will have to log out and locate your assigned device.",
-    "privacyHeader": "Do you agree with the following usage statement?",
-    "privacyBody": "By clicking ‘Confirm’ and participating in this call, you consent to the monitoring and recording of your video, audio, and in-call chat messages by your correctional facility. You agree to abide by the facility’s stated calling policies and understand that failure to do so may result in the interruption or termination of your call."
+    "title": "Antes de conectarnos, confirmamos algunas cosas...",
+    "locationHeader": "¿Está usando el dispositivo correcto?",
+    "subtitle": "Su llamada está asignada a:",
+    "locationBody": "Si estás en el dispositivo equivocado, no podrá conectarse a su llamada y tendrá que cerrar la sesión y ubicar su dispositivo asignado.",
+    "privacyHeader": "¿Está de acuerdo con la siguiente declaración de uso?",
+    "privacyBody": "Al hacer clic en \"Confirmar\" y participar en esta llamada, usted acepta la supervisión y grabación de su video, audio y mensajes de chat durante la llamada por parte de su centro penitenciario. Usted acepta cumplir con las políticas de llamadas establecidas por la instalación y comprende que no hacerlo puede resultar en la interrupción o terminación de su llamada."
   },
   "informational": {
     "whenWillCallConnect": {
-      "title": "When will my call connect?",
-      "body": "Once the facility staff member is stationed and both you and your contact are in the Waiting Room, your call will automatically connect at the scheduled start time. If you choose to check your connection while waiting, don’t worry about losing any of your call time! Your call will automatically connect even if you are in the middle of testing so that you can take advantage of the entire sesson. Note: The facility staff member does not participate in the call itself but has the ability to interrupt or terminate the call based on their discretion."
+      "title": "¿Cuándo se conectará mi llamada?",
+      "body": "Una vez que el miembro del personal de la instalación esté destinado y tanto usted como su contacto estén en la sala de espera, su llamada se conectará automáticamente a la hora de inicio programada. Si elige verificar su conexión mientras espera, ¡no se preocupe por perder parte del tiempo de su llamada! Su llamada se conectará automáticamente incluso si está en medio de una prueba para que pueda aprovechar toda la sesión. Nota: El miembro del personal de la instalación no participa en la llamada en sí, pero tiene la capacidad de interrumpir o terminar la llamada según su criterio."
     }
   }
 }

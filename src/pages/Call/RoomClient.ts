@@ -216,9 +216,7 @@ class RoomClient {
       params.codecOptions = config.video.codecOptions;
     }
 
-    console.log("transporting ", track);
     const producer = await this.producerTransport.produce(params);
-    console.log("transported");
     this.producers[producer.id] = producer;
     return stream;
   }
