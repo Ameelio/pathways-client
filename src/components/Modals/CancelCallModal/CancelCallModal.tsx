@@ -44,6 +44,7 @@ const CancelCallModal: React.FC<Props> = ({ data, closeModal, cancelCall }) => {
         cancelCall(call.id, reason);
         closeModal();
       }}
+      okButtonProps={{ disabled: !reason.length }}
       onCancel={closeModal}
       className="rounded-sm"
     >

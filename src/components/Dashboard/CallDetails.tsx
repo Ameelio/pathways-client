@@ -1,4 +1,4 @@
-import { CalendarOutlined, TeamOutlined } from "@ant-design/icons";
+import { CalendarOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Col, Divider, Drawer, Row, Space, Typography } from "antd";
 import { differenceInMinutes, format } from "date-fns";
 import React from "react";
@@ -8,6 +8,8 @@ import { Call } from "src/types/Call";
 import { openModal } from "src/redux/modules/modalsSlice";
 import { getParticipantsFullNames } from "src/utils";
 import ContactAvatarGroup from "../Avatar/UserAvatarGroup";
+import { FAQ_LIST } from "src/constants/FAQ";
+import i18n from "src/i18n/config";
 
 interface Props {
   selectedCall: Call | null;
@@ -25,6 +27,7 @@ const CallDetails: React.FC<Props> = ({ selectedCall, onClose }) => {
       new Date(selectedCall.scheduledStart)
     );
 
+  const expectationFAQ = FAQ_LIST.find((faq) => faq.key === "expectation");
   return selectedCall ? (
     <Drawer
       title="Call Details"
@@ -65,7 +68,7 @@ const CallDetails: React.FC<Props> = ({ selectedCall, onClose }) => {
         <Row>
           <Space>
             <Col>
-              <TeamOutlined className="text-2xl" />
+              <UserOutlined className="text-2xl" />
             </Col>
             <Col>
               <ContactAvatarGroup contacts={selectedCall.userParticipants} />
@@ -99,10 +102,35 @@ const CallDetails: React.FC<Props> = ({ selectedCall, onClose }) => {
         </Row>
         <Divider />
         <Row>
-          <Typography.Link>{t("call.whatToExpect")}</Typography.Link>
+          <Typography.Link
+            onClick={() =>
+              dispatch(
+                openModal({
+                  activeType: "RESOURCE_MODAL",
+                  entity: {
+                    title:
+                      (i18n.language === "es"
+                        ? expectationFAQ?.es.question
+                        : expectationFAQ?.en.question) || "",
+                    body:
+                      (i18n.language === "es"
+                        ? expectationFAQ?.es.answer
+                        : expectationFAQ?.en.answer) || "",
+                  },
+                })
+              )
+            }
+          >
+            {t("call.whatToExpect")}
+          </Typography.Link>
         </Row>
         <Row>
-          <Typography.Link>{t("call.privacyNotice")}</Typography.Link>
+          <Typography.Link
+            onClick={() => window.open("/privacy_policy.pdf")}
+            target="_blank"
+          >
+            {t("call.privacyNotice")}
+          </Typography.Link>
         </Row>
       </Space>
     </Drawer>

@@ -1,5 +1,13 @@
+type FAQKey =
+  | "contacts"
+  | "callsScheduled"
+  | "reschedule"
+  | "storm"
+  | "expectation"
+  | "features";
+
 type FAQItem = { question: string; answer: string };
-type FAQ = { en: FAQItem; es: FAQItem; key: string };
+type FAQ = { en: FAQItem; es: FAQItem; key: FAQKey };
 
 export const FAQ_LIST: FAQ[] = [
   {
@@ -47,7 +55,7 @@ export const FAQ_LIST: FAQ[] = [
       question:
         "If an unexpected event happens that prevents me from participating in a scheduled call (i.e. lockdown, storm, etc.), will my contact be notified?",
       answer:
-        "If you can’t make a scheduled call, you can cancel it whenever you’re logged into your account by selecting ‘View details’ on a given call. In this version of Connect, you may send a cancellation reason to help your contact reschedule for a time that works better for you. When you cancel a call, your contact will receive a notification and be given the immediate option to reschedule.",
+        "Unfortunately, not at this time. We understand the importance of this notification though and are working to make sure it can happen in the future.",
     },
     es: {
       question:
@@ -73,7 +81,8 @@ export const FAQ_LIST: FAQ[] = [
     key: "features",
     en: {
       question: "What specific features are available to me in a call?",
-      answer: "",
+      answer:
+        "Toggle your microphone on/off, Toggle your video camera on/off, Toggle the timer countdown display on/off, Exchange in-call chat messages with your contact (all messages are monitored), Report a technical issue, Leave the call (even if you leave, you may rejoin the call anytime within the [20]-minute time frame)",
     },
     es: {
       question: "De qué funciones específicas dispongo en una llamada?",

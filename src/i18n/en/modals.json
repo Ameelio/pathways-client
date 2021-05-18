@@ -6,9 +6,9 @@
     "messageTwo": "Please select a cancellation reason to send to {{connectionFirstName}} to help them choose a time that works better for you..",
     "dropdownPlaceholder": "Cancellation reason",
     "reason1": "I can't make this time just this once.",
-    "reason2": "I can't make this time on {{dayOfWeek}}.",
+    "reason2": "I can't make this time on {{dayOfWeek}}s.",
     "reason3": "I can't make this time on weekdays (Mon-Fri).",
-    "reason4": "I can't make this time any day of the week (Sun - Sat).",
+    "reason4": "I can't make this time any day of the week (Sun-Sat).",
     "toastSuccess": "Successfully cancelled call.",
     "toastFailure": "Failed to cancel call."
   },
