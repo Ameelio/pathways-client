@@ -94,37 +94,6 @@ const Calls: React.FC<Props> = ({ calls, user }) => {
       ),
     },
   ];
-  // useEffect(() => {
-  //   setTableData(
-  //     calls.map((call) => {
-  //       return {
-  //         date: format(new Date(call.scheduledStart), "eeee, LLLL d"),
-  //         time: `${format(
-  //           new Date(call.scheduledStart),
-  //           "h:mm bbb"
-  //         )} - ${format(new Date(call.scheduledEnd), "h:mm bbb")}`,
-  //         participants: (
-  //           <Space>
-  //             <Avatar src={user.profileImagePath} size="small" />
-  //             <Typography.Text>{getFullName(user)}</Typography.Text>
-  //           </Space>
-  //         ),
-  //         cancel: (
-  //           <Button
-  //             type="link"
-  //             onClick={() =>
-  //               dispatch(
-  //                 openModal({ activeType: "CANCEL_CALL_MODAL", entity: call })
-  //               )
-  //             }
-  //           >
-  //             {t("cancel")}
-  //           </Button>
-  //         ),
-  //       };
-  //     })
-  //   );
-  // }, [calls, user, dispatch, t]);
 
   return (
     <PageLayout>
