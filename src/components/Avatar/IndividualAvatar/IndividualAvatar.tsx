@@ -1,8 +1,8 @@
 import React from "react";
 import { InitialsAvatar } from "./InitialsAvatar";
-import { Image } from "antd";
+import { AvatarProps, Image } from "antd";
 
-interface Props {
+interface Props extends AvatarProps {
   fallback: string;
   size?: number;
   src?: string;

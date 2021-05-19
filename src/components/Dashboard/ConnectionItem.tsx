@@ -3,6 +3,7 @@ import React from "react";
 // import { useTranslation } from "react-i18next";
 import { Contact } from "src/types/User";
 import { getFullName } from "src/utils/utils";
+import IndividualAvatar from "../Avatar/IndividualAvatar";
 
 interface Props {
   contact: Contact;
@@ -23,7 +24,11 @@ const ConnectionItem: React.FC<Props> = ({ contact }) => {
   return (
     <Col key={contact.id} className="flex flex-col align-center">
       <Space direction="vertical">
-        <Avatar shape="square" size={80} src={contact.profileImagePath} />
+        <IndividualAvatar
+          size={80}
+          src={contact.profileImagePath}
+          fallback={getFullName(contact)}
+        />
         <div>
           <div>
             <Typography.Text>{getFullName(contact)}</Typography.Text>

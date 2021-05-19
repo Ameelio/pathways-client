@@ -21,13 +21,13 @@ export default function Sidebar({ user, navigate }: Props): ReactElement {
   const { t } = useTranslation("common");
   return (
     <Sider theme="light" className="shadow-lg">
-      <Space direction="vertical" className="w-full mb-4" size="large">
-        <Row className="p-2 cursor-pointer" onClick={() => navigate("/")}>
+      <Space direction="vertical" className="w-full" size="large">
+        <Row className="mt-4 ml-4 cursor-pointer" onClick={() => navigate("/")}>
           <Logo className="login-logo" />
         </Row>
         <Row
           align="middle"
-          className="pl-4 cursor-pointer mb-4"
+          className="pl-4 cursor-pointer"
           onClick={() => navigate(`/profile/${user.id}`)}
         >
           <Space>

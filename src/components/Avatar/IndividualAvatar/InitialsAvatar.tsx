@@ -8,7 +8,7 @@ interface Props extends AvatarProps {
   name: string;
 }
 export const InitialsAvatar = ({ name, ...props }: Props): JSX.Element => (
-  <Avatar className={getAvatarBackgroundColor(name)}>
+  <Avatar className={getAvatarBackgroundColor(name)} {...props}>
     {getInitials(name)}
   </Avatar>
 );

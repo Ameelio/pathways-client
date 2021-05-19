@@ -18,7 +18,7 @@
     "subtitle": "Your call is assigned to:",
     "locationBody": "If you’re on the wrong device, you will not be able to connect to your call, and you will have to log out and locate your assigned device.",
     "privacyHeader": "Do you agree with the following usage statement?",
-    "privacyBody": "By clicking ‘Confirm’ and participating in this call, you consent to the monitoring and recording of your video, audio, and in-call chat messages by your correctional facility. You agree to abide by the facility’s stated calling policies and understand that failure to do so may result in the interruption or termination of your call."
+    "privacyBody": "By clicking ‘Confirm’ and participating in this call, you consent to the monitoring and/or recording of your video, audio, and in-call chat messages. If you do not consent to being recorded, please exit the video call."
   },
   "informational": {
     "whenWillCallConnect": {

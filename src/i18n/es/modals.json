@@ -18,7 +18,7 @@
     "subtitle": "Su llamada está asignada a:",
     "locationBody": "Si estás en el dispositivo equivocado, no podrá conectarse a su llamada y tendrá que cerrar la sesión y ubicar su dispositivo asignado.",
     "privacyHeader": "¿Está de acuerdo con la siguiente declaración de uso?",
-    "privacyBody": "Al hacer clic en \"Confirmar\" y participar en esta llamada, usted acepta la supervisión y grabación de su video, audio y mensajes de chat durante la llamada por parte de su centro penitenciario. Usted acepta cumplir con las políticas de llamadas establecidas por la instalación y comprende que no hacerlo puede resultar en la interrupción o terminación de su llamada."
+    "privacyBody": "Al hacer clic en \"Confirmar\" y participar en esta llamada, usted acepta la supervisión y grabación de su video, audio y mensajes de chat durante la llamada por parte de su centro penitenciario. Si no da su consentimiento para que lo graben, salga de la videollamada."
   },
   "informational": {
     "whenWillCallConnect": {
