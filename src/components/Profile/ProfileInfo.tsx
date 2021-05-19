@@ -50,46 +50,36 @@ const ProfileInfo: React.FC<Props> = ({ user, calls, onEdit }) => {
         <Row gutter={32}>
           <Col span={14}>
             <Card title={t("profileInfo.about")}>
-              <p>
+              <Space direction="vertical">
                 <Typography.Text>{`${t("profileInfo.name")}: ${getFullName(
                   user
                 )}`}</Typography.Text>
-              </p>
-              <p>
-                <Typography.Text>{`${t("profileInfo.home")}: ${
-                  user.location
-                }`}</Typography.Text>
-              </p>
-              <p>
+
                 <Typography.Text>{`${t("profileInfo.birthday")}: ${format(
                   new Date(user.dateOfBirth),
                   "MMMM d, yyyy"
                 )}`}</Typography.Text>
-              </p>
+              </Space>
             </Card>
           </Col>
           <Col span={10}>
             <Card title={t("profileInfo.history")}>
               <Row gutter={16}>
                 <Col>
-                  <p>
+                  <Space direction="vertical">
                     <Typography.Text type="secondary">
                       {t("profileInfo.totalCalls")}
                     </Typography.Text>
-                  </p>
-                  <p>
                     <Typography.Text>{calls.length}</Typography.Text>
-                  </p>
+                  </Space>
                 </Col>
                 <Col>
-                  <p>
+                  <Space direction="vertical">
                     <Typography.Text type="secondary">
                       {t("profileInfo.totalMinutes")}
                     </Typography.Text>
-                  </p>
-                  <p>
                     <Typography.Text>{totalMinutes}</Typography.Text>
-                  </p>
+                  </Space>
                 </Col>
               </Row>
             </Card>

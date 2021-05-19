@@ -1,105 +1,122 @@
-import { Avatar, Button, Col, Row, Space, Table, Typography } from "antd";
-import React, { useEffect, useState } from "react";
-import { Call } from "src/types/Call";
-import { User } from "src/types/User";
+import { Button, Col, Row, Space, Table, Typography } from "antd";
+import React from "react";
+import { Call, ISOString } from "src/types/Call";
+import { Contact, User } from "src/types/User";
 import PageLayout from "src/components/Common/PageLayout";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import { getFullName } from "src/utils/utils";
 import { useAppDispatch } from "src/redux";
 import { openModal } from "src/redux/modules/modalsSlice";
+import IndividualAvatar from "../Avatar/IndividualAvatar";
 
 interface Props {
   calls: Call[];
   user: User;
 }
 
-interface TableData {
-  date: string;
-  time: string;
-  participants: JSX.Element;
-  cancel: JSX.Element;
-}
-
-const tableColumns = [
-  {
-    title: "Date",
-    dataIndex: "date",
-  },
-  {
-    title: "Time",
-    dataIndex: "time",
-  },
-  {
-    title: "Participants",
-    dataIndex: "participants",
-  },
-  {
-    title: "",
-    dataIndex: "cancel",
-  },
-];
-
 const Calls: React.FC<Props> = ({ calls, user }) => {
   const dispatch = useAppDispatch();
-  const [tableData, setTableData] = useState<TableData[]>([]);
   const { t } = useTranslation("calls");
 
-  useEffect(() => {
-    setTableData(
-      calls.map((call) => {
-        return {
-          date: format(new Date(call.scheduledStart), "eeee, LLLL d"),
-          time: `${format(
-            new Date(call.scheduledStart),
-            "h:mm bbb"
-          )} - ${format(new Date(call.scheduledStart), "h:mm bbb")}`,
-          participants: (
-            <Space>
-              <Avatar src={user.profileImagePath} size="small" />
-              <Typography.Text>{getFullName(user)}</Typography.Text>
-            </Space>
-          ),
-          cancel: (
-            <Button
-              type="link"
-              onClick={() =>
-                dispatch(
-                  openModal({ activeType: "CANCEL_CALL_MODAL", entity: call })
-                )
-              }
-            >
-              {t("cancel")}
-            </Button>
-          ),
-        };
-      })
-    );
-  }, [calls, user, dispatch, t]);
+  const tableColumns = [
+    {
+      title: "Date",
+      key: "date",
+      dataIndex: "scheduledStart",
+      render: (date: ISOString) => {
+        return (
+          <Typography.Text>
+            {format(new Date(date), "eeee, LLLL d")}
+          </Typography.Text>
+        );
+      },
+    },
+    {
+      title: "Scheduled Start",
+      key: "start",
+      dataIndex: "scheduledStart",
+      render: (scheduledStart: ISOString) => {
+        return (
+          <Typography.Text>
+            {format(new Date(scheduledStart), "h:mm bbb")}
+          </Typography.Text>
+        );
+      },
+    },
+    {
+      title: "Scheduled End",
+      key: "end",
+      dataIndex: "scheduledEnd",
+      render: (scheduledEnd: ISOString) => {
+        return (
+          <Typography.Text>
+            {format(new Date(scheduledEnd), "h:mm bbb")}
+          </Typography.Text>
+        );
+      },
+    },
+    {
+      title: "Participants",
+      key: "userParticipants",
+      dataIndex: "userParticipants",
+      render: (participants: Contact[]) => {
+        return (
+          <Space direction="vertical">
+            {participants.map((p) => (
+              <Space>
+                <IndividualAvatar
+                  src={p.profileImagePath}
+                  size={24}
+                  fallback={getFullName(p)}
+                />
+                <Typography.Text>{getFullName(p)}</Typography.Text>
+              </Space>
+            ))}
+          </Space>
+        );
+      },
+    },
+    {
+      title: "",
+      key: "cancel",
+      render: (_text: string, call: Call) => (
+        <Button
+          type="link"
+          onClick={() =>
+            dispatch(
+              openModal({ activeType: "CANCEL_CALL_MODAL", entity: call })
+            )
+          }
+        >
+          {t("cancel")}
+        </Button>
+      ),
+    },
+  ];
 
   return (
     <PageLayout>
       <Space className="p-8 w-full" direction="vertical">
         <Row className="pb-2">
           <Col>
-            <p className="pb-2">
+            <Space direction="vertical">
               <Typography.Text type="secondary">
                 {t("callLimit")}
               </Typography.Text>
-            </p>
-            <p>
-              <Typography.Text strong className="text-base">
-                {user.quota}
-              </Typography.Text>
-            </p>
+              <Space>
+                <Typography.Text strong className="text-base">
+                  {user.quota}
+                </Typography.Text>
+                {/* <Tooltip title="PLACEHOLDER FOR liz">
+                  <Button icon={InfoOutlined} shape="circle" />
+                </Tooltip> */}
+              </Space>
+            </Space>
           </Col>
         </Row>
         <Row>
-          <Table
-            className="w-full"
-            columns={tableColumns}
-            dataSource={tableData}
-          />
+          <Table className="w-full" columns={tableColumns} dataSource={calls} />
         </Row>
       </Space>
     </PageLayout>

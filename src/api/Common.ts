@@ -3,6 +3,8 @@ import { FacilitiesAPIResponse } from "./interfaces/apiResponses";
 
 export const API_URL = process.env.REACT_APP_API_URL || "api/v1/";
 
+export type UUID = string;
+
 export interface ApiResponse {
   date: number;
   good: boolean;

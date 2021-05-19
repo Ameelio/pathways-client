@@ -60,7 +60,7 @@ const Settings: React.FC = () => {
                     )
                   }
                 >
-                  {t("resources.contactVerification")}
+                  {t("resources.videoWelcome")}
                 </Typography.Link>
               </Row>
               <Row className="pb-2">
@@ -74,21 +74,14 @@ const Settings: React.FC = () => {
                     )
                   }
                 >
-                  {t("resources.callInfo")}
+                  {t("resources.videoFeatures")}
                 </Typography.Link>
               </Row>
               <Row className="pb-2">
                 <Typography.Link
-                  onClick={() =>
-                    dispatch(
-                      openModal({
-                        activeType: "RESOURCE_MODAL",
-                        entity: { title: "Hello", body: "World" },
-                      })
-                    )
-                  }
+                  onClick={() => window.open("/privacy_policy.pdf")}
                 >
-                  {t("resources.privacyInfo")}
+                  {t("resources.callPolicies")}
                 </Typography.Link>
               </Row>
             </Card>

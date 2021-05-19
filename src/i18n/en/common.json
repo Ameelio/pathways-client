@@ -1,5 +1,9 @@
 {
   "loading": "Loading",
   "confirm": "Confirm",
-  "logout": "Log Out"
+  "logout": "Log Out",
+  "home": "Home",
+  "calls": "Calls",
+  "inbox": "Inbox",
+  "settings": "Settings"
 }

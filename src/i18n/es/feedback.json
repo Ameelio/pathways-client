@@ -1,29 +1,29 @@
 {
   "title": {
-    "happy": "We hope your call and {{names}} had a good time!",
-    "unhappy": "You left the meeting",
-    "terminated": "Time flies when you’re in good company!"
+    "happy": "¡Esperamos que su llamada y {{names}} la hayan pasado bien!",
+    "unhappy": "Dejaste la reunión",
+    "terminated": "¡El tiempo vuela cuando estás en buena compañía!"
   },
   "body": {
-    "unhappy": "Sorry to see you go! If anything went wrong on our end, please let us know by reporting an issue.",
-    "happy": "You can always rejoin the call up until your scheduled end time. You can rejoin both here and also in the home page."
+    "unhappy": "¡Siento verte ir! Si algo salió mal por nuestra parte, háganoslo saber informando un problema.",
+    "happy": "Siempre puede volver a unirse a la llamada hasta la hora de finalización programada. Puede volver a unirte aquí y también en la página de inicio.."
   },
   "qualityRating": {
-    "question": "How was the audio and video?"
+    "question": "¿Cómo estuvo el audio y el video?"
   },
   "sentimentRating": {
-    "question": "How are you feeling after your call?"
+    "question": "¿Cómo se siente después de su llamada?"
   },
   "ratings": {
-    "terrible": "terrible",
-    "bad": "bad",
+    "terrible": "horible",
+    "bad": "mal",
     "normal": "normal",
-    "good": "good",
-    "wonderful": "wonderful"
+    "good": "bueno",
+    "wonderful": "maravillosa"
   },
   "buttons": {
-    "rejoin": "Rejoin",
-    "return": "Return Home",
-    "report": "Report an issue"
+    "rejoin": "Reunir",
+    "return": "Regresar a la página principal",
+    "report": "Reportar un problema"
   }
 }

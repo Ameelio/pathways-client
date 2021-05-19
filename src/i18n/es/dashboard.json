@@ -1,18 +1,23 @@
 {
   "call": {
     "title": "Próximas llamadas",
-    "seeAll": "Ver Todo",
-    "noCalls": "No hay próximas llamadas",
-    "upcomingCalls": "Próximas llamada",
+    "seeAll": "Ver todo",
+    "noCalls": "Las próximas llamadas aparecerán aquí cuando sus contactos programen una llamada con usted.",
+    "upcomingCalls": "próxima llamada",
     "minutes": "minutos",
-    "ago": "atrás",
-    "join": "Únete Ahora",
-    "initializing": "Initializing...",
-    "seeDetails": "Ver Detalles"
+    "ago": "hace",
+    "join": "Únete ahora",
+    "initializing": "Inicializando...",
+    "seeDetails": "Ver detalles",
+    "cancelDescription": "¿No puede hacer esta vez? Puede cancelar esta llamada y seleccionar un motivo de cancelación para enviar a su contacto.",
+    "cancel": "Cancelar Llamada",
+    "whatToExpect": "Que esperar de mi llamada",
+    "privacyNotice": "Aviso de Privacidad"
   },
   "connection": {
-    "active": "Aprobada(o)s",
-    "pending": "Pendientes",
-    "title": "Contactos"
+    "active": "Activo",
+    "pending": "Pendiente",
+    "title": "Contactos",
+    "lastCall": "Última llamada: hasta {{daysPastNum}} dias"
   }
 }

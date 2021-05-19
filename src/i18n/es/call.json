@@ -3,55 +3,55 @@
     "warning": "DOC Warning"
   },
   "peer": {
-    "joinedCallTitle": "joined the call",
-    "joinedCallBody": "Your call will connect soon.",
-    "leftCallTitle": "left the call",
-    "leftCallBody": "Your call will resume once they rejoin.",
-    "muted": "muted their mic",
-    "unmuted": "unmuted their mic",
-    "videoOn": "turned on their video",
-    "videoOff": "turned off their video",
-    "participantDisconnect": "disconnected from the call"
+    "joinedCallTitle": "subió a la llamada",
+    "joinedCallBody": "Su llamada se conectará pronto",
+    "leftCallTitle": "dejó la llamada",
+    "leftCallBody": "Su llamada se reanudará una vez que se reúnan.",
+    "muted": "silenciaron su micrófono",
+    "unmuted": "desactivó el micrófono",
+    "videoOn": "encendió su video",
+    "videoOff": "apagó su video",
+    "participantDisconnect": "desconectada de la llamada"
   },
   "waitingRoom": {
-    "questionOfDay": "Question of the day",
-    "initialization": "Initializing video call...",
-    "waitingForPrefix": "Waiting for",
-    "waitingForSuffix": "to join the call",
-    "loading": "Loading...",
-    "checkConnection": "Check Connection",
-    "leaveWaitingRoom": "Leave Waiting Room",
-    "whenWillCallConnect": "Whe will my call connect?"
+    "questionOfDay": "Pregunta del día",
+    "initialization": "Inicializando videollamada ...",
+    "waitingForPrefix": "esperando a",
+    "waitingForSuffix": "unirse a la llamada",
+    "loading": "Cargando...",
+    "checkConnection": "Verifica la conexión",
+    "leaveWaitingRoom": "Salir de la sala de espera",
+    "whenWillCallConnect": "¿Cuándo se conectará mi llamada?"
   },
   "chat": {
-    "title": "Chat",
-    "placeholder": "Type here...",
-    "monitorWarning": "Note: All messages are monitored for security purposes."
+    "title": "Charlar",
+    "placeholder": "Escribir aquí...",
+    "monitorWarning": "Nota: todos los mensajes se controlan por motivos de seguridad."
   },
   "videoOverlay": {
-    "on": "On",
-    "off": "off",
+    "on": "Aprendido",
+    "off": "Apagado",
     "chat": "Chat",
     "video": "Video",
     "mic": "Mic",
-    "showTime": "Show Time",
-    "hideTime": "Hide Time",
-    "leaveCall": "Leave Call"
+    "showTime": "Mostrar el tiempo",
+    "hideTime": "Ocultar el tiempo",
+    "leaveCall": "Dejar la llamada"
   },
   "you": {
-    "You": "You",
-    "enabledWebcam": "turned on your webcam",
-    "disabledWebcam": "turned off your webcam",
-    "mutedMic": "muted your microphone",
-    "unmutedMic": "unmuted your microphone"
+    "You": "Usted",
+    "enabledWebcam": "encendiste su webcam",
+    "disabledWebcam": "apaga su webcam",
+    "mutedMic": "enmudeció su micrófono",
+    "unmutedMic": "reactivar su micrófono"
   },
   "testConnection": {
-    "title": "Check Your Audio & Video"
+    "title": "Verifique su audio y video"
   },
   "callStatus": {
-    "missingMonitor": "Your call will resume once the DoC monitor rejoins the room...",
-    "live": "Your call is live!",
-    "terminated": "Your call was terminated by the DoC monitor.",
-    "ended": "Your call has come to an end!"
+    "missingMonitor": "Su llamada se reanudará una vez que el monitor de DoC se reincorpora a la llamada ...",
+    "live": "Su llamada está en vivo!",
+    "terminated": "Su llamada fue cancelada por el monitor de DoC.",
+    "ended": "¡Su llamada ha terminado"
   }
 }

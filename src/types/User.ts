@@ -1,7 +1,7 @@
 import { Connection } from "./Connection";
 
 export interface BasePersona {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   profileImagePath?: string;

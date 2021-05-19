@@ -1,13 +1,16 @@
 {
   "language": {
-    "title": "Language",
-    "messageOne": "Please select your preferred language.",
+    "title": "Idioma",
+    "messageOne": "Seleccione su idioma preferido.",
     "messageTwo": "Por favor elija su idioma preferido."
   },
   "resources": {
-    "title": "Resources",
-    "contactVerification": "How does contact verification work",
-    "callInfo": "What can I expect for a call",
-    "privacyInfo": "Your privacy on Ameelio Connect video calls"
+    "title": "Recursos",
+    "videoWelcome": "[Video] Bienvenido a Connect!",
+    "videoFeatures": "[Video] Tutorial",
+    "callPolicies": "Call Policies"
+  },
+  "faq": {
+    "title": "Preguntas frecuentes"
   }
 }

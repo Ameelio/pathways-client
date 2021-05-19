@@ -31,7 +31,7 @@ export const fetchCalls = createAsyncThunk(FETCH_CALLS, async () => {
 
 export const cancelCall = createAsyncThunk(
   "calls/cancelCall",
-  async ({ id, reason }: { id: number; reason: string }) => {
+  async ({ id, reason }: { id: string; reason: string }) => {
     await fetchAuthenticated(`calls/${id}`, {
       method: "DELETE",
       body: JSON.stringify({ statusDetails: reason }),
@@ -52,7 +52,7 @@ export const initializeVisit = createAsyncThunk(
     authInfo,
     videoHandler,
   }: {
-    callId: number;
+    callId: string;
     authInfo: AuthInfo;
     setRc: (rc: RoomClient) => void;
     videoHandler: CallHandler;
@@ -66,13 +66,14 @@ export const initializeVisit = createAsyncThunk(
       }
     );
     if (!socket.connected) {
+      console.log("[initializeVisit] Trying to connect...");
       await new Promise((resolve) => socket.on("connect", resolve));
     }
-    console.log("connected");
+    console.log("[initializeVisit] Socket connected");
     await new Promise((resolve) => {
       socket.emit("authenticate", authInfo, resolve);
     });
-    console.log("authenticated");
+    console.log("[initializeVisit] User authenticated");
     const rc = new RoomClient(socket, callId);
     await rc.init();
     setRc(rc);
@@ -98,10 +99,17 @@ export const initializeProducers = createAsyncThunk<
 >(
   "visit/initializeProducers",
   async ({ rc, setLocalAudio, setLocalVideo, setRc }) => {
-    const [videoStream, audioStream] = await Promise.all([
-      rc.produce("video"),
-      rc.produce("audio"),
-    ]);
+    console.log("produce");
+    // const [videoStream, audioStream] = await Promise.all([
+    //   rc.produce("video"),
+    //   rc.produce("audio"),
+    // ]);
+
+    const videoStream = await rc.produce("video");
+    console.log(videoStream);
+    const audioStream = await rc.produce("audio");
+
+    console.log(audioStream);
 
     if (!videoStream) throw Error("Unable to produce video");
     if (!audioStream) throw Error("Unable to produce audio");
@@ -164,10 +172,10 @@ export const initializeRemotes = createAsyncThunk<
   {
     rc: RoomClient;
     setRemoteAudios: React.Dispatch<
-      React.SetStateAction<Record<number, MediaStream>>
+      React.SetStateAction<Record<string, MediaStream>>
     >;
     setRemoteVideos: React.Dispatch<
-      React.SetStateAction<Record<number, MediaStream>>
+      React.SetStateAction<Record<string, MediaStream>>
     >;
   },
   ThunkApi
@@ -177,7 +185,9 @@ export const initializeRemotes = createAsyncThunk<
     rc.on(
       "consume",
       async (kind: string, stream: MediaStream, user: CallParticipant) => {
-        console.log("got consume of ", kind, " from user", user);
+        console.log(
+          `[initializeRemotes] Receive ${kind} consume from ${user.type} ${user.id}`
+        );
         if (user.type !== "user") return;
         if (kind === "audio") {
           setRemoteAudios((existing) => {
@@ -206,7 +216,7 @@ export const callSlice = createSlice({
   reducers: {
     updateCallStatus: (
       state,
-      action: PayloadAction<{ id: number; status: InCallStatus }>
+      action: PayloadAction<{ id: string; status: InCallStatus }>
     ) => {
       callAdapter.updateOne(state, {
         id: action.payload.id,
@@ -227,12 +237,12 @@ export const callSlice = createSlice({
     builder.addCase(initializeProducers.rejected, () =>
       showToast(
         "initializeProducers",
-        "Failed to initialize local streams.",
+        "Failed to produce local streams.",
         "error"
       )
     );
     builder.addCase(initializeRemotes.rejected, () =>
-      showToast("initializeProducers", "Failed to initialize remotes.", "error")
+      showToast("initializeRemotes", "Failed to initialize remotes.", "error")
     );
     builder.addCase(cancelCall.fulfilled, (state, action) => {
       callAdapter.updateOne(state, action.payload);

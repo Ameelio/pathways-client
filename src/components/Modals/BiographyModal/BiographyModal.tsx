@@ -18,7 +18,7 @@ const BiographyModal = ({ closeModal, data }: Props) => {
       visible={true}
     >
       <Space size="large" direction="vertical" align="center">
-        <Image src={authorImagePath} />
+        <Image src={authorImagePath} preview={false} />
 
         <Typography.Text>{authorDescription}</Typography.Text>
       </Space>

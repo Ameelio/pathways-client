@@ -1,12 +1,12 @@
 {
-  "title": "Bienvenido a Ameelio",
-  "buttonText": "Iniciar Sesión",
-  "caption": "Para iniciar sesión, ingresa tu número de identificación y el código PIN. Al utilizar Ameelio Connect, acepta la",
-  "tos": "los Términos de Servicio",
-  "pp": "la Política de Privacidad",
+  "title": "Bienvenida a pathways",
+  "caption": "Para iniciar sesión, ingresa su número de identificación y el código PIN de 6 dígitos. Al utilizar Ameelio Connect, acepta",
+  "tos": "Términos de servicio",
+  "pp": "Política de privacidad",
   "and": "y",
+  "buttonText": "Login",
   "placeholder": {
-    "inmateNumber": "Número de Persona Encarcelada",
-    "pinCode": "Código PIN"
+    "inmateNumber": "número de preso",
+    "pinCode": "código PIN"
   }
 }

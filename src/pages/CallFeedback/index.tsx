@@ -26,7 +26,7 @@ import { addMinutes } from "date-fns";
 //   5: <SmileOutlined style={{ fontSize: 36 }} />,
 // };
 
-async function rateCall(callId: number, rating: number): Promise<void> {
+async function rateCall(callId: string, rating: number): Promise<void> {
   await fetchAuthenticated(`calls/${callId}`, {
     method: "PATCH",
     body: JSON.stringify({
@@ -44,7 +44,7 @@ const CallFeedbackPage: React.FC<RouteComponentProps<TParams>> = ({
 
   const { t } = useTranslation("error");
 
-  const call = useCallById(parseInt(match.params.id));
+  const call = useCallById(match.params.id);
 
   const [exitType, setExitType] = useState<CallFeedbackType>();
 

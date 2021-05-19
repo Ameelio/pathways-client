@@ -9,6 +9,7 @@ import { modalsSlice } from "src/redux/modules/modalsSlice";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { commonSlice } from "src/components/Common/commonSlice";
 import { contactsSlice } from "./modules/contactsSlice";
+import { chatMessageSlice } from "./modules/messages";
 
 export const history = createBrowserHistory();
 
@@ -20,6 +21,7 @@ export const createRootReducer = (history: History) =>
     contacts: contactsSlice.reducer,
     modals: modalsSlice.reducer,
     connections: connectionSlice.reducer,
+    chats: chatMessageSlice.reducer,
     router: connectRouter(history),
   });
 export const rootReducer = createRootReducer(history);

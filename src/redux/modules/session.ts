@@ -1,11 +1,10 @@
-import { UNAUTHENTICATED_USER_ID } from "src/utils/constants";
 import { User } from "src/types/User";
 import { Language } from "src/types/Session";
 
 // TODO: use session slice
 // https://github.com/Ameelio/pathways-client/issues/45
 interface AuthInfo {
-  id: number;
+  id: string;
   type: "inmate";
   token: string;
 }
@@ -79,9 +78,9 @@ export const setProfileImage = (imgPath: string): UserActionTypes => {
 
 // Reducer
 const initialState: SessionState = {
-  authInfo: { id: UNAUTHENTICATED_USER_ID, type: "inmate", token: "" },
+  authInfo: { id: "", type: "inmate", token: "" },
   user: {
-    id: UNAUTHENTICATED_USER_ID,
+    id: "",
     firstName: "",
     lastName: "",
     location: "",
@@ -106,9 +105,9 @@ export function sessionReducer(
       return action.payload;
     case LOGOUT:
       return {
-        authInfo: { id: UNAUTHENTICATED_USER_ID, type: "inmate", token: "" },
+        authInfo: { id: "", type: "inmate", token: "" },
         user: {
-          id: UNAUTHENTICATED_USER_ID,
+          id: "",
           firstName: "",
           lastName: "",
           location: "",

@@ -1,6 +1,7 @@
 import React from "react";
 import { Typography, Modal } from "antd";
 import { ResourceModalData } from "src/types/UI";
+import ReactPlayer from "react-player";
 
 interface Props {
   data: ResourceModalData;
@@ -22,6 +23,7 @@ const InformationalModal: React.FC<Props> = ({ data, closeModal }) => {
       className="rounded-sm w-full"
     >
       <Typography.Text>{resource.body}</Typography.Text>
+      {resource.videoLink && <ReactPlayer url={resource.videoLink} />}
     </Modal>
   );
 };

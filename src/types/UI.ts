@@ -13,6 +13,7 @@ export type ModalType =
 export interface FAQResource {
   title: string;
   body: string;
+  videoLink?: string;
   hideCancel?: boolean;
   okBtnText?: string;
   cancelBtnText?: string;

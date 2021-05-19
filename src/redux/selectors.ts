@@ -3,8 +3,9 @@ import { callAdapter } from "./modules/call";
 import { contactsAdapter } from "./modules/contactsSlice";
 import { BaseCall } from "src/types/Call";
 import { createSelector } from "reselect";
+import { chatMessagesAdapter } from "./modules/messages";
 
-// get selectors from entity adapter
+// Create aliases for entity adapter selectors
 export const {
   selectAll: selectAllCalls,
   selectById: selectCallById,
@@ -15,6 +16,10 @@ export const {
   selectById: selectContactById,
   selectEntities: selectContactEntities,
 } = contactsAdapter.getSelectors<RootState>((state) => state.contacts);
+
+export const {
+  selectAll: selectAllBaseChats,
+} = chatMessagesAdapter.getSelectors<RootState>((state) => state.chats);
 
 export const selectUpcomingCalls = createSelector(
   selectAllCalls,

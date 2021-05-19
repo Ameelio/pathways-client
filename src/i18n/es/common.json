@@ -1,5 +1,9 @@
 {
-  "loading": "Loading",
-  "confirm": "Confirm",
-  "logout": "Log Out"
+  "loading": "Cargando",
+  "confirm": "Confirmir",
+  "logout": "Cerrar Sesión",
+  "home": "Home",
+  "calls": "Llamadas",
+  "inbox": "Bandeja de Entrada",
+  "settings": "Ajustes"
 }

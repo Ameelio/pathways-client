@@ -1,13 +1,15 @@
 import React, { ReactElement } from "react";
 import { Menu, Layout, Space, Row, Avatar, Typography, Divider } from "antd";
 import {
-  EllipsisOutlined,
   HomeOutlined,
+  InboxOutlined,
   ScheduleOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import { User } from "src/types/User";
 import { ReactComponent as Logo } from "src/assets/logo.svg";
 import { getFullName } from "src/utils/utils";
+import { useTranslation } from "react-i18next";
 
 const { Sider } = Layout;
 interface Props {
@@ -16,10 +18,11 @@ interface Props {
 }
 
 export default function Sidebar({ user, navigate }: Props): ReactElement {
+  const { t } = useTranslation("common");
   return (
     <Sider theme="light" className="shadow-lg">
-      <Space direction="vertical" className="w-full">
-        <Row className="p-2 cursor-pointer" onClick={() => navigate("/")}>
+      <Space direction="vertical" className="w-full" size="large">
+        <Row className="mt-4 ml-4 cursor-pointer" onClick={() => navigate("/")}>
           <Logo className="login-logo" />
         </Row>
         <Row
@@ -38,22 +41,29 @@ export default function Sidebar({ user, navigate }: Props): ReactElement {
             icon={<HomeOutlined />}
             onClick={() => navigate("/")}
           >
-            Home
+            {t("home")}
           </Menu.Item>
           <Menu.Item
             key="calls"
             icon={<ScheduleOutlined />}
             onClick={() => navigate("/calls")}
           >
-            Calls
+            {t("calls")}
+          </Menu.Item>
+          <Menu.Item
+            key="inbox"
+            icon={<InboxOutlined />}
+            onClick={() => navigate("/inbox")}
+          >
+            {t("inbox")}
           </Menu.Item>
           <Divider />
           <Menu.Item
             key="settings"
-            icon={<EllipsisOutlined />}
+            icon={<SettingOutlined />}
             onClick={() => navigate("/settings")}
           >
-            Settings
+            {t("settings")}
           </Menu.Item>
         </Menu>
       </Space>

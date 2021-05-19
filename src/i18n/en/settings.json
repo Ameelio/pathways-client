@@ -6,9 +6,9 @@
   },
   "resources": {
     "title": "Resources",
-    "contactVerification": "How does contact verification work",
-    "callInfo": "What can I expect for a call",
-    "privacyInfo": "Your privacy on Ameelio Connect video calls"
+    "videoWelcome": "[Video] Welcome to Connect!",
+    "videoFeatures": "[Video] In-Call Features",
+    "callPolicies": "Call Policies"
   },
   "faq": {
     "title": "Frequently Asked Questions"

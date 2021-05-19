@@ -1,7 +1,12 @@
 {
   "call": {
-    "callNull": "The call does not exist!",
-    "callNotStarted": "The call room already closed.",
-    "returnHome": "Return Home"
+    "callNull": "¡La llamada no existe!",
+    "callNotStarted": "La llamada ya terminó.",
+    "returnHome": "Regresar a la página principal"
+  },
+  "api": {
+    "fetchConnections": "No se pudieron cargar las conexiones",
+    "fetchContacts": "No se pudieron cargar las contacos",
+    "fetchCalls": "No se pudieron cargar las llamadas"
   }
 }

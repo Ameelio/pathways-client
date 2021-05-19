@@ -6,21 +6,19 @@
     "messageTwo": "Please select a cancellation reason to send to {{connectionFirstName}} to help them choose a time that works better for you..",
     "dropdownPlaceholder": "Cancellation reason",
     "reason1": "I can't make this time just this once.",
-    "reason2": "I can't make this time on {{dayOfWeek}}.",
+    "reason2": "I can't make this time on {{dayOfWeek}}s.",
     "reason3": "I can't make this time on weekdays (Mon-Fri).",
-    "reason4": "I can't make this time any day of the week (Sun - Sat).",
+    "reason4": "I can't make this time any day of the week (Sun-Sat).",
     "toastSuccess": "Successfully cancelled call.",
     "toastFailure": "Failed to cancel call."
   },
   "kioskConfirmationModal": {
-    "title": "Before connecting, let’s confirm you’re in the right place...",
-    "subtitle": "Your call is assigned to...",
-    "body": "Please confirm that you are using the device listed above. If you’re on the wrong device, you will not be able to connect to your call, and you will have to log out and locate your assigned device."
-  },
-  "privacyNotice": {
-    "title": "Privacy Notice",
-    "body": "I understand that by joining this call, I am consenting to the monitoring and recording of it for security purposes. In addition, I understand that if I violate any facility calling policies, my call may be terminated.",
-    "okText": "Agree"
+    "title": "Before connecting, let’s confirm a few things...",
+    "locationHeader": "Are you using the correct device?",
+    "subtitle": "Your call is assigned to:",
+    "locationBody": "If you’re on the wrong device, you will not be able to connect to your call, and you will have to log out and locate your assigned device.",
+    "privacyHeader": "Do you agree with the following usage statement?",
+    "privacyBody": "By clicking ‘Confirm’ and participating in this call, you consent to the monitoring and/or recording of your video, audio, and in-call chat messages. If you do not consent to being recorded, please exit the video call."
   },
   "informational": {
     "whenWillCallConnect": {

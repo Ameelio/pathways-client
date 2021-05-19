@@ -7,6 +7,7 @@
   "api": {
     "fetchConnections": "Failed to load connections",
     "fetchContacts": "Failed to load contacts",
-    "fetchCalls": "Failed to load calls"
+    "fetchCalls": "Failed to load calls",
+    "fetchChats": "Failed to load chats"
   }
 }

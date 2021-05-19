@@ -37,7 +37,7 @@ async function initializeSession(token: string, data: any, language: Language) {
 export async function loginWithCredentials(cred: {
   inmateNumber: string;
   pin: string;
-  facilityId: number;
+  facilityId: string;
   language: Language;
 }): Promise<void> {
   Store.dispatch(setSessionStatus("loading"));

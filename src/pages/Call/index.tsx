@@ -29,7 +29,7 @@ type TParams = { id: string };
 const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
   const dispatch = useAppDispatch();
 
-  const callId = parseInt(match.params.id);
+  const callId = match.params.id;
   const call = useCallById(callId);
   const { authInfo, user } = useAppSelector((state) => state.session);
 
@@ -38,27 +38,14 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
   const [rc, setRc] = useState<RoomClient>();
   const [localAudio, setLocalAudio] = useState<ControlledStream>();
   const [localVideo, setLocalVideo] = useState<ControlledStream>();
-  const [remoteAudios, setRemoteAudios] = useState<Record<number, MediaStream>>(
+  const [remoteAudios, setRemoteAudios] = useState<Record<string, MediaStream>>(
     {}
   );
-  const [remoteVideos, setRemoteVideos] = useState<Record<number, MediaStream>>(
+  const [remoteVideos, setRemoteVideos] = useState<Record<string, MediaStream>>(
     {}
   );
 
   const [hasInit, setHasInit] = useState(false);
-
-  useEffect(() => {
-    dispatch(
-      openModal({
-        activeType: "RESOURCE_MODAL",
-        entity: {
-          title: t("modals:privacyNotice.title"),
-          body: t("modals:privacyNotice.body"),
-          okBtnText: t("modals:privacyNotice.okText"),
-        },
-      })
-    );
-  }, [t, dispatch]);
 
   useEffect(() => {
     dispatch(enterFullScreen());
