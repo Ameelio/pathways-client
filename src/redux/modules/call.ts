@@ -99,17 +99,10 @@ export const initializeProducers = createAsyncThunk<
 >(
   "visit/initializeProducers",
   async ({ rc, setLocalAudio, setLocalVideo, setRc }) => {
-    console.log("produce");
-    // const [videoStream, audioStream] = await Promise.all([
-    //   rc.produce("video"),
-    //   rc.produce("audio"),
-    // ]);
-
-    const videoStream = await rc.produce("video");
-    console.log(videoStream);
-    const audioStream = await rc.produce("audio");
-
-    console.log(audioStream);
+    const [videoStream, audioStream] = await Promise.all([
+      rc.produce("video"),
+      rc.produce("audio"),
+    ]);
 
     if (!videoStream) throw Error("Unable to produce video");
     if (!audioStream) throw Error("Unable to produce audio");
@@ -186,7 +179,8 @@ export const initializeRemotes = createAsyncThunk<
       "consume",
       async (kind: string, stream: MediaStream, user: CallParticipant) => {
         console.log(
-          `[initializeRemotes] Receive ${kind} consume from ${user.type} ${user.id}`
+          `[initializeRemotes] Receive ${kind} consume from ${user.type} ${user.id}`,
+          stream
         );
         if (user.type !== "user") return;
         if (kind === "audio") {
