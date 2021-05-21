@@ -46,8 +46,8 @@ declare global {
 interface Props {
   call: Call;
   user: User;
-  remoteAudios: Record<number, MediaStream>;
-  remoteVideos: Record<number, MediaStream>;
+  remoteAudios: Record<string, MediaStream>;
+  remoteVideos: Record<string, MediaStream>;
   room: RoomClient;
   localVideo?: ControlledStream;
   localAudio?: ControlledStream;
@@ -280,8 +280,8 @@ const CallBase: React.FC<Props> = React.memo(
         );
     };
 
-    const videoKeys = Object.keys(remoteVideos).map((key) => parseInt(key));
-    const audioKeys = Object.keys(remoteAudios).map((key) => parseInt(key));
+    const videoKeys = Object.keys(remoteVideos);
+    const audioKeys = Object.keys(remoteAudios);
 
     const isCallEnding =
       differenceInSeconds(new Date(call.scheduledEnd), new Date()) <=
@@ -293,11 +293,11 @@ const CallBase: React.FC<Props> = React.memo(
           onMouseMove={() => onMouseMove()}
           onMouseOver={() => onMouseMove()}
         >
-          {videoKeys.map((key: number) => (
+          {videoKeys.map((key: string) => (
             <div className="w-full h-full">
               <Video
                 srcObject={remoteVideos[key]}
-                className="w-full h-full"
+                className="m-auto h-3/4"
                 autoPlay={true}
                 isFadingOut={isCallEnding}
               />
@@ -316,7 +316,7 @@ const CallBase: React.FC<Props> = React.memo(
               </div>
             </div>
           ))}
-          {audioKeys.map((key: number) => (
+          {audioKeys.map((key: string) => (
             <Audio
               srcObject={remoteAudios[key]}
               autoPlay={true}
