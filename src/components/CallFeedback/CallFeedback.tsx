@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { Layout, Rate, Button, Space, Typography, Card } from "antd";
@@ -10,7 +10,7 @@ import TeamWaveLottie from "src/assets/Lottie/TeamWave.json";
 import CyclingLottie from "src/assets/Lottie/GirlCycling.json";
 import ShrugLottie from "src/assets/Lottie/Shrug.json";
 import RocketLottie from "src/assets/Lottie/Rocket.json";
-import { getRandomItem } from "src/utils";
+import { getContactsFirstNames } from "src/utils";
 
 export type CallFeedbackType =
   | "forced"
@@ -48,7 +48,9 @@ const CallFeedback: React.FC<Props> = ({
   const renderTitle = () => {
     switch (type) {
       case "terminated":
-        return t("feedback:title.happy");
+        return t("feedback:title.happy", {
+          names: getContactsFirstNames(call.userParticipants),
+        });
       case "deliberate":
       case "forced":
         return t("feedback:title.happy");
@@ -74,8 +76,9 @@ const CallFeedback: React.FC<Props> = ({
   const pickIllustration = () => {
     switch (type) {
       case "deliberate":
+        return CyclingLottie;
       case "forced":
-        return getRandomItem([TeamWaveLottie, CyclingLottie, GoodbyeLottie]);
+        return TeamWaveLottie;
       case "unhappy":
         return ShrugLottie;
       case "terminated":
@@ -93,9 +96,10 @@ const CallFeedback: React.FC<Props> = ({
           <Space>
             <Button
               size="large"
-              disabled={!!rating}
+              disabled={!rating}
               onClick={() => {
                 if (!rating) return;
+                rateCall(rating);
                 logout();
               }}
             >
@@ -105,7 +109,7 @@ const CallFeedback: React.FC<Props> = ({
             <Button
               type="primary"
               size="large"
-              disabled={!!rating}
+              disabled={!rating}
               onClick={() => {
                 if (!rating) return;
                 rateCall(rating);
@@ -120,7 +124,7 @@ const CallFeedback: React.FC<Props> = ({
         return (
           <Space direction="vertical" size="large" align="center">
             {/* TODO: add report functionality */}
-            <Button type="link">{t("feedback:buttons.report")}</Button>
+            {/* <Button type="link">{t("feedback:buttons.report")}</Button> */}
             <Space>
               <Button size="large" onClick={() => navigate(`/call/${call.id}`)}>
                 {t("feedback:buttons.rejoin")}
@@ -149,7 +153,6 @@ const CallFeedback: React.FC<Props> = ({
     switch (type) {
       case "forced":
       case "deliberate":
-      case "unhappy":
         return (
           <Card title="How was the audio and video?">
             <Rate
@@ -160,6 +163,7 @@ const CallFeedback: React.FC<Props> = ({
             />
           </Card>
         );
+      case "unhappy":
       default:
         return <div />;
     }

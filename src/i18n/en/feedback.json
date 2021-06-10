@@ -1,6 +1,6 @@
 {
   "title": {
-    "happy": "We hope your call and {{names}} had a good time!",
+    "happy": "We hope you and {{names}} had a good time!",
     "unhappy": "You left the meeting",
     "terminated": "Time flies when you’re in good company!"
   },
