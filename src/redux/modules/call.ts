@@ -58,9 +58,7 @@ export const initializeVisit = createAsyncThunk(
     videoHandler: CallHandler;
   }) => {
     const socket = io.connect(
-      process.env.NODE_ENV === "production"
-        ? `https://${videoHandler.host}`
-        : `https://${videoHandler.host}:${videoHandler.port}`,
+      `https://${videoHandler.host}:${videoHandler.port}`,
       {
         transports: ["websocket"],
       }

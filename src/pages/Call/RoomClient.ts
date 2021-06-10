@@ -168,7 +168,7 @@ class RoomClient {
     // When our producer transport is producing a new stream,
     // inform the server.
     if (this.producerTransport) {
-      console.log("informing produce");
+      console.log("[Produce] Producing");
       this.producerTransport.on(
         "produce",
         async ({ kind, rtpParameters }, callback, errback) => {
