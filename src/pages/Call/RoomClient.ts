@@ -314,7 +314,6 @@ class RoomClient {
     this.socket.off("connect");
     this.socket.off("consume");
     this.socket.off("textMessage");
-    this.socket.close();
 
     if (this.consumerTransport) this.consumerTransport.close();
     if (this.producerTransport) this.producerTransport.close();
@@ -333,6 +332,8 @@ class RoomClient {
     this.producers = {};
 
     this.handlers = {};
+
+    this.socket.close();
   }
 }
 

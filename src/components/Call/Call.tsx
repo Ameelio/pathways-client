@@ -297,7 +297,7 @@ const CallBase: React.FC<Props> = React.memo(
             <div className="w-full h-full">
               <Video
                 srcObject={remoteVideos[key]}
-                className="m-auto h-3/4"
+                className="m-auto h-screen"
                 autoPlay={true}
                 isFadingOut={isCallEnding}
               />
