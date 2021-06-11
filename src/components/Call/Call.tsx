@@ -122,6 +122,7 @@ const CallBase: React.FC<Props> = React.memo(
           paused: boolean;
           type: "audio" | "video";
         }) => {
+          console.log("[producerUpdate] received update");
           if (from.type !== "user") return;
           type === "audio" ? setPeerAudioOn(!paused) : setPeerVideoOn(!paused);
         }
@@ -303,10 +304,10 @@ const CallBase: React.FC<Props> = React.memo(
               />
               {/* Blurb with metadata */}
               <div className="absolute bottom-20 left-4 bg-black bg-opacity-50 py-1 px-2 rounded flex salign-center">
-                {peerAudioOn && (
+                {!peerAudioOn && (
                   <AudioMutedOutlined className="text-red-600 text-base" />
                 )}
-                {peerVideoOn && (
+                {!peerVideoOn && (
                   <VideoCameraOutlined className="text-red-600 text-base ml-1" />
                 )}
                 <Typography.Text className="text-white text-base ml-1">
