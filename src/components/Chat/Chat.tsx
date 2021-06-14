@@ -1,5 +1,5 @@
 import { Divider, Input, Space } from "antd";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { BaseMessage } from "src/types/Message";
 import MessageDisplay from "./MessageDisplay";
 import { useTranslation } from "react-i18next";
@@ -13,20 +13,29 @@ const Chat: React.FC<Props> = ({ messages, handleSendMessage }) => {
   const { t } = useTranslation("call");
 
   const [draftMessage, setDraftMessage] = useState("");
-
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const onSendMessage = async () => {
     setDraftMessage("");
     handleSendMessage(draftMessage);
   };
 
+  useEffect(() => {
+    if (!messagesContainerRef.current) return;
+    messagesContainerRef.current.scroll({
+      top: messagesContainerRef.current.scrollHeight,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, [messagesContainerRef, messages]);
+
   return (
     <div className="flex flex-col h-full">
-      <Space direction="vertical" style={{ overflowY: "scroll" }}>
+      <div className="flex flex-col overflow-y-auto" ref={messagesContainerRef}>
         {messages.map((message) => (
-          <MessageDisplay message={message} />
+          <MessageDisplay message={message} className="mt-4" />
         ))}
-      </Space>
-      <div className="mt-auto mb-8 flex-shrink-0">
+      </div>
+      <div className="mt-auto mb-8 flex-shrink-0 min-height-1/4 h-1/4">
         <Divider />
         <Input.TextArea
           value={draftMessage}
