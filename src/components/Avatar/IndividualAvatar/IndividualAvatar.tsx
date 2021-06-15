@@ -10,7 +10,13 @@ interface Props extends AvatarProps {
 
 const IndividualAvatar = ({ fallback, size, src }: Props) => {
   return src ? (
-    <Image src={src} width={size || 200} />
+    <Image
+      src={src}
+      width={size || 200}
+      height={size || 200}
+      preview={false}
+      className="object-cover"
+    />
   ) : (
     <InitialsAvatar name={fallback} size={size || "default"} shape="square" />
   );

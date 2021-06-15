@@ -50,13 +50,14 @@ export default function Sidebar({ user, navigate }: Props): ReactElement {
           >
             {t("calls")}
           </Menu.Item>
-          <Menu.Item
+          {/* TODO: Uncomment when we roll out inbox */}
+          {/* <Menu.Item
             key="inbox"
             icon={<InboxOutlined />}
             onClick={() => navigate("/inbox")}
           >
             {t("inbox")}
-          </Menu.Item>
+          </Menu.Item> */}
           <Divider />
           <Menu.Item
             key="settings"

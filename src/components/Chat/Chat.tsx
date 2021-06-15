@@ -1,4 +1,4 @@
-import { Divider, Input, Space } from "antd";
+import { Divider, Input } from "antd";
 import React, { useState, useRef, useEffect } from "react";
 import { BaseMessage } from "src/types/Message";
 import MessageDisplay from "./MessageDisplay";
@@ -15,8 +15,10 @@ const Chat: React.FC<Props> = ({ messages, handleSendMessage }) => {
   const [draftMessage, setDraftMessage] = useState("");
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const onSendMessage = async () => {
+    const cleanMessage = draftMessage.trim();
+    if (!cleanMessage.length) return;
+    handleSendMessage(draftMessage.trim());
     setDraftMessage("");
-    handleSendMessage(draftMessage);
   };
 
   useEffect(() => {
