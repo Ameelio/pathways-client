@@ -205,12 +205,7 @@ const CallBase: React.FC<Props> = React.memo(
       if (!status) return;
       switch (status) {
         case "missing_monitor":
-          showToast(
-            "callStatus",
-            t("callStatus.missingMonitor"),
-            "loading",
-            10
-          );
+          showToast("callStatus", t("callStatus.missingMonitor"), "loading", 0);
           break;
         case "live":
           showToast("callStatus", t("callStatus.live"), "info");
