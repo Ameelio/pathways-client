@@ -13,6 +13,7 @@ import {
   ControlledStream,
   CallStatus,
   InCallStatus,
+  InCallParticipantStatus,
 } from "src/types/Call";
 import { ThunkApi } from "../helper";
 import io from "socket.io-client";
@@ -168,11 +169,19 @@ export const initializeRemotes = createAsyncThunk<
     setRemoteVideos: React.Dispatch<
       React.SetStateAction<Record<string, MediaStream>>
     >;
+    setParticipantsJoinStatus: React.Dispatch<
+      React.SetStateAction<InCallParticipantStatus>
+    >;
   },
   ThunkApi
 >(
   "visit/initializeRemotes",
-  async ({ rc, setRemoteAudios, setRemoteVideos }) => {
+  async ({
+    rc,
+    setRemoteAudios,
+    setRemoteVideos,
+    setParticipantsJoinStatus,
+  }) => {
     rc.on(
       "consume",
       async (kind: string, stream: MediaStream, user: CallParticipant) => {
@@ -195,8 +204,17 @@ export const initializeRemotes = createAsyncThunk<
             return newStreams;
           });
         }
+        setParticipantsJoinStatus("joined");
       }
     );
+    rc.socket.on("participantDisconnect", async ({ type }: CallParticipant) => {
+      console.log(`[participantDisconnect] ${type}`);
+      if (type === "user") {
+        setParticipantsJoinStatus("dropped");
+        setRemoteVideos({});
+        setRemoteAudios({});
+      }
+    });
   }
 );
 

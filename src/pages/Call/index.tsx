@@ -17,12 +17,25 @@ import {
   updateCallStatus,
 } from "src/redux/modules/call";
 import RoomClient from "./RoomClient";
-import { ControlledStream, InCallStatus } from "src/types/Call";
+import {
+  CallParticipant,
+  ControlledStream,
+  InCallParticipantStatus,
+  InCallStatus,
+} from "src/types/Call";
 import { useCallById } from "src/hooks/useCalls";
 import Error from "src/components/Error";
 import { Button } from "antd";
 import { useTranslation } from "react-i18next";
 import Loader from "src/components/Loader";
+import useSound from "use-sound";
+import LeaveCallSound from "src/assets/Sounds/LeaveCall.wav";
+import JoinedCallSound from "src/assets/Sounds/EnterCall.wav";
+import {
+  getContactsFirstNames,
+  openNotificationWithIcon,
+  showToast,
+} from "src/utils";
 
 type TParams = { id: string };
 
@@ -33,7 +46,7 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
   const call = useCallById(callId);
   const { authInfo, user } = useAppSelector((state) => state.session);
 
-  const { t } = useTranslation(["error", "common", "modals"]);
+  const { t } = useTranslation(["error", "common", "modals", "call"]);
 
   const [rc, setRc] = useState<RoomClient>();
   const [localAudio, setLocalAudio] = useState<ControlledStream>();
@@ -46,6 +59,13 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
   );
 
   const [hasInit, setHasInit] = useState(false);
+
+  const [
+    participantJoinStatus,
+    setParticipantsJoinStatus,
+  ] = useState<InCallParticipantStatus>("no_show");
+  const [playLeaveCall] = useSound(LeaveCallSound);
+  const [playJoinCall] = useSound(JoinedCallSound);
 
   useEffect(() => {
     dispatch(enterFullScreen());
@@ -68,7 +88,14 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
 
   useEffect(() => {
     if (!rc || hasInit) return;
-    dispatch(initializeRemotes({ rc, setRemoteAudios, setRemoteVideos }));
+    dispatch(
+      initializeRemotes({
+        rc,
+        setRemoteAudios,
+        setRemoteVideos,
+        setParticipantsJoinStatus,
+      })
+    );
     dispatch(initializeProducers({ rc, setLocalAudio, setLocalVideo, setRc }));
     setHasInit(true);
   }, [hasInit, rc, dispatch]);
@@ -78,6 +105,30 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
       rc?.destroy();
     };
   }, [rc]);
+
+  useEffect(() => {
+    if (!call) return;
+    if (participantJoinStatus === "joined") {
+      playJoinCall();
+      showToast(
+        "participantConnect",
+        `${getContactsFirstNames(call.userParticipants)} ${t(
+          "call:peer.joinedCallTitle"
+        )}.`,
+        // t("call:peer.joinedCallBody"),
+        "info"
+      );
+    } else if (participantJoinStatus === "dropped") {
+      playLeaveCall();
+      showToast(
+        "participantDisconnect",
+        `${call?.userParticipants[0].firstName} ${t(
+          "call:peer.participantDisconnect"
+        )}.`,
+        "info"
+      );
+    }
+  }, [call, participantJoinStatus, t, playLeaveCall, playJoinCall]);
 
   const updateCallMemo = useCallback(
     (status: InCallStatus) => {
@@ -154,6 +205,7 @@ const CallBase: React.FC<RouteComponentProps<TParams>> = ({ match }) => {
       localVideo={localVideo}
       remoteAudios={remoteAudios}
       remoteVideos={remoteVideos}
+      participantJoinStatus={participantJoinStatus}
     />
   );
 };

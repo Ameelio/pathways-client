@@ -3,11 +3,17 @@ import React from "react";
 
 interface Props {
   initials: string;
+  height: string;
+  className?: string;
 }
 
-const VideoMePlaceholder: React.FC<Props> = ({ initials }) => {
+const VideoMePlaceholder: React.FC<Props> = ({
+  initials,
+  height,
+  className,
+}) => {
   return (
-    <div style={Styles.background}>
+    <div style={{ ...Styles.background, height }} className={className}>
       <Avatar size={64} style={Styles.avatar}>
         {initials}
       </Avatar>
@@ -20,8 +26,6 @@ const Styles = {
     position: "absolute",
     top: 16,
     left: 16,
-    width: "300px",
-    height: "200px",
     zIndex: 9999,
     display: "flex",
   } as React.CSSProperties,

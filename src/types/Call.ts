@@ -26,6 +26,8 @@ type GeneralCallStatus =
 
 export type CallStatus = InCallStatus | GeneralCallStatus;
 
+export type InCallParticipantStatus = "no_show" | "joined" | "dropped";
+
 export interface BaseCall {
   id: string;
   scheduledStart: ISOString;
