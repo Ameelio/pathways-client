@@ -10,6 +10,7 @@ import { User } from "src/types/User";
 import { ReactComponent as Logo } from "src/assets/logo.svg";
 import { getFullName } from "src/utils/utils";
 import { useTranslation } from "react-i18next";
+import IndividualAvatar from "../Avatar/IndividualAvatar";
 
 const { Sider } = Layout;
 interface Props {
@@ -31,7 +32,11 @@ export default function Sidebar({ user, navigate }: Props): ReactElement {
           onClick={() => navigate(`/profile/${user.id}`)}
         >
           <Space>
-            <Avatar src={user.profileImagePath} size="large" />
+            <IndividualAvatar
+              src={user.profileImagePath}
+              size={64}
+              fallback={getFullName(user)}
+            />
             <Typography.Text>{getFullName(user)}</Typography.Text>
           </Space>
         </Row>
@@ -50,13 +55,14 @@ export default function Sidebar({ user, navigate }: Props): ReactElement {
           >
             {t("calls")}
           </Menu.Item>
-          <Menu.Item
+          {/* TODO: Uncomment when we roll out inbox */}
+          {/* <Menu.Item
             key="inbox"
             icon={<InboxOutlined />}
             onClick={() => navigate("/inbox")}
           >
             {t("inbox")}
-          </Menu.Item>
+          </Menu.Item> */}
           <Divider />
           <Menu.Item
             key="settings"

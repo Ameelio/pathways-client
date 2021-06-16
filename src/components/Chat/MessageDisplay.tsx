@@ -6,9 +6,10 @@ import { BaseMessage } from "src/types/Message";
 
 interface Props {
   message: BaseMessage;
+  className?: string;
 }
 
-const MessageDisplay: React.FC<Props> = ({ message }) => {
+const MessageDisplay: React.FC<Props> = ({ message, className }) => {
   const type = message.senderType;
   const getDisplayName = () => {
     switch (type) {
@@ -25,6 +26,7 @@ const MessageDisplay: React.FC<Props> = ({ message }) => {
       direction="vertical"
       align={type === "inmate" ? "end" : "start"}
       style={{ width: "100%" }}
+      className={className}
     >
       <Space>
         <Typography.Text strong>{getDisplayName()}</Typography.Text>

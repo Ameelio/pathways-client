@@ -49,7 +49,8 @@ const Settings: React.FC = () => {
           </Col>
           <Col span={12}>
             <Card title={t("resources.title")}>
-              <Row className="pb-2">
+              {/* TODO: uncomment when we have thsis content */}
+              {/* <Row className="pb-2">
                 <Typography.Link
                   onClick={() =>
                     dispatch(
@@ -76,7 +77,7 @@ const Settings: React.FC = () => {
                 >
                   {t("resources.videoFeatures")}
                 </Typography.Link>
-              </Row>
+              </Row> */}
               <Row className="pb-2">
                 <Typography.Link
                   onClick={() => window.open("/privacy_policy.pdf")}

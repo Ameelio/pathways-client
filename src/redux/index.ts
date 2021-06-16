@@ -1,6 +1,6 @@
 import { connectRouter, routerMiddleware } from "connected-react-router";
 import { combineReducers } from "redux";
-import { History, createBrowserHistory } from "history";
+import { History, createHashHistory } from "history";
 import { configureStore } from "@reduxjs/toolkit";
 import { sessionReducer } from "./modules/session";
 import { callSlice } from "./modules/call";
@@ -11,7 +11,7 @@ import { commonSlice } from "src/components/Common/commonSlice";
 import { contactsSlice } from "./modules/contactsSlice";
 import { chatMessageSlice } from "./modules/messages";
 
-export const history = createBrowserHistory();
+export const history = createHashHistory();
 
 export const createRootReducer = (history: History) =>
   combineReducers({

@@ -20,7 +20,7 @@
     "waitingForSuffix": "to join the call",
     "loading": "Loading...",
     "checkConnection": "Check Connection",
-    "leaveWaitingRoom": "Leave Waiting Room",
+    "leaveWaitingRoom": "Leave Call",
     "whenWillCallConnect": "Whe will my call connect?"
   },
   "chat": {
