@@ -53,19 +53,6 @@ const config = {
   },
 };
 
-// function getMediaConstraints(
-//   type: MediaType,
-//   deviceId?: number
-// ): MediaStreamConstraints {
-//   if (type === "audio") {
-//     return { audio: true };
-//   } else {
-//     return {
-//       video: true,
-//     };
-//   }
-// }
-
 export async function stopStream(stream: MediaStream) {
   const tracks = stream.getTracks();
   tracks.forEach((track) => {
@@ -84,6 +71,7 @@ class RoomClient {
   private producerTracks: MediaStreamTrack[];
 
   public socket: SocketIOClient.Socket;
+  public videoAspectRatio?: number;
 
   constructor(socket: SocketIOClient.Socket, callId: string) {
     this.socket = socket;
@@ -214,6 +202,13 @@ class RoomClient {
     if (type === "video") {
       params.encodings = config.video.encodings;
       params.codecOptions = config.video.codecOptions;
+
+      const videoWidth = track.getSettings().width;
+      const videoHeight = track.getSettings().height;
+      // record video width and height for display purposers
+      if (videoWidth && videoHeight) {
+        this.videoAspectRatio = videoHeight / videoWidth;
+      }
     }
 
     const producer = await this.producerTransport.produce(params);

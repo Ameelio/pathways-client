@@ -21,6 +21,7 @@ const MessageDisplay: React.FC<Props> = ({ message, className }) => {
         return "Loved One";
     }
   };
+
   return (
     <Space
       direction="vertical"
@@ -34,7 +35,12 @@ const MessageDisplay: React.FC<Props> = ({ message, className }) => {
           {format(new Date(message.createdAt), "HH:mm")}
         </Typography.Text>
       </Space>
-      <Typography.Text>{message.contents}</Typography.Text>
+      <Typography.Text
+        mark={type === "doc"}
+        className={type === "inmate" ? "float-right text-right" : "float-left"}
+      >
+        {message.contents}
+      </Typography.Text>
       {message.status === "error" && (
         <Space direction="horizontal">
           <ExclamationCircleOutlined className="text-red-600 text-xs" />

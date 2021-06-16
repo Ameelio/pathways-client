@@ -5,6 +5,7 @@ import {
   CallParticipant,
   ControlledStream,
   InCallStatus,
+  InCallParticipantStatus,
 } from "src/types/Call";
 import { AudioMutedOutlined, VideoCameraOutlined } from "@ant-design/icons";
 import {
@@ -25,7 +26,6 @@ import Video from "./Video";
 import Audio from "./Audio";
 import { User } from "src/types/User";
 import LeaveCallSound from "src/assets/Sounds/LeaveCall.wav";
-import JoinedCallSound from "src/assets/Sounds/EnterCall.wav";
 import useSound from "use-sound";
 import { useCallMessages } from "src/hooks/useRoom";
 import RoomClient from "src/pages/Call/RoomClient";
@@ -51,6 +51,7 @@ interface Props {
   room: RoomClient;
   localVideo?: ControlledStream;
   localAudio?: ControlledStream;
+  participantJoinStatus: InCallParticipantStatus;
   leaveCall: () => void;
   push: (path: string) => void;
   openInfoModal: (resource: FAQResource) => void;
@@ -67,6 +68,7 @@ const CallBase: React.FC<Props> = React.memo(
     localAudio,
     remoteAudios,
     remoteVideos,
+    participantJoinStatus,
     leaveCall,
     push,
     openInfoModal,
@@ -76,7 +78,6 @@ const CallBase: React.FC<Props> = React.memo(
     const { t } = useTranslation("call");
 
     const [showOverlay, setShowOverlay] = useState(true);
-    const [participantHasJoined, setParticipantsHasJoined] = useState(false);
     const [chatCollapsed, setChatCollapsed] = useState(true);
     const [peerAudioOn, setPeerAudioOn] = useState(true);
     const [peerVideoOn, setPeerVideoOn] = useState(true);
@@ -95,17 +96,9 @@ const CallBase: React.FC<Props> = React.memo(
       setHasUnreadMessages,
     } = useCallMessages(call.id, room, alertDocMessageMemo);
 
-    const [playJoinCall] = useSound(JoinedCallSound);
     const [playLeaveCall] = useSound(LeaveCallSound);
 
     const [playMessageReceived] = useSound(MessageReceivedSound);
-
-    useEffect(() => {
-      Object.keys(remoteVideos).length > 0 ||
-      Object.keys(remoteAudios).length > 0
-        ? setParticipantsHasJoined(true)
-        : setParticipantsHasJoined(false);
-    }, [remoteVideos, remoteAudios]);
 
     // TODO fix this
     useEffect(() => {
@@ -148,7 +141,7 @@ const CallBase: React.FC<Props> = React.memo(
     ]);
 
     useEffect(() => {
-      if (call && participantHasJoined)
+      if (participantJoinStatus === "joined")
         showToast(
           "peerVideo",
           `${getContactsFirstNames(call.userParticipants)} ${
@@ -156,10 +149,10 @@ const CallBase: React.FC<Props> = React.memo(
           }`,
           "info"
         );
-    }, [peerVideoOn, call, participantHasJoined, t]);
+    }, [peerVideoOn, call.userParticipants, participantJoinStatus, t]);
 
     useEffect(() => {
-      if (call && participantHasJoined)
+      if (participantJoinStatus === "joined")
         showToast(
           "peerAudio",
           `${getContactsFirstNames(call.userParticipants)} ${
@@ -167,39 +160,7 @@ const CallBase: React.FC<Props> = React.memo(
           }`,
           "info"
         );
-    }, [peerAudioOn, call, participantHasJoined, t]);
-
-    useEffect(() => {
-      if (participantHasJoined && call) {
-        playJoinCall();
-        openNotificationWithIcon(
-          `${getContactsFirstNames(call.userParticipants)} ${t(
-            "peer.joinedCallTitle"
-          )}.`,
-          t("peer.joinedCallBody"),
-          "info"
-        );
-      }
-    }, [participantHasJoined, call, playJoinCall, t]);
-
-    useEffect(() => {
-      room.socket.on(
-        "participantDisconnect",
-        async ({ id, type }: CallParticipant) => {
-          if (type === "user" && call?.userIds.includes(id)) {
-            playLeaveCall();
-            setParticipantsHasJoined(false);
-            showToast(
-              "participantDisconnect",
-              `${call?.userParticipants[0].firstName} ${t(
-                "peer.participantDisconnect"
-              )}.`,
-              "info"
-            );
-          }
-        }
-      );
-    }, [call, room, t, playLeaveCall]);
+    }, [peerAudioOn, call.userParticipants, participantJoinStatus, t]);
 
     useEffect(() => {
       if (!status) return;
@@ -229,7 +190,7 @@ const CallBase: React.FC<Props> = React.memo(
     const getMessage = (): string => {
       if (!room) {
         return t("waitingRoom.initialization");
-      } else if (!participantHasJoined) {
+      } else if (participantJoinStatus === "no_show") {
         return `${t("waitingRoom.waitingForPrefix")} ${getContactsFirstNames(
           call.userParticipants
         )} ${t("waitingRoom.waitingForSuffix")}...`;
@@ -289,29 +250,30 @@ const CallBase: React.FC<Props> = React.memo(
           onMouseMove={() => onMouseMove()}
           onMouseOver={() => onMouseMove()}
         >
-          {videoKeys.map((key: string) => (
-            <div className="w-full h-full">
-              <Video
-                srcObject={remoteVideos[key]}
-                className="m-auto h-screen"
-                autoPlay={true}
-                isFadingOut={isCallEnding}
-              />
-              {/* Blurb with metadata */}
-              <div className="absolute bottom-20 left-4 bg-black bg-opacity-50 py-1 px-2 rounded flex salign-center">
-                {!peerAudioOn && (
-                  <AudioMutedOutlined className="text-red-600 text-base" />
-                )}
-                {!peerVideoOn && (
-                  <VideoCameraOutlined className="text-red-600 text-base ml-1" />
-                )}
-                <Typography.Text className="text-white text-base ml-1">
-                  {" "}
-                  {getContactsFirstNames(call.userParticipants)}
-                </Typography.Text>
+          {peerVideoOn &&
+            videoKeys.map((key: string) => (
+              <div className="w-full h-full">
+                <Video
+                  srcObject={remoteVideos[key]}
+                  className="m-auto h-screen"
+                  autoPlay={true}
+                  isFadingOut={isCallEnding}
+                />
+                {/* Blurb with metadata */}
+                <div className="absolute bottom-20 left-4 bg-black bg-opacity-50 py-1 px-2 rounded flex salign-center">
+                  {!peerAudioOn && (
+                    <AudioMutedOutlined className="text-red-600 text-base" />
+                  )}
+                  {!peerVideoOn && (
+                    <VideoCameraOutlined className="text-red-600 text-base ml-1" />
+                  )}
+                  <Typography.Text className="text-white text-base ml-1">
+                    {" "}
+                    {getContactsFirstNames(call.userParticipants)}
+                  </Typography.Text>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
           {audioKeys.map((key: string) => (
             <Audio
               srcObject={remoteAudios[key]}
@@ -331,13 +293,17 @@ const CallBase: React.FC<Props> = React.memo(
           {localVideo && localVideo.stream && !localVideo.paused ? (
             <Video
               srcObject={localVideo.stream}
-              className="w-2/12 absolute top-4 left-4 flex"
+              className="w-64 absolute top-4 left-4 flex"
               autoPlay={true}
             />
           ) : (
-            <VideoMePlaceholder initials={getInitials(getFullName(user))} />
+            <VideoMePlaceholder
+              initials={getInitials(getFullName(user))}
+              height={`${(room.videoAspectRatio || 0.5) * 16}rem`}
+              className="w-64"
+            />
           )}
-          {!participantHasJoined && (
+          {participantJoinStatus !== "joined" && (
             <WaitingRoomCard
               call={call}
               title={getMessage()}
@@ -388,15 +354,15 @@ const CallBase: React.FC<Props> = React.memo(
             />
           )}
         </div>
-        <Layout.Sider
-          theme="light"
-          className="h-screen mh-screen shadow"
-          width={300}
-          collapsible
-          collapsed={chatCollapsed}
-          trigger={null}
-        >
-          {!chatCollapsed && (
+        {!chatCollapsed && (
+          <Layout.Sider
+            theme="light"
+            className="h-screen mh-screen shadow"
+            width={300}
+            collapsible
+            collapsed={chatCollapsed}
+            trigger={null}
+          >
             <div
               style={WRAPPER_PADDING}
               className="mt-3 h-screen mh-screen flex flex-col"
@@ -407,8 +373,8 @@ const CallBase: React.FC<Props> = React.memo(
               </Typography.Text>
               <Chat messages={messages} handleSendMessage={handleSendMessage} />
             </div>
-          )}
-        </Layout.Sider>
+          </Layout.Sider>
+        )}
       </Layout>
     );
   }
