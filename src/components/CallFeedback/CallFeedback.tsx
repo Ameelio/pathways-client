@@ -154,7 +154,7 @@ const CallFeedback: React.FC<Props> = ({
       case "forced":
       case "deliberate":
         return (
-          <Card title="How was the audio and video?">
+          <Card title="How was the audio and video?" className="shadow-lg">
             <Rate
               value={rating}
               onChange={(val: number) => setRating(val)}

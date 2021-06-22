@@ -107,7 +107,7 @@ const LoginContainer: React.FC = () => {
             onFinish={onFinish}
             initialValues={{
               language: Object.keys(LANGUAGES)[0],
-              pin: "abc12345678910",
+              pin: "",
             }}
           >
             <Form.Item label="Language" name="language">
