@@ -288,7 +288,11 @@ const CallBase: React.FC<Props> = React.memo(
             />
           )}
           {!peerVideoOn && (
-            <ContactAvatarGroup size={128} contacts={call.userParticipants} />
+            <ContactAvatarGroup
+              size={128}
+              contacts={call.userParticipants}
+              className="mx-auto my-auto"
+            />
           )}
           {localVideo && localVideo.stream && !localVideo.paused ? (
             <Video
