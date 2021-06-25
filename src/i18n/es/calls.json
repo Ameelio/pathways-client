@@ -1,4 +1,5 @@
 {
   "callLimit": "Límite de llamadas semanales",
-  "cancel": "Cancelar"
+  "cancel": "Cancelar",
+  "tooltip": "Número máximo de llamadas permitidas en una semana (dom - sáb)."
 }

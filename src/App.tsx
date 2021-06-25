@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./App.scss";
-import { useAppSelector } from "src/redux";
+import { useAppDispatch, useAppSelector } from "src/redux";
 import { connect, ConnectedProps } from "react-redux";
 import { ConnectedRouter, push } from "connected-react-router";
 import { Layout } from "antd";
@@ -19,6 +19,7 @@ import Modals from "./components/Modals/Modals";
 import Loader from "./components/Loader";
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
+import { logout } from "./redux/modules/session";
 
 const mapDispatchToProps = { fetchContacts, push };
 
@@ -34,6 +35,7 @@ function App({
   const { i18n } = useTranslation();
   const hasSideBar = useAppSelector((state) => state.common.fullScreen);
   const session = useAppSelector((state) => state.session);
+  const dispatch = useAppDispatch();
 
   const defaultProtectedRouteProps: ProtectedRouteProps = {
     isAuthenticated: session.isLoggedIn, // TODO: improve this later
@@ -67,7 +69,13 @@ function App({
     <ConnectedRouter history={history}>
       <Modals />
       <Layout className="min-h-screen">
-        {showSideBar && <Sidebar user={session.user} navigate={push} />}
+        {showSideBar && (
+          <Sidebar
+            user={session.user}
+            navigate={push}
+            logout={() => dispatch(logout())}
+          />
+        )}
         {loading ? (
           <Loader fullPage />
         ) : (

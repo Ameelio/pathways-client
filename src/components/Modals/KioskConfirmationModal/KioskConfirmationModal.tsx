@@ -10,13 +10,13 @@ import { getLottieOptions } from "src/utils/UI";
 interface Props {
   data: KioskConfirmationModalData;
   handleConfirm: () => void;
-  handleLogout: () => void;
+  closeModal: () => void;
 }
 
 export default function KioskConfirmationModal({
   data,
   handleConfirm,
-  handleLogout,
+  closeModal,
 }: Props): ReactElement {
   const call = data.entity;
   const { t } = useTranslation(["modals", "common"]);
@@ -26,11 +26,10 @@ export default function KioskConfirmationModal({
       title={t("modals:kioskConfirmationModal.title")}
       visible={true}
       onOk={handleConfirm}
-      onCancel={handleLogout}
+      onCancel={closeModal}
       className="rounded-sm w-full flex flex-col align-center"
       okText={t("common:confirm")}
       cancelText={t("common:logout")}
-      closable={false}
     >
       <div className="overflow-y-auto max-h-80">
         <Space size="large" direction="vertical">

@@ -1,4 +1,4 @@
-import { Button, Col, Row, Space, Table, Typography } from "antd";
+import { Button, Col, Row, Space, Table, Tooltip, Typography } from "antd";
 import React from "react";
 import { Call, ISOString } from "src/types/Call";
 import { Contact, User } from "src/types/User";
@@ -100,19 +100,18 @@ const Calls: React.FC<Props> = ({ calls, user }) => {
       <Space className="p-8 w-full" direction="vertical">
         <Row className="pb-2">
           <Col>
-            <Space direction="vertical">
-              <Typography.Text type="secondary">
-                {t("callLimit")}
-              </Typography.Text>
-              <Space>
-                <Typography.Text strong className="text-base">
-                  {user.quota}
+            <Tooltip title={t("tooltip")}>
+              <Space direction="vertical">
+                <Typography.Text type="secondary">
+                  {t("callLimit")}
                 </Typography.Text>
-                {/* <Tooltip title="PLACEHOLDER FOR liz">
-                  <Button icon={InfoOutlined} shape="circle" />
-                </Tooltip> */}
+                <Space>
+                  <Typography.Text strong className="text-base">
+                    {user.quota}
+                  </Typography.Text>
+                </Space>
               </Space>
-            </Space>
+            </Tooltip>
           </Col>
         </Row>
         <Row>

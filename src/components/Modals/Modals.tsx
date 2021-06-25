@@ -53,9 +53,8 @@ const Modals: React.FC = () => {
             playEnterSound();
             dispatch(push(`/call/${data.entity.id}`));
           }}
-          handleLogout={() => {
+          closeModal={() => {
             dispatch(closeModal());
-            dispatch(logout());
           }}
         />
       );

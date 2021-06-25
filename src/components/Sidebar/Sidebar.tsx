@@ -1,8 +1,17 @@
 import React, { ReactElement } from "react";
-import { Menu, Layout, Space, Row, Avatar, Typography, Divider } from "antd";
+import {
+  Menu,
+  Layout,
+  Space,
+  Row,
+  Avatar,
+  Typography,
+  Divider,
+  Button,
+} from "antd";
 import {
   HomeOutlined,
-  InboxOutlined,
+  LogoutOutlined,
   ScheduleOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
@@ -16,9 +25,14 @@ const { Sider } = Layout;
 interface Props {
   user: User;
   navigate: (path: string) => void;
+  logout: () => void;
 }
 
-export default function Sidebar({ user, navigate }: Props): ReactElement {
+export default function Sidebar({
+  user,
+  navigate,
+  logout,
+}: Props): ReactElement {
   const { t } = useTranslation("common");
   return (
     <Sider theme="light" className="shadow-lg">
@@ -63,13 +77,21 @@ export default function Sidebar({ user, navigate }: Props): ReactElement {
           >
             {t("inbox")}
           </Menu.Item> */}
-          <Divider />
           <Menu.Item
             key="settings"
             icon={<SettingOutlined />}
             onClick={() => navigate("/settings")}
           >
             {t("settings")}
+          </Menu.Item>
+          <Divider />
+          <Menu.Item
+            key="logout"
+            icon={<LogoutOutlined />}
+            onClick={logout}
+            className="text-blue-500"
+          >
+            {t("logout")}
           </Menu.Item>
         </Menu>
       </Space>
