@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { Redirect } from "react-router";
 import { loginWithCredentials } from "src/api/User";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { LockOutlined, NumberOutlined, UserOutlined } from "@ant-design/icons";
 import { getRandomItem } from "src/utils/utils";
 import { ReactComponent as Logo } from "src/assets/logo.svg";
 import "./index.css";
@@ -25,6 +25,7 @@ import { BACKGROUNDS } from "src/constants";
 import { BORDER_RADIUS } from "src/styles/Layout";
 import { fetchFacilities } from "src/api/Common";
 import { FacilityRO } from "src/api/interfaces/apiResponses";
+import NumberPad from "src/components/NumberPad";
 
 const { Content } = Layout;
 
@@ -43,8 +44,11 @@ const LoginContainer: React.FC = () => {
 
   const session = useAppSelector((state: RootState) => state.session);
 
+  const [form] = Form.useForm();
   const [background] = useState(getRandomItem(BACKGROUNDS));
   const [facilities, setFacilities] = useState<FacilityRO[]>([]);
+  const [pin, setPin] = useState<string>("");
+  const [padVisible, setPadVisible] = useState(false);
 
   useEffect(() => {
     const getFacilityOptions = async () => {
@@ -75,7 +79,7 @@ const LoginContainer: React.FC = () => {
 
   return (
     <Content
-      className="flex flex-col banner-background"
+      className="flex banner-background"
       style={{
         backgroundImage: `url(${background})`,
       }}
@@ -102,6 +106,7 @@ const LoginContainer: React.FC = () => {
 
           <Form
             {...FORM_LAYOUT}
+            form={form}
             name="login"
             className="w-full rounded-lg"
             onFinish={onFinish}
@@ -124,9 +129,17 @@ const LoginContainer: React.FC = () => {
             </Form.Item>
 
             <Form.Item
+              name="facilityId"
+              label="Facility"
+              rules={[{ required: true, message: "Must select a facility." }]}
+            >
+              <Select>{facilityOptions}</Select>
+            </Form.Item>
+
+            <Form.Item
               name="inmateNumber"
               label="ID Number"
-              rules={[{ required: true, message: "Inmate ID is required." }]}
+              rules={[{ required: true, message: "ID Number is required." }]}
             >
               <Input
                 prefix={<UserOutlined />}
@@ -142,16 +155,14 @@ const LoginContainer: React.FC = () => {
               <Input.Password
                 prefix={<LockOutlined />}
                 placeholder={t("placeholder.pinCode")}
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
+                addonAfter={
+                  <NumberOutlined
+                    onClick={() => setPadVisible((collapsed) => !collapsed)}
+                  />
+                }
               />
-            </Form.Item>
-            <Form.Item
-              name="facilityId"
-              label="Facility"
-              rules={[
-                { required: true, message: "Facility must be selected." },
-              ]}
-            >
-              <Select>{facilityOptions}</Select>
             </Form.Item>
 
             <Form.Item {...FORM_TAIL_LAYOUT} style={{ borderRadius: 4 }}>
@@ -167,6 +178,14 @@ const LoginContainer: React.FC = () => {
           </Form>
         </Space>
       </div>
+      <NumberPad
+        input={pin}
+        setInput={(input: string) => {
+          form.setFieldsValue({ pin: input });
+          setPadVisible(false);
+        }}
+        visible={padVisible}
+      />{" "}
     </Content>
   );
 };

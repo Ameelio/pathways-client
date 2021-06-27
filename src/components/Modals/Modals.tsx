@@ -6,7 +6,6 @@ import CancelCallModal from "./CancelCallModal";
 import InformationalModal from "./InformationalModal";
 import TestConnectionModal from "./TestConnectionModal";
 import { push } from "connected-react-router";
-import { logout } from "src/redux/modules/session";
 import EnterCallSound from "src/assets/Sounds/EnterCall.wav";
 import useSound from "use-sound";
 import { cancelCall } from "src/redux/modules/call";

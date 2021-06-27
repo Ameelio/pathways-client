@@ -18,7 +18,6 @@ import {
 } from "src/redux/modules/call";
 import RoomClient from "./RoomClient";
 import {
-  CallParticipant,
   ControlledStream,
   InCallParticipantStatus,
   InCallStatus,
@@ -31,11 +30,7 @@ import Loader from "src/components/Loader";
 import useSound from "use-sound";
 import LeaveCallSound from "src/assets/Sounds/LeaveCall.wav";
 import JoinedCallSound from "src/assets/Sounds/EnterCall.wav";
-import {
-  getContactsFirstNames,
-  openNotificationWithIcon,
-  showToast,
-} from "src/utils";
+import { getContactsFirstNames, showToast } from "src/utils";
 
 type TParams = { id: string };
 

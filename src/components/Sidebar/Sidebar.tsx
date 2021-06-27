@@ -1,14 +1,5 @@
 import React, { ReactElement } from "react";
-import {
-  Menu,
-  Layout,
-  Space,
-  Row,
-  Avatar,
-  Typography,
-  Divider,
-  Button,
-} from "antd";
+import { Menu, Layout, Space, Row, Typography, Divider } from "antd";
 import {
   HomeOutlined,
   LogoutOutlined,
