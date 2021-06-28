@@ -7,7 +7,7 @@ interface Props {
   visible?: boolean;
 }
 
-const keys = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
+const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
 
 const NumberPad = ({ setInput, visible, className }: Props) => {
   const [result, setResult] = useState("");
