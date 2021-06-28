@@ -81,7 +81,7 @@ const CallBase: React.FC<Props> = React.memo(
     const [chatCollapsed, setChatCollapsed] = useState(true);
     const [peerAudioOn, setPeerAudioOn] = useState(true);
     const [peerVideoOn, setPeerVideoOn] = useState(true);
-    const [timerOn, setTimerOn] = useState(false);
+    const [timerOn, setTimerOn] = useState(true);
     const [status, setStatus] = useState<InCallStatus>();
 
     const alertDocMessageMemo = useCallback(
