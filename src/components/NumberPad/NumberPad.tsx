@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Row, Col, Input, Modal, Button } from "antd";
 import { CloseCircleFilled } from "@ant-design/icons";
 interface Props {
-  input: string;
   setInput: (input: string) => void;
   className?: string;
   visible?: boolean;
@@ -10,9 +9,10 @@ interface Props {
 
 const keys = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0];
 
-const NumberPad = ({ input, setInput, visible, className }: Props) => {
-  const [result, setResult] = useState(input);
+const NumberPad = ({ setInput, visible, className }: Props) => {
+  const [result, setResult] = useState("");
 
+  console.log(result);
   return (
     <Modal
       visible={visible}

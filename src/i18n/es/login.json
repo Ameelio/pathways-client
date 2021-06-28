@@ -6,7 +6,9 @@
   "and": "y",
   "buttonText": "Login",
   "placeholder": {
-    "inmateNumber": "número de preso",
-    "pinCode": "código PIN"
+    "inmateNumber": "Número de Preso",
+    "pinCode": "Código PIN",
+    "facility": "Centro Penitenciario",
+    "language": "Idioma"
   }
 }

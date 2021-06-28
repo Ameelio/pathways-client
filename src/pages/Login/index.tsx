@@ -47,7 +47,6 @@ const LoginContainer: React.FC = () => {
   const [form] = Form.useForm();
   const [background] = useState(getRandomItem(BACKGROUNDS));
   const [facilities, setFacilities] = useState<FacilityRO[]>([]);
-  const [pin, setPin] = useState<string>("");
   const [padVisible, setPadVisible] = useState(false);
 
   useEffect(() => {
@@ -115,7 +114,7 @@ const LoginContainer: React.FC = () => {
               pin: "",
             }}
           >
-            <Form.Item label="Language" name="language">
+            <Form.Item label={t("placeholder.language")} name="language">
               <Radio.Group
                 className="w-full"
                 onChange={(e) => i18n.changeLanguage(e.target.value)}
@@ -130,7 +129,7 @@ const LoginContainer: React.FC = () => {
 
             <Form.Item
               name="facilityId"
-              label="Facility"
+              label={t("placeholder.facility")}
               rules={[{ required: true, message: "Must select a facility." }]}
             >
               <Select>{facilityOptions}</Select>
@@ -138,7 +137,7 @@ const LoginContainer: React.FC = () => {
 
             <Form.Item
               name="inmateNumber"
-              label="ID Number"
+              label={t("placeholder.inmateNumber")}
               rules={[{ required: true, message: "ID Number is required." }]}
             >
               <Input
@@ -155,8 +154,6 @@ const LoginContainer: React.FC = () => {
               <Input.Password
                 prefix={<LockOutlined />}
                 placeholder={t("placeholder.pinCode")}
-                value={pin}
-                onChange={(e) => setPin(e.target.value)}
                 addonAfter={
                   <NumberOutlined
                     onClick={() => setPadVisible((collapsed) => !collapsed)}
@@ -179,7 +176,6 @@ const LoginContainer: React.FC = () => {
         </Space>
       </div>
       <NumberPad
-        input={pin}
         setInput={(input: string) => {
           form.setFieldsValue({ pin: input });
           setPadVisible(false);
