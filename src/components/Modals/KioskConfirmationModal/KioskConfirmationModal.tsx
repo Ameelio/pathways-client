@@ -31,7 +31,7 @@ export default function KioskConfirmationModal({
       okText={t("common:confirm")}
       cancelText={t("common:logout")}
     >
-      <div className="overflow-y-auto max-h-80">
+      <div className="overflow-y-auto max-h-64">
         <Space size="large" direction="vertical">
           <Space direction="vertical" className="w-full">
             <Typography.Text underline>

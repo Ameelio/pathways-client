@@ -14,7 +14,7 @@ import {
 } from "antd";
 import { Redirect } from "react-router";
 import { loginWithCredentials } from "src/api/User";
-import { LockOutlined, NumberOutlined, UserOutlined } from "@ant-design/icons";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { getRandomItem } from "src/utils/utils";
 import { ReactComponent as Logo } from "src/assets/logo.svg";
 import "./index.css";
@@ -26,6 +26,8 @@ import { BORDER_RADIUS } from "src/styles/Layout";
 import { fetchFacilities } from "src/api/Common";
 import { FacilityRO } from "src/api/interfaces/apiResponses";
 import NumberPad from "src/components/NumberPad";
+import Icon from "@ant-design/icons";
+import DialPadSvg from "src/assets/Icons/DialpadIcon";
 
 const { Content } = Layout;
 
@@ -155,8 +157,10 @@ const LoginContainer: React.FC = () => {
                 prefix={<LockOutlined />}
                 placeholder={t("placeholder.pinCode")}
                 addonAfter={
-                  <NumberOutlined
+                  <Icon
+                    component={DialPadSvg}
                     onClick={() => setPadVisible((collapsed) => !collapsed)}
+                    className="text-blue-500 text-lg"
                   />
                 }
               />

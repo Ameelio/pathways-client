@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Row, Col, Input, Modal, Button } from "antd";
-import { CloseCircleFilled } from "@ant-design/icons";
+import Icon from "@ant-design/icons";
+import BackspaceKeySvg from "src/assets/Icons/BackspaceKeySvg";
+
 interface Props {
   setInput: (input: string) => void;
   className?: string;
@@ -44,17 +46,18 @@ const NumberPad = ({ setInput, visible, className }: Props) => {
           >
             <Button
               onClick={() => setResult((prev) => `${prev}${k}`)}
-              className="text-2xl font-bold bg-gray-200"
+              className="text-2xl font-bold bg-gray-200 p-0"
               shape="circle"
             >
               {k}
             </Button>
           </Col>
         ))}
-        <Col span={8} className="flex justify-center mt-4">
-          <CloseCircleFilled
+        <Col span={8} className="flex justify-center mt-4 p-0">
+          <Icon
             onClick={() => setResult((prev) => prev.slice(0, -1))}
-            className="text-2xl text-gray-500"
+            className="text-gray-500"
+            component={BackspaceKeySvg}
           />
         </Col>
       </Row>
