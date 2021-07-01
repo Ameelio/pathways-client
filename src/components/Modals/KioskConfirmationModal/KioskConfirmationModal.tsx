@@ -10,13 +10,13 @@ import { getLottieOptions } from "src/utils/UI";
 interface Props {
   data: KioskConfirmationModalData;
   handleConfirm: () => void;
-  handleLogout: () => void;
+  closeModal: () => void;
 }
 
 export default function KioskConfirmationModal({
   data,
   handleConfirm,
-  handleLogout,
+  closeModal,
 }: Props): ReactElement {
   const call = data.entity;
   const { t } = useTranslation(["modals", "common"]);
@@ -26,38 +26,38 @@ export default function KioskConfirmationModal({
       title={t("modals:kioskConfirmationModal.title")}
       visible={true}
       onOk={handleConfirm}
-      onCancel={handleLogout}
+      onCancel={closeModal}
       className="rounded-sm w-full flex flex-col align-center"
       okText={t("common:confirm")}
       cancelText={t("common:logout")}
     >
-      <Lottie
-        options={getLottieOptions(KioskLottie)}
-        // height="20%"
-        width="45%"
-      />
-      <Space size="large" direction="vertical">
-        <Space direction="vertical" className="w-full">
-          <Typography.Text underline>
-            {t("modals:kioskConfirmationModal.locationHeader")}
-          </Typography.Text>
-          <Typography.Text>
-            {t("modals:kioskConfirmationModal.locationBody")}
-          </Typography.Text>
-          <Typography.Text>
-            {t("modals:kioskConfirmationModal.subtitle")}{" "}
-            <Typography.Text strong>{call.kioskName}</Typography.Text>
-          </Typography.Text>
+      <div className="overflow-y-auto max-h-64">
+        <Space size="large" direction="vertical">
+          <Space direction="vertical" className="w-full">
+            <Typography.Text underline>
+              {t("modals:kioskConfirmationModal.locationHeader")}
+            </Typography.Text>
+            <Typography.Text>
+              {t("modals:kioskConfirmationModal.locationBody")}
+            </Typography.Text>
+            <Typography.Text>
+              {t("modals:kioskConfirmationModal.subtitle")}{" "}
+              <Typography.Text strong>{call.kioskName}</Typography.Text>
+            </Typography.Text>
+          </Space>
+          <Space direction="vertical">
+            <Typography.Text underline>
+              {t("modals:kioskConfirmationModal.privacyHeader")}
+            </Typography.Text>
+            <Typography.Text>
+              {t("modals:kioskConfirmationModal.privacyBody")}
+            </Typography.Text>
+          </Space>
         </Space>
-        <Space direction="vertical">
-          <Typography.Text underline>
-            {t("modals:kioskConfirmationModal.privacyHeader")}
-          </Typography.Text>
-          <Typography.Text>
-            {t("modals:kioskConfirmationModal.privacyBody")}
-          </Typography.Text>
-        </Space>
-      </Space>
+        <div className="-m-24">
+          <Lottie options={getLottieOptions(KioskLottie)} width="50%" />
+        </div>
+      </div>
     </Modal>
   );
 }

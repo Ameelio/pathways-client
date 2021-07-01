@@ -7,6 +7,8 @@
   "buttonText": "Login",
   "placeholder": {
     "inmateNumber": "Inmate Number",
-    "pinCode": "Pin Code"
+    "pinCode": "Pin Code",
+    "facility": "Facility",
+    "language": "Language"
   }
 }

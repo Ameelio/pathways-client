@@ -66,16 +66,16 @@ export async function loginWithCredentials(cred: {
   }
 }
 
-export async function updateProfile(profileImagePath: string) {
+export async function updateProfile(profileImageUrl: string) {
   try {
     await fetchAuthenticated("", {
       method: "PATCH",
       body: JSON.stringify({
-        profileImagePath,
+        profileImageUrl,
       }),
     });
 
-    Store.dispatch(setProfileImage(profileImagePath));
+    Store.dispatch(setProfileImage(profileImageUrl));
   } catch (err) {
     showToast(
       "update_profile_errror",

@@ -17,7 +17,6 @@ type ModalEntity =
   | KioskConfirmationModalData
   | BiographyModalData
   | ProfilePhotoModalData;
-
 type ModalsSliceState = { data: ModalEntity };
 
 const initialState: ModalsSliceState = {

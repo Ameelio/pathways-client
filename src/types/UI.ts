@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import { Call } from "./Call";
 import { Quote } from "./Common";
 
@@ -8,7 +9,8 @@ export type ModalType =
   | "TEST_CONNECTION_MODAL"
   | "KIOSK_CONFIRMATION_MODAL"
   | "BIO_MODAL"
-  | "PROFILE_PHOTO_MODAL";
+  | "PROFILE_PHOTO_MODAL"
+  | "NUMBER_PAD_MODAL";
 
 export interface FAQResource {
   title: string;

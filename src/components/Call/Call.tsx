@@ -81,7 +81,7 @@ const CallBase: React.FC<Props> = React.memo(
     const [chatCollapsed, setChatCollapsed] = useState(true);
     const [peerAudioOn, setPeerAudioOn] = useState(true);
     const [peerVideoOn, setPeerVideoOn] = useState(true);
-    const [timerOn, setTimerOn] = useState(false);
+    const [timerOn, setTimerOn] = useState(true);
     const [status, setStatus] = useState<InCallStatus>();
 
     const alertDocMessageMemo = useCallback(
@@ -260,7 +260,7 @@ const CallBase: React.FC<Props> = React.memo(
                   isFadingOut={isCallEnding}
                 />
                 {/* Blurb with metadata */}
-                <div className="absolute bottom-20 left-4 bg-black bg-opacity-50 py-1 px-2 rounded flex salign-center">
+                <div className="absolute bottom-32 right-4 bg-black bg-opacity-50 py-1 px-2 rounded flex salign-center">
                   {!peerAudioOn && (
                     <AudioMutedOutlined className="text-red-600 text-base" />
                   )}
@@ -288,7 +288,11 @@ const CallBase: React.FC<Props> = React.memo(
             />
           )}
           {!peerVideoOn && (
-            <ContactAvatarGroup size={128} contacts={call.userParticipants} />
+            <ContactAvatarGroup
+              size={128}
+              contacts={call.userParticipants}
+              className="mx-auto my-auto"
+            />
           )}
           {localVideo && localVideo.stream && !localVideo.paused ? (
             <Video

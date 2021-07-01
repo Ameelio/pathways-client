@@ -3,9 +3,9 @@ import { useAppSelector } from "src/redux";
 import { selectAllCalls } from "src/redux/selectors";
 import "src/i18n/config";
 import Profile from "src/components/Profile";
-import { BACKGROUNDS } from "src/constants";
 import { useAppDispatch } from "src/redux";
 import { openModal } from "src/redux/modules/modalsSlice";
+import { PROFILE_PHOTOS } from "src/constants/ProfilePhotos";
 
 const ProfilePage: React.FC = () => {
   const user = useAppSelector((state) => state.session.user);
@@ -19,7 +19,7 @@ const ProfilePage: React.FC = () => {
         dispatch(
           openModal({
             activeType: "PROFILE_PHOTO_MODAL",
-            entity: BACKGROUNDS,
+            entity: PROFILE_PHOTOS,
           })
         )
       }

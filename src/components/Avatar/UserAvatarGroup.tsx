@@ -8,11 +8,12 @@ import { getAvatarBackgroundColor } from "src/utils/UI";
 interface Props {
   contacts: Contact[];
   size?: AvatarSize;
+  className?: string;
 }
 
-const ContactAvatarGroup: React.FC<Props> = ({ contacts, size }) => {
+const ContactAvatarGroup: React.FC<Props> = ({ contacts, size, className }) => {
   return (
-    <Avatar.Group>
+    <Avatar.Group className={className}>
       {contacts.map((contact) => (
         <Avatar
           key={contact.id}

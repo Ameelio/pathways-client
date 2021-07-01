@@ -26,7 +26,7 @@ const renderer = ({
   return completed ? (
     <div />
   ) : (
-    <Typography.Text className={`${style} px-4 py-2 rounded-md`}>
+    <Typography.Text className={`${style} px-6 py-4 rounded-md text-lg`}>
       {formatted.minutes}:{formatted.seconds}
     </Typography.Text>
   );
