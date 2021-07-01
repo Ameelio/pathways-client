@@ -260,7 +260,7 @@ const CallBase: React.FC<Props> = React.memo(
                   isFadingOut={isCallEnding}
                 />
                 {/* Blurb with metadata */}
-                <div className="absolute bottom-20 left-4 bg-black bg-opacity-50 py-1 px-2 rounded flex salign-center">
+                <div className="absolute bottom-32 right-4 bg-black bg-opacity-50 py-1 px-2 rounded flex salign-center">
                   {!peerAudioOn && (
                     <AudioMutedOutlined className="text-red-600 text-base" />
                   )}
