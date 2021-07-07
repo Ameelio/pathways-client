@@ -63,7 +63,7 @@ export async function fetchAuthenticated(
 }
 
 export async function fetchFacilities(
-  timeout = 1500
+  timeout = 15000
 ): Promise<FacilitiesAPIResponse> {
   const requestOptions = {
     headers: {
