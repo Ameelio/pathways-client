@@ -27,8 +27,9 @@ const NumberPad = ({ setInput, visible, className }: Props) => {
         <Input.Password
           placeholder="input password"
           value={result}
-          readOnly={true}
-          bordered={false}
+          onChange={(e) => setResult(e.target.value)}
+          bordered={true}
+          autoFocus={true}
         />
       </Row>
 
