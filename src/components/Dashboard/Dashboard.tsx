@@ -8,9 +8,11 @@ import CallDetails from "./CallDetails";
 import PageLayout from "src/components/Common/PageLayout";
 import { Contact } from "src/types/User";
 import { Quote } from "src/types/Common";
+import { InPersonVisit } from "src/types/InPersonVisit";
 
 interface Props {
   calls: Call[];
+  inPersonVisits: InPersonVisit[];
   contacts: Contact[];
   joinCall: (call: Call) => void;
   seeAllCalls: () => void;
@@ -18,12 +20,15 @@ interface Props {
 }
 const Dashboard: React.FC<Props> = ({
   calls,
+  inPersonVisits,
   contacts,
   joinCall,
   seeAllCalls,
   openBio,
 }) => {
   const [selectedCall, setSelectedCall] = useState<null | Call>(null);
+  console.log("hi from dashboard");
+  console.log(inPersonVisits);
   return (
     <PageLayout>
       <Space direction="vertical" size="large" className="w-full p-6 pt-9">

@@ -10,6 +10,7 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { commonSlice } from "src/components/Common/commonSlice";
 import { contactsSlice } from "./modules/contactsSlice";
 import { chatMessageSlice } from "./modules/messages";
+import { inPersonVisitSlice } from "./modules/inPersonVisit";
 
 export const history = createHashHistory();
 
@@ -18,6 +19,7 @@ export const createRootReducer = (history: History) =>
     common: commonSlice.reducer,
     session: sessionReducer,
     calls: callSlice.reducer,
+    inPersonVisits: inPersonVisitSlice.reducer,
     contacts: contactsSlice.reducer,
     modals: modalsSlice.reducer,
     connections: connectionSlice.reducer,

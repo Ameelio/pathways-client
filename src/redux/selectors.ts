@@ -4,12 +4,20 @@ import { contactsAdapter } from "./modules/contactsSlice";
 import { BaseCall } from "src/types/Call";
 import { createSelector } from "reselect";
 import { chatMessagesAdapter } from "./modules/messages";
+import { inPersonVisitAdapter } from "./modules/inPersonVisit";
 
 // Create aliases for entity adapter selectors
 export const {
   selectAll: selectAllCalls,
   selectById: selectCallById,
 } = callAdapter.getSelectors<RootState>((state) => state.calls);
+
+export const {
+  selectAll: selectAllInPersonVisits,
+  selectById: selectInPersonVisitById,
+} = inPersonVisitAdapter.getSelectors<RootState>(
+  (state) => state.inPersonVisits
+);
 
 export const {
   selectAll: selectAllContacts,
