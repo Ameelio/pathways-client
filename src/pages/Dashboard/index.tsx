@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "src/redux";
-import { connect, ConnectedProps } from "react-redux";
 import { fetchCalls } from "src/redux/modules/call";
 import { selectAllContacts } from "src/redux/selectors";
 import { push } from "connected-react-router";
@@ -11,20 +10,19 @@ import { useUpcomingCalls } from "src/hooks/useCalls";
 import { Call } from "src/types/Call";
 import { Quote } from "src/types/Common";
 
-const mapDispatchToProps = { fetchCalls, push };
-
-const connector = connect(null, mapDispatchToProps);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-const DashboardPage: React.FC<PropsFromRedux> = ({ fetchCalls }) => {
+const DashboardPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const contacts = useAppSelector(selectAllContacts);
   const calls = useUpcomingCalls();
 
   useEffect(() => {
-    (async () => await fetchCalls())();
-  }, [fetchCalls]);
+    dispatch(fetchCalls());
+
+    const interval = setInterval(() => {
+      dispatch(fetchCalls());
+    }, 30000);
+    return () => clearInterval(interval);
+  }, [dispatch]);
 
   return (
     <Dashboard
@@ -43,4 +41,4 @@ const DashboardPage: React.FC<PropsFromRedux> = ({ fetchCalls }) => {
   );
 };
 
-export default connector(DashboardPage);
+export default DashboardPage;
