@@ -9,12 +9,11 @@ interface Props {
   visible?: boolean;
 }
 
-const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+const keys = [7, 8, 9, 4, 5, 6, 1, 2, 3, 0];
 
 const NumberPad = ({ setInput, visible, className }: Props) => {
   const [result, setResult] = useState("");
 
-  console.log(result);
   return (
     <Modal
       visible={visible}

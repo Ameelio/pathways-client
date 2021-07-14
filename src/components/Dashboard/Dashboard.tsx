@@ -35,7 +35,7 @@ const Dashboard: React.FC<Props> = ({
         <Row gutter={16}>
           <Col span={16}>
             <CallsList
-              calls={calls.slice(0, 3)}
+              calls={calls}
               selectCall={(call: Call) => setSelectedCall(call)}
               joinCall={joinCall}
               seeAllCalls={seeAllCalls}

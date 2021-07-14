@@ -21,9 +21,11 @@ const CallItem: React.FC<Props> = ({ call, selectCall, joinCall }: Props) => {
     new Date(call.scheduledStart)
   );
 
-  const canJoin =
+  const isInitializing =
     subMinutes(new Date(call.scheduledStart), WAITING_ROOM_BUFFER_MIN) <
     new Date();
+
+  const canJoin = new Date(call.scheduledStart) <= new Date();
 
   const getDateLabel = (date: Date) => {
     if (isToday(date)) return "Today";
@@ -50,17 +52,19 @@ const CallItem: React.FC<Props> = ({ call, selectCall, joinCall }: Props) => {
           </Space>
         </Space>
         <Space>
-          {canJoin ? (
+          {isInitializing ? (
             <Button
               size="large"
               type="primary"
               className="rounded-sm"
-              disabled={!call.videoHandler}
+              disabled={!call.videoHandler || !canJoin}
               onClick={() => {
                 joinCall(call);
               }}
             >
-              {call.videoHandler ? t("call.join") : t("call.initializing")}
+              {call.videoHandler && canJoin
+                ? t("call.join")
+                : t("call.initializing")}
             </Button>
           ) : (
             <Button

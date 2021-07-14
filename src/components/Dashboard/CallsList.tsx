@@ -38,7 +38,7 @@ const CallsList: React.FC<Props> = ({
               }`}
         </Typography.Text>
       </div>
-      {calls.map((call) => (
+      {calls.slice(0, 5).map((call) => (
         <CallItem
           call={call}
           selectCall={selectCall}
