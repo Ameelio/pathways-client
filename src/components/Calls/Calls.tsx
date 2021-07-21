@@ -1,6 +1,6 @@
 import { Button, Col, Row, Space, Table, Typography } from "antd";
 import React from "react";
-import { Call, ISOString } from "src/types/Call";
+import { Call } from "src/types/Call";
 import { Contact, User } from "src/types/User";
 import PageLayout from "src/components/Common/PageLayout";
 import { useTranslation } from "react-i18next";
@@ -9,6 +9,7 @@ import { getFullName } from "src/utils/utils";
 import { useAppDispatch } from "src/redux";
 import { openModal } from "src/redux/modules/modalsSlice";
 import IndividualAvatar from "../Avatar/IndividualAvatar";
+import { ISOString } from "src/types/Visit";
 
 interface Props {
   calls: Call[];

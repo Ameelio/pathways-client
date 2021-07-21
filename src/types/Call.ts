@@ -1,4 +1,5 @@
 import { Contact } from "./User";
+import { BaseVisit } from "./Visit";
 
 export interface Kiosk {
   id: string;
@@ -10,8 +11,6 @@ export interface CallHandler {
   host: string;
   port: string;
 }
-
-export type ISOString = string;
 
 export type InCallStatus = "live" | "missing_monitor" | "ended" | "terminated";
 type GeneralCallStatus =
@@ -26,22 +25,13 @@ type GeneralCallStatus =
 
 export type CallStatus = InCallStatus | GeneralCallStatus;
 
-export interface BaseCall {
-  id: string;
-  scheduledStart: ISOString;
-  scheduledEnd: ISOString;
-  approved: boolean;
+export interface BaseCall extends BaseVisit {
   status: CallStatus;
-  connectionId: string;
-  statusDetails: string;
-  userIds: string[];
-  kioskId: string;
-  kioskName: string;
   videoHandler?: CallHandler;
 }
 
 export interface Call extends BaseCall {
-  userParticipants: Contact[];
+  // userParticipants: Contact[];
 }
 
 export interface CallParticipant {

@@ -12,6 +12,7 @@ import { Call } from "src/types/Call";
 import { Quote } from "src/types/Common";
 import { fetchInPersonVisits } from "src/redux/modules/inPersonVisit";
 import { useUpcomingInPersonVisits } from "src/hooks/useInPersonVisits";
+import { useUpcomingVisits } from "src/hooks/useVisits";
 
 const mapDispatchToProps = { fetchCalls, fetchInPersonVisits, push };
 
@@ -27,6 +28,7 @@ const DashboardPage: React.FC<PropsFromRedux> = ({
   const contacts = useAppSelector(selectAllContacts);
   const calls = useUpcomingCalls();
   const inPersonVisits = useUpcomingInPersonVisits();
+  const visits = useUpcomingVisits();
 
   useEffect(() => {
     (async () => {
@@ -39,6 +41,7 @@ const DashboardPage: React.FC<PropsFromRedux> = ({
     <Dashboard
       calls={calls}
       inPersonVisits={inPersonVisits}
+      visits={visits}
       contacts={contacts}
       joinCall={(call: Call) => {
         dispatch(

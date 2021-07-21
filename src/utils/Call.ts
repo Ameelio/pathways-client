@@ -1,6 +1,7 @@
 import { Dictionary } from "@reduxjs/toolkit";
 import { BaseCall, Call, MediaType } from "src/types/Call";
 import { Contact } from "src/types/User";
+import { BaseVisit } from "src/types/Visit";
 import { notEmpty } from "./utils";
 
 // The timer will switch to a white background for four seconds around each of these key minutes
@@ -74,8 +75,8 @@ export function getContactsFirstNames(contacts: Contact[]) {
   return contacts.map((user) => user.firstName).join(", ");
 }
 
-export function getParticipantsFullNames(call: Call) {
-  return call.userParticipants
+export function getParticipantsFullNames(visit: BaseVisit) {
+  return visit.userParticipants
     .map((user) => `${user.firstName} ${user.lastName}`)
     .join(", ");
 }

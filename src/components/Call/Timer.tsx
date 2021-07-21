@@ -1,7 +1,7 @@
 import { Typography } from "antd";
 import React from "react";
 import Countdown from "react-countdown";
-import { ISOString } from "src/types/Call";
+import { ISOString } from "src/types/Visit";
 import { mapCountdownTimeToStyle } from "src/utils";
 
 interface Props {

@@ -1,7 +1,6 @@
 import { Col, Row, Space } from "antd";
 import React, { useState } from "react";
 import { Call } from "src/types/Call";
-import CallsList from "./CallsList";
 import ConnectionsList from "./ConnectionsList";
 import DashboardHeader from "./DashboardHeader";
 import CallDetails from "./CallDetails";
@@ -9,10 +8,13 @@ import PageLayout from "src/components/Common/PageLayout";
 import { Contact } from "src/types/User";
 import { Quote } from "src/types/Common";
 import { InPersonVisit } from "src/types/InPersonVisit";
+import VisitsList from "./VisitsList";
+import { BaseVisit } from "src/types/Visit";
 
 interface Props {
   calls: Call[];
   inPersonVisits: InPersonVisit[];
+  visits: BaseVisit[];
   contacts: Contact[];
   joinCall: (call: Call) => void;
   seeAllCalls: () => void;
@@ -21,14 +23,15 @@ interface Props {
 const Dashboard: React.FC<Props> = ({
   calls,
   inPersonVisits,
+  visits,
   contacts,
   joinCall,
   seeAllCalls,
   openBio,
 }) => {
   const [selectedCall, setSelectedCall] = useState<null | Call>(null);
-  console.log("hi from dashboard");
-  console.log(inPersonVisits);
+  console.log("heyv isits from dash");
+  console.log(visits);
   return (
     <PageLayout>
       <Space direction="vertical" size="large" className="w-full p-6 pt-9">
@@ -39,8 +42,10 @@ const Dashboard: React.FC<Props> = ({
         </Row>
         <Row gutter={16}>
           <Col span={16}>
-            <CallsList
+            <VisitsList
               calls={calls.slice(0, 3)}
+              inPersonVisits={inPersonVisits.slice(0, 3)}
+              visits={visits.slice(0, 3)}
               selectCall={(call: Call) => setSelectedCall(call)}
               joinCall={joinCall}
               seeAllCalls={seeAllCalls}

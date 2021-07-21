@@ -10,6 +10,8 @@ import { Language } from "src/types/Session";
 
 export const AVATAR_LARGE = 135;
 
+export const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
 export const ROUTES: Route[] = [
   { path: "/calls", component: CallsPage, label: "Calls" },
   { path: "/settings", component: SettingsPage, label: "Settings" },

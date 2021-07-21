@@ -1,6 +1,5 @@
 import { Contact } from "./User";
-
-export type ISOString = string;
+import { BaseVisit } from "./Visit";
 
 export type InPersonVisitStatus =
   | "ended"
@@ -12,17 +11,8 @@ export type InPersonVisitStatus =
   | "rejected"
   | "no_show";
 
-export interface BaseInPersonVisit {
-  id: string;
-  scheduledStart: ISOString;
-  scheduledEnd: ISOString;
-  approved: boolean;
+export interface BaseInPersonVisit extends BaseVisit {
   status: InPersonVisitStatus;
-  connectionId: string;
-  statusDetails: string;
-  userIds: string[];
-  kioskId: string;
-  kioskName: string;
 }
 
 export interface InPersonVisit extends BaseInPersonVisit {
